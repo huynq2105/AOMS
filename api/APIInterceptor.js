@@ -4,6 +4,7 @@ import PersistentStorageActions from '../stores/actions/PersistentStorageActions
 import LoadingActions from '../stores/actions/LoadingActions';
 import { Alert } from 'react-native';
 import AppActions from '../stores/actions/AppActions';
+import moment from 'moment';
 export function initAPIInterceptor(store) {
   api.interceptors.request.use(
     async request => {
@@ -24,6 +25,7 @@ export function initAPIInterceptor(store) {
       if (!request.headers.__tenant && tenant && tenant.tenantId) {
         request.headers.__tenant = tenant.tenantId;
       }
+      console.log('Request========================================',request)
       return request;
     },
   
@@ -40,29 +42,45 @@ export function initAPIInterceptor(store) {
         if (!cookies || !cookies.length) cookies = [];
         let cookieTmp = '';
         let cookieDt = '';
-        if(cookies[0] && cookies[0]?.indexOf('idsrv.session')>=0){
+  
+        if(cookies[0] && (cookies[0]?.indexOf('idsrv.session')>=0 || cookies[0]?.indexOf('AspNetCore.Culture')>=0)){
           for (let i = 0; i < cookies.length; i++) {
             if (cookies[i].indexOf('path') >= 0) cookieDt = cookies[i];
           }
         }
-
+        console.log('cookies=======================',cookies);
+        console.log('cookieDt=======================',cookieDt);
         for (let i = 0; i < cookies.length; i++) {
           if (cookies[i].indexOf('XSRF-TOKEN') >= 0) cookieTmp = cookies[i];
         }
         let cookieObject = parseCookie(cookieTmp);
-       
+        console.log('cookieObject=======================',cookieObject);
         if (cookieObject["XSRF-TOKEN"]) {
-          store.dispatch(PersistentStorageActions.setVerifyToken(cookieObject["XSRF-TOKEN"]));
+          console.log('da chay vao cookieObject["XSRF-TOKEN"]',cookieObject["XSRF-TOKEN"])
+         // if(cookieObject["XSRF-TOKEN"].length == 155) store.dispatch(PersistentStorageActions.setVerifyToken(cookieObject["XSRF-TOKEN"]));
+         store.dispatch(PersistentStorageActions.setVerifyToken(cookieObject["XSRF-TOKEN"]));
+         // store.dispatch(PersistentStorageActions.setToken(cookieObject["XSRF-TOKEN"]));
+         /*  store.dispatch(PersistentStorageActions.setToken({
+            "access_token": cookieObject["XSRF-TOKEN"],
+            "expires_in": 1800000,
+            "token_type": "Bearer",
+            "refresh_token": "",
+            "expire_time": new Date().valueOf() + 1800000,
+            "scope": undefined,
+          })); */
         }
         if(cookieDt){
-          const dt = new Date(cookieDt.split(';')[0]).toLocaleString()
+          console.log('da chay vao cookieDt',cookieDt)
+          const a = cookieDt.split(';')[0].substring(0,25);
+          console.log('Get date',a);
+          const dt = moment(a);
+          console.log('da chay vao cookiedt',dt)
           store.dispatch(PersistentStorageActions.setTokenExpired(dt));
         }
       
       } catch (e) {
         console.log('APIC58', e.toString());
       }
-
       return response;
     },
     error => {

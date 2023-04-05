@@ -3,11 +3,11 @@ const ENV = {
       version: 'v1.3.5 - v1.1.1b6',
     },
     dev: {
-      apiUrl: 'https://apms.alssys.vn',
+      apiUrl: 'https://aoms-uat.alssys.vn',
       oAuthConfig: {
-        issuer: 'https://apms.alssys.vn',
-        issuerDev: 'https://apms.alssys.vn',
-        issuerUat: 'https://apms-uat.alssys.vn',
+        issuer: 'https://aoms-uat.alssys.vn',
+        issuerDev: 'https://aoms-uat.alssys.vn',
+        issuerUat: 'https://aoms-uat.alssys.vn',
         clientId: 'AOMS_App',
         clientSecret: '1q2w3E*',
         scope: 'offline_access AOMS',
@@ -17,9 +17,9 @@ const ENV = {
       },
     },
     prod: {
-      apiUrl: 'https://apms.alssys.vn',
+      apiUrl: 'https://aoms-uat.alssys.vn',
       oAuthConfig: {
-        issuer: 'https://apms.alssys.vn',
+        issuer: 'https://aoms-uat.alssys.vn',
         clientId: 'AOMS_App',
         clientSecret: '1q2w3E*',
         scope: 'offline_access AOMS',

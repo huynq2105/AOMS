@@ -18,6 +18,7 @@ const alsc = require('../assets/images/ALSC.png');
 const ncts = require('../assets/images/NCTS.png');
 const goods = require('../assets/images/goods.jpg');
 const bg_login = require('../assets/images/bg_login.png');
+const bg_img = require('../assets/images/ic_logo.png');
 export default {
   background_01,
   background_02,
@@ -38,5 +39,6 @@ export default {
   alsc,
   ncts,
   goods,
-  bg_login
+  bg_login,
+  bg_img
 };

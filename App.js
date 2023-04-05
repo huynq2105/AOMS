@@ -24,8 +24,16 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import {SafeAreaProvider} from 'react-native-safe-area-context'
 import LoginScreen from './screens/Auth/LoginScreen';
-
+import {enableScreens} from 'react-native-screens';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
+import {ToastProvider} from 'react-native-toast-notifications';
+import { AppContainer } from './appContainer';
+import { initAPIInterceptor } from './api/APIInterceptor';
+import {persistor, store} from './stores';
+import HomeScreen from './screens/Home/HomeScreen';
 const Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -51,7 +59,8 @@ const Section = ({children, title}) => {
     </View>
   );
 };
-
+enableScreens();
+initAPIInterceptor(store);
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -60,7 +69,14 @@ const App = () => {
   };
 
   return (
-    <LoginScreen />
+    <Provider store={store}>
+        <SafeAreaProvider>
+        <PersistGate loading={null} persistor={persistor}>
+        <AppContainer />
+      </PersistGate>
+        </SafeAreaProvider>
+     
+    </Provider>
   );
 };
 

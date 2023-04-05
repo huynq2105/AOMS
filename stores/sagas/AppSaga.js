@@ -42,6 +42,7 @@ function* setAppConfigWatcher(action) {
 
 function* logoutWatcher() {
     yield put(PersistentStorageActions.setToken({}));
+    yield put(PersistentStorageActions.setTokenExpired(null));
     yield call(logout);
     yield put(AppActions.fetchAppConfigAsync());
   }

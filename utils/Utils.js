@@ -1,4 +1,6 @@
 import validator from 'validator'
+import truckStatus from '../constants/truckUnloadingStatus';
+
 function isValidEmail(value) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(value).toLowerCase());
@@ -22,6 +24,16 @@ function validateEmail(value, setEmailError) {
 //         setPasswordError("")
 //     }
 // }
+function getTruckStatus(status){
+    for(const key in truckStatus){
+        if(truckStatus[key].status===status){
+            console.log('Truck status=====================',truckStatus[key])
+            return {...truckStatus[key]}
+        }
+        
+           
+    }
+}
 function validatePassword(value, setPasswordError) {
     if (validator.isStrongPassword(value, {
         minLength: 6, minLowercase: 1,
@@ -47,7 +59,8 @@ const utils = {
     isValidEmail,
     validateEmail,
     validatePassword,
-    getImgUrlByWareHouse
+    getImgUrlByWareHouse,
+    getTruckStatus
 };
 
 export default utils;

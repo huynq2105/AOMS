@@ -40,13 +40,16 @@ export const register = body =>
 //     data: `grant_type=password&scope=${oAuthConfig.scope}&username=${username}&password=${password}&client_id=${oAuthConfig.clientId}&client_secret=${oAuthConfig.clientSecret}`,
 //     baseURL: oAuthConfig.issuer,
 //   }).then(({ data }) => data);
-export const logout = () =>
+export const logout = () =>{
+  console.log('da chay vao logout')
   api({
     method: 'GET',
     url: '/api/account/logout',
   })
     .then(({data}) => data)
     .catch(data => data);
+}
+  
 
 export const getTenant = tenantName =>
   api({
