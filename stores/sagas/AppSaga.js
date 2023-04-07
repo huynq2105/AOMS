@@ -57,11 +57,9 @@ function* setLanguage(action) {
 }
 
 function* logoutWatcher() {
-  //yield call(logout);
+  yield call(logout);
     yield put(PersistentStorageActions.setToken({}));
-    yield put(PersistentStorageActions.setCookie(null));
-    yield put(PersistentStorageActions.setVerifyToken(''));
-   /// yield put(AppActions.fetchAppConfigAsync());
+    yield put(AppActions.fetchAppConfigAsync());
   }
   export default function* () {
     yield all([

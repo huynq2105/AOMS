@@ -66,9 +66,6 @@ const requestCameraPermission = async () => {
 };
 const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appConfig,tokenExpired}) => {
   const now = new Date().valueOf();
-/*   console.log('token=======================',token)
-  console.log('token het han Expired=======================',token?.expire_time)
-  console.log('token  Expired=======================',tokenExpired) */
     const isValid = useMemo(() => isTokenValid(token,tokenExpired), [token]);
     const localizationContext = useMemo(
       () => ({
@@ -77,8 +74,6 @@ const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appCon
       }),
       [language],
     );
-/*     console.log('Token is valid',isTokenValid(token))
-    console.log('da chay vao App Container',isValid) */
     const toast = useToast()
     useEffect(() => {
       //setTokenDevice(tokenDevice)
@@ -89,7 +84,7 @@ const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appCon
       }, [isValid]);
       useEffect(() => {
         requestCameraPermission();
-      //  fetchAppConfig();
+        fetchAppConfig();
       }, []);
     
     return(
