@@ -61,6 +61,7 @@ function* logoutWatcher() {
     yield put(PersistentStorageActions.setToken({}));
     yield put(PersistentStorageActions.setCookie(null));
     yield put(PersistentStorageActions.setVerifyToken(''));
+    yield call(getApplicationConfigurationNoAuthAPI)
    /// yield put(AppActions.fetchAppConfigAsync());
   }
   export default function* () {
