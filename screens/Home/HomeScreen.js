@@ -8,8 +8,7 @@ import TextButton from '../../components/TextButton';
 import AppActions from '../../stores/actions/AppActions';
 import { connectToRedux } from '../../utils/ReduxConnect';
 import PersistentStorageActions from '../../stores/actions/PersistentStorageActions';
-
-const HomeScreen = ({navigation,logoutAsync,setTokenExpired}) => {
+const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken}) => {
 
     function renderLogout(){
     return(
@@ -22,6 +21,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired}) => {
   }}
   onPress={()=>{
     setTokenExpired(null);
+    //setVerifyToken('');
     logoutAsync();
   }}
   />)
@@ -130,6 +130,7 @@ export default connectToRedux({
   component: HomeScreen,
   dispatchProps: {
     logoutAsync: AppActions.logoutAsync,
-    setTokenExpired: PersistentStorageActions.setTokenExpired
+    setTokenExpired: PersistentStorageActions.setTokenExpired,
+    setVerifyToken: PersistentStorageActions.setVerifyToken
   },
 });

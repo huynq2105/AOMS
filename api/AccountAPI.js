@@ -21,6 +21,7 @@ export const Logout = () =>
 api({
   method: 'GET',
   url: '/api/account/logout',
+  withCredentials:false
 }).then(({data}) => data).catch(data => data);
 
 export const getTenant = tenantName =>

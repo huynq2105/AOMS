@@ -20,6 +20,7 @@ import DataRenderResult from '../../../../components/DataRenderResult/DataRender
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import LoadingActions from '../../../../stores/actions/LoadingActions';
 import api from '../../../../api/API'
+import apiUpload from '../../../../api/ApiUpload'
 import DatePicker from 'react-native-date-picker'
 
 const selectKey = {
@@ -27,7 +28,7 @@ const selectKey = {
     unload: 2,
     complete: 3,
   };
-  
+  const defaultImage = require('../../../../assets/images/thumb.png');
   const selectData = {
     assignee: [
       {id: selectKey.arrive, label: 'Arrive cargo terminal'},
@@ -190,7 +191,7 @@ const NBAUnloadingDetailScreen = ({route, navigation, loading, startLoading, sto
         maxWidth: 768, maxHeight: 1024,
       };
       const onCameraResult = (response) => {
-        console.log(response);
+        //console.log(response);
         if (response.didCancel) {
           console.log('Cancel image picker')
          /*  Toast.show({
@@ -228,7 +229,8 @@ const NBAUnloadingDetailScreen = ({route, navigation, loading, startLoading, sto
             api.post(
               '/api/file-management/file-descriptor/upload',
               form,
-              {params: {directoryId: config.folderId, Name: addFile.name}}
+              { headers: { 'Content-Type': 'multipart/form-data'},params: {directoryId: config.folderId, Name: addFile.name}}
+            
             )
               .then(({data}) => {
                 api.post(

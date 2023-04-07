@@ -18,7 +18,7 @@ const inititalState = {
         "roles": [],
         "password": "",
       },
-      token: {}, language: null, tenant: {},tokenDevice:{},verifyToken:'',tokenExpired:null
+      token: {}, language: null, tenant: {},tokenDevice:{},verifyToken:'',cookie:null,tokenExpired:null
 }
 
 
@@ -33,6 +33,9 @@ export default createReducer(inititalState,builder =>
     })
     .addCase(PersistentStorageActions.setVerifyToken, (state, action) => {
         state.verifyToken = action.payload;
+      })
+      .addCase(PersistentStorageActions.setCookie, (state, action) => {
+        state.cookie = action.payload;
       })
       .addCase(PersistentStorageActions.setTenant, (state, action) => {
         state.tenant = action.payload;

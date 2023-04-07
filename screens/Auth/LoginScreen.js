@@ -46,6 +46,9 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
   const toggleTenantSelection = () => {
     setShowTenantSelection(!showTenantSelection);
   };
+/*   useEffect(()=>{
+    fetchAppConfig()
+  },[]) */
 /*   const a = '02 Apr 2023 01:44:51 GMT'
   const dt = moment(a).format('DD/MM/yyyy');
   console.log('Convert Date Time========================',dt); */
@@ -63,12 +66,16 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
       setSaveMe(true);
     }
   }, []); */
+/*   useEffect(() => {
+    fetchAppConfig();
+  }, []); */
   function isEnableSignIn() {
     return email != '' && password != '' && emaiError == '';
   }
   const handleLogin = () => {
     let action;
     setIsLoading(true);
+    //fetchAppConfig();
   /*   await AsyncStorage.setItem('userLogin', email);
     if (saveMe) {
       await AsyncStorage.setItem('passwordLogin', password);
@@ -94,19 +101,14 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
         });
         setTokenExpired(new Date().valueOf() + 1800000); */
         setToken({
-          "access_token": verifyToken,
+          "access_token": "",
           "expires_in": 1800000,
           "token_type": "Bearer",
           "refresh_token": "",
           "expire_time": new Date().valueOf() + 1800000,
           "scope": undefined,
         });
-      }).then(
-        () =>
-          new Promise(resolve =>
-            fetchAppConfig({ showLoading: false, callback: () => resolve(true) }),
-          ),
-      )
+      })
       .catch(e => {
         console.log('Login Error',e)
         //fetchAppConfig()
@@ -115,9 +117,9 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
       }).finally(()=>{
         console.log('Login finally')
         setIsLoading(false);
-        /* new Promise(resolve =>
+        new Promise(resolve =>
           fetchAppConfig({showLoading: false, callback: () => resolve(true)}),
-        ) */
+        )
       });
     //action = authActions.login(email, password);
   };

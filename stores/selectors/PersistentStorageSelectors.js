@@ -11,6 +11,9 @@ export function createTokenSelector() {
   export function createVerifyTokenSelector() {
     return createSelector([getPersistentStorage], persistentStorage => persistentStorage.verifyToken);
   }
+  export function createCookieSelector() {
+    return createSelector([getPersistentStorage], persistentStorage => persistentStorage.cookie);
+  }
    
   export function createTenantSelector() {
     return createSelector([getPersistentStorage], persistentStorage => persistentStorage.tenant);
