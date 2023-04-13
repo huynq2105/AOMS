@@ -100,11 +100,11 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken}) => 
       }
     return (
 <View style={styles.container}>
-{renderHeader()}
-      <View
+{/* {renderHeader()} */}
+    {/*   <View
         style={{
           height: Platform.OS == 'ios' ? 90 : 60,
-        }}></View>
+        }}></View> */}
       {/*    <Text
         style={{
           ...FONTS.h3,

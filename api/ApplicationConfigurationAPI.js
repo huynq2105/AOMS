@@ -1,8 +1,13 @@
-import api from './API'
+import api from './API';
 import conf from '../utils/default_conf.json';
-import {parseCookie} from "../aw/awutils/cookie_utils";
+import {parseCookie} from '../aw/awutils/cookie_utils';
 
-export const getApplicationConfiguration = () => {
+export const getApplicationConfiguration = async () => {
+  try {
+    await api.get('/abp/Swashbuckle/SetCsrfCookie')
+  } catch (e) {
+    console.log(e);
+  }
   return api
     .get('/api/abp/application-configuration')
     // .then(({data, headers}) => ({data, headers}))
@@ -12,5 +17,4 @@ export const getApplicationConfiguration = () => {
     .catch(function (e) {
       return conf;
     });
-}
-
+};

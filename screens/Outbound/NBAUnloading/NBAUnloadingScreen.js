@@ -48,7 +48,6 @@ const NBAUnloadingScreen = ({navigation}) => {
     }) */
   }
   const changeFilterDate = (date) => {
-    console.log(date);
     setFilterDate({show: false, val: date ? date : filterDate.val});
     // loadData();
   }

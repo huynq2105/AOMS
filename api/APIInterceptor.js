@@ -9,18 +9,11 @@ export function initAPIInterceptor(store) {
   api.interceptors.request.use(
     async request => {
       const {
-        persistentStorage: {token,language, tenant, verifyToken,cookie},
+        persistentStorage: {token,language, tenant, verifyToken},
       } = store.getState();
       if (!request.headers.RequestVerificationToken && verifyToken) {
         request.headers.RequestVerificationToken = verifyToken;
       }
-      if (!request.headers['Cookie'] && cookie) {
-        request.headers['Cookie'] = '.AOMS.AspNetCore.Identity.Application=' + cookie;
-      }
-     /*  if (request.url==='/api/account/login' && verifyTokenLogin) {
-        console.log('Da chay vao set VerifyToken Login')
-        request.headers.RequestVerificationToken = verifyTokenLogin;
-      } */
       if (!request.headers.Authorization && token && token.access_token) {
         request.headers.Authorization = `${token.token_type} ${token.access_token}`;
       }
@@ -34,7 +27,6 @@ export function initAPIInterceptor(store) {
       if (!request.headers.__tenant && tenant && tenant.tenantId) {
         request.headers.__tenant = tenant.tenantId;
       }
-      console.log('Request After========================================',request)
       return request;
     },
   
@@ -46,13 +38,11 @@ export function initAPIInterceptor(store) {
       try {
         const {headers} = response;
         let cookies = headers['set-cookie'];
-        console.log('header=============================================================',headers);
         let cookiesCheck;
         if (cookies && cookies.length > 0) cookies = cookies[0].split(',');
         if (!cookies || !cookies.length) cookies = [];
         let cookieTmp = '';
         let cookieDt = '';
-        let cookieRequest = '';
         if(cookies[0] && (cookies[0]?.indexOf('idsrv.session')>=0 || cookies[0]?.indexOf('AspNetCore.Culture')>=0)){
           for (let i = 0; i < cookies.length; i++) {
             if (cookies[i].indexOf('path') >= 0) cookieDt = cookies[i];
@@ -61,31 +51,10 @@ export function initAPIInterceptor(store) {
         for (let i = 0; i < cookies.length; i++) {
           if (cookies[i].indexOf('XSRF-TOKEN') >= 0) cookieTmp = cookies[i];
         }
-        for (let i = 0; i < cookies.length; i++) {
-          if (cookies[i].indexOf('.AOMS.AspNetCore.Identity.Application') >= 0) cookieRequest = cookies[i];
-        }
-     //   console.log('cookieRequest=============================================================',cookieRequest);
         let cookieObject = parseCookie(cookieTmp);
-        let cookieRequestObj = parseCookie(cookieRequest);
-        //console.log('cookieRequestObj=============================================================',cookieRequestObj);
-       // console.log('cookieRequestObj Vryfi=============================================================',cookieRequestObj['.AOMS.AspNetCore.Identity.Application']);
         if (cookieObject["XSRF-TOKEN"]) {
-        //if(cookieObject["XSRF-TOKEN"].length == 155) store.dispatch(PersistentStorageActions.setVerifyTokenLogin(cookieObject["XSRF-TOKEN"]));
-         //store.dispatch(PersistentStorageActions.setVerifyToken(cookieRequestObj['.AOMS.AspNetCore.Identity.Application']));
-          store.dispatch(PersistentStorageActions.setVerifyToken(cookieObject["XSRF-TOKEN"]));
-         /*  store.dispatch(PersistentStorageActions.setToken({
-            "access_token": cookieObject["XSRF-TOKEN"],
-            "expires_in": 1800000,
-            "token_type": "Bearer",
-            "refresh_token": "",
-            "expire_time": new Date().valueOf() + 1800000,
-            "scope": undefined,
-          })); */
+         store.dispatch(PersistentStorageActions.setVerifyToken(cookieObject["XSRF-TOKEN"]));
         }
-        if (cookieRequestObj['.AOMS.AspNetCore.Identity.Application']) {
-           store.dispatch(PersistentStorageActions.setCookie(cookieRequestObj['.AOMS.AspNetCore.Identity.Application']));
-         
-          }
         if(cookieDt){
           const a = cookieDt.split(';')[0].substring(0,25);
           const dt = moment(a);
@@ -128,8 +97,6 @@ export function initAPIInterceptor(store) {
       title = 'Error details:';
     } else if (error.message) {
       message = '';
-     // console.log('Network error with message')
-      // message = error.message;
     } else {
       switch (status) {
         case 401:

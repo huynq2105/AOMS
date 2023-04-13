@@ -4,7 +4,6 @@ import {getEnvVars} from '../Environment'
 const {oAuthConfig} = getEnvVars();
 
 export const login = ({ username, password }) =>{
-  console.log('===============da chay vao log in ================')
   api({
     method: 'POST',
     url: '/connect/token',

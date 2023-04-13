@@ -22,7 +22,6 @@ const TenantBox = ({
   toggleTenantSelection,
 }) => {
   const [tenantName, setTenantName] = useState(tenant.name);
-  // console.log('TenantBox===========================',tenant)
   const findTenant = () => {
     if (!tenantName) {
       setTenant({});

@@ -46,6 +46,7 @@ const disable_eye = require('../assets/icons/disable_eye.png');
 const down = require('../assets/icons/down.png');
 //const eye = require("../assets/icons/eye.png")
 const game = require('../assets/icons/games.png');
+const plus = require('../assets/icons/plus.png');
 const barcode = require('../assets/icons/barcode.png');
 const info = require('../assets/icons/info.png');
 const internet = require('../assets/icons/internet.png');
@@ -90,6 +91,7 @@ export default {
   filter,
   down_arrow,
   truck,
+  plus,
   eye,
   eye_close,
   email,

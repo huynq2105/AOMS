@@ -46,42 +46,13 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
   const toggleTenantSelection = () => {
     setShowTenantSelection(!showTenantSelection);
   };
-/*   useEffect(()=>{
-    fetchAppConfig()
-  },[]) */
-/*   const a = '02 Apr 2023 01:44:51 GMT'
-  const dt = moment(a).format('DD/MM/yyyy');
-  console.log('Convert Date Time========================',dt); */
-  /* const getData = useCallback(async () => {
-    const saveMeStore = await AsyncStorage.getItem('saveMe');
-    const userLogin = await AsyncStorage.getItem('userLogin');
-    if (userLogin) {
-      setEmail(userLogin);
-    }
-    const passwordLogin = await AsyncStorage.getItem('passwordLogin');
-    if (passwordLogin) {
-      setPassword(passwordLogin);
-    }
-    if (saveMeStore === 'true') {
-      setSaveMe(true);
-    }
-  }, []); */
-/*   useEffect(() => {
-    fetchAppConfig();
-  }, []); */
+
   function isEnableSignIn() {
     return email != '' && password != '' && emaiError == '';
   }
   const handleLogin = () => {
     let action;
     setIsLoading(true);
-    //fetchAppConfig();
-  /*   await AsyncStorage.setItem('userLogin', email);
-    if (saveMe) {
-      await AsyncStorage.setItem('passwordLogin', password);
-    } else {
-      await AsyncStorage.removeItem('passwordLogin');
-    } */
     setError(null);
     setAccount({userName:email,password})
     login({userName: email, password: password})
@@ -91,15 +62,6 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
           return;
         }
         console.log('data Login',data)
-        /* setToken({
-          "access_token": "",
-          "expires_in": 1800000,
-          "token_type": "Bearer",
-          "refresh_token": "",
-          "expire_time": new Date().valueOf() + 1800000,
-          "scope": undefined,
-        });
-        setTokenExpired(new Date().valueOf() + 1800000); */
         setToken({
           "access_token": "",
           "expires_in": 1800000,
@@ -111,7 +73,6 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
       })
       .catch(e => {
         console.log('Login Error',e)
-        //fetchAppConfig()
         setError(e);
         setIsLoading(false);
       }).finally(()=>{

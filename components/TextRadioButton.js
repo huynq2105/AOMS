@@ -4,9 +4,9 @@ import {
     View,
     Image
 } from 'react-native';
-import {dummyData,COLORS,SIZES,FONTS,icons} from '../constants'
+import { COLORS,FONTS,SIZE } from '../constants/theme';
 import Text from '../constants/Text'
-
+import icons from '../constants/icons';
 const TextRadioButton = ({customContainerStyle,onPress,label,labelStyle,iconStyle,isSelected})=>{
     return(
         <TouchableOpacity

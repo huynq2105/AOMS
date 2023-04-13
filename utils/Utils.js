@@ -27,7 +27,6 @@ function validateEmail(value, setEmailError) {
 function getTruckStatus(status){
     for(const key in truckStatus){
         if(truckStatus[key].status===status){
-            console.log('Truck status=====================',truckStatus[key])
             return {...truckStatus[key]}
         }
         

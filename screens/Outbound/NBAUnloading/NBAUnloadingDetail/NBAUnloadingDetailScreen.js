@@ -71,7 +71,6 @@ const NBAUnloadingDetailScreen = ({route, navigation, loading, startLoading, sto
           '/api/file-management/directory-descriptor',
           {params: {Filter: config.folderName}}
         );
-        console.log('Folder config================================',result?.data)
         let data = result?.data;
         if (!data || !data?.items || !Array.isArray(data?.items) || data?.items?.length < 1) {
           result = await api.post(
@@ -191,7 +190,6 @@ const NBAUnloadingDetailScreen = ({route, navigation, loading, startLoading, sto
         maxWidth: 768, maxHeight: 1024,
       };
       const onCameraResult = (response) => {
-        //console.log(response);
         if (response.didCancel) {
           console.log('Cancel image picker')
          /*  Toast.show({

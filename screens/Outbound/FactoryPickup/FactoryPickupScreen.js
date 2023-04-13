@@ -4,95 +4,235 @@ import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Text,
+
   TouchableOpacity,
   View,
+  Platform,
+  Image
 } from 'react-native';
-
+import Text from '../../../constants/Text'
+import { SIZES,COLORS,FONTS } from '../../../constants/theme';
 //import Autocomplete component
 import Autocomplete from 'react-native-autocomplete-input';
 import {getUsers} from '../../../api/IdentityAPI'
-const FactoryPickupScreen = props => {
-    const [films, setFilms] = useState([]);
-  const [filteredFilms, setFilteredFilms] = useState([]);
-  const [selectedValue, setSelectedValue] = useState({});
-   useEffect(() => {
-    getUsers({maxResultCount:20,skipCount:0})
-    .then(({ items, totalCount: total }) => {
-       // console.log('Danh sach usser===========',items)
-        setFilms(items)
-      /*   setTotalCount(total);
-        setRecords(skip ? [...records, ...items] : items);
-        setSkipCount(skip); */
-      })
-   /*  .then(({item,totalCount}) => {
-        console.log('Danh sach usser===========',item)
-        setFilms(item)
-    }) */
-    //   .then((json) => {
-    //     const {results: films} = x``;
-    //     setFilms(films);
-    //     //setting the data in the films state
-    //   })
-      .catch((e) => {
-        alert(e);
-      });
-  }, []); 
-console.log('danh sach film',filteredFilms)
-  const findFilm = (query) => {
-    //method called everytime when we change the value of the input
-    if (query) {
-      //making a case insensitive regular expression to get similar value from the film json
-      const regex = new RegExp(`${query.trim()}`, 'i');
-      //setting the filtered film array according the query from the input
-      setFilteredFilms(films.filter((film) => film.userName.search(regex) >= 0));
-    } else {
-      //if the query is null then return blank
-      setFilteredFilms([]);
-    }
-  };
+import Header from '../../../components/Header';
+import DatePicker from 'react-native-date-picker';
+import icons from '../../../constants/icons';
+import moment from 'moment';
+import utils from '../../../utils/Utils';
+import { getDeliver } from '../../../api/OutboundAPI';
+import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
+import IconButton from '../../../components/IconButton';
+import { DMY_FORMAT } from '../../../utils/DateHelpers';
+import images from '../../../constants/images';
+const FactoryPickupScreen = ({navigation}) => {
+  const [filterDate, setFilterDate] = useState({
+    show: false,
+    val: new Date()
+  });
+  const today = moment();
+  console.log('FIlter Date===================',filterDate.val)
+  const params ={LoadingArrivalDate:'31/03/2023'};
+  const changeFilterDate = (date) => {
+    console.log(date);
+    setFilterDate({show: false, val: date ? date : filterDate.val});
+    // loadData();
+  }
+const handleNavigate = ()=>{
+
+}
+  function renderHeader() {
     return (
-        <SafeAreaView style={{flex: 1}}>
-        <View style={styles.container}>
-          <Autocomplete
-            autoCapitalize="none"
-            autoCorrect={false}
-            containerStyle={styles.autocompleteContainer}
-            //data to show in suggestion
-            data={filteredFilms}
-            //default value if you want to set something in input
-            defaultValue={
-              JSON.stringify(selectedValue) === '{}' ? '' : selectedValue.userName
-            }
-            /*onchange of the text changing the state of the query which will trigger
-            the findFilm method to show the suggestions*/
-            onChangeText={(text) => findFilm(text)}
-            placeholder="Enter the film title"
-            flatListProps={{
-              keyExtractor: (_, idx) => idx,
-              renderItem: ({ item }) => <TouchableOpacity
-              onPress={() => {
-                setSelectedValue(item);
-                setFilteredFilms([]);
-              }}>
-             <Text style={styles.itemText}>{item.name}/{item.email}</Text>
-            </TouchableOpacity>
+      <Header
+        // eslint-disable-next-line react-native/no-inline-styles
+        containerStyle={{
+          height: 60,
+          paddingHorizontal: SIZES.padding,
+          alignItems: 'center',
+          backgroundColor: COLORS.primaryALS,
+          //marginTop: Platform.OS == 'ios' ? 30 : 10,
+        }}
+        title="Truck Unloading"
+        rightComponent={
+          <View
+            style={{
+              width: 35,
+              height: 35,
+            }}></View>
+        }
+        leftComponent={
+          <TouchableOpacity
+            style={{
+              width: 35,
+              height: 35,
             }}
-          />
-          <View style={styles.descriptionContainer}>
-            {films.length > 0 ? (
-              <>
-                <Text style={styles.infoText}>Selected Data</Text>
-                <Text style={styles.infoText}>
-                  {JSON.stringify(selectedValue)}
-                </Text>
-              </>
-            ) : (
-              <Text style={styles.infoText}>Enter The Film Title</Text>
+            onPress={()=>navigation.openDrawer()}
+            >
+              <Image source={icons.menu}
+                style={{
+                  width:20,
+                  height:20,
+                  tintColor:COLORS.white
+                }}
+              />
+            </TouchableOpacity>
+        }
+
+        /*  rightComponent={<CartQuantityButton quantity={cartLagiQuantity} onPress={()=>navigation.navigate("CartLagi")} />} */
+      />
+    );
+  }
+  function renderContent() {
+    return (
+      <View
+        style={{
+          flex: 1,
+        }}>
+          <DataRenderResult
+            navigation={navigation}
+            params={params}
+            fetchFn={getDeliver}
+            render={truck=>(
+              <TouchableOpacity
+                style={{
+                  paddingVertical:SIZES.radius,
+                  paddingHorizontal:SIZES.base,
+                  borderTopWidth:1,
+                  borderColor:COLORS.secondaryALS,
+                  flexDirection:'row',
+                  alignItems:'center'
+                }}
+                onPress={()=>handleNavigate(truck)}
+              >
+                <View
+                  style={{
+                    flexDirection:'row',
+                    flex:3,
+                   // backgroundColor:COLORS.green,
+                    alignItems:'center'
+                  }}
+                >
+                  <Image source={icons.truck}
+                  style={{
+                    width:30,
+                    height:30,
+                    marginRight:SIZES.base,
+                    tintColor:COLORS.primaryALS
+                  }} />
+                     <Text primaryALS>{truck.vehicRegNo}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection:"row",
+                    flex:5
+                    
+                  }}
+                >
+                <Text
+                  style={{
+                    flex:1
+                  }}
+                >{utils.getTruckStatus(truck.status).des}</Text>
+                <Image source={icons.right_arrow}
+                  style={{
+                    width:20,
+                    height:20,
+                    tintColor:COLORS.primaryALS
+                  }}
+                />
+                </View>
+        
+              </TouchableOpacity>
             )}
+          />
+      </View>
+    );
+  }
+    return (
+      <View style={styles.container}>
+      {renderHeader()}
+            {/* <View
+              style={{
+                height: Platform.OS == 'ios' ? 90 : 60,
+              }}></View> */}
+              <View
+                style={{
+                  marginTop:60,
+                  justifyContent:'center',
+                  alignItems:'center',
+                  flexDirection:'row'
+                }}
+              >
+              <Text h3 primaryALS>Pickup Date</Text>
+              <View
+                style={{
+                  height:40,
+                  width:100,
+                  borderWidth:1,
+                  borderColor:COLORS.gray,
+                  marginLeft:SIZES.base,
+                  justifyContent:'center',
+                  alignItems:'center'
+                }}
+              >
+                <Text>{DMY_FORMAT(filterDate.val)}</Text>
+              </View>
+              <TouchableOpacity
+                style={{
+                  marginLeft:SIZES.base
+                }}
+                onPress={() => setFilterDate({...filterDate, show: true})}
+              >
+                <Image source={icons.calendar}
+                style={{
+                  width:20,
+                  height:20,
+                  tintColor:COLORS.green
+                }}
+                />
+              </TouchableOpacity>
+              </View>
+              {
+          filterDate.show && (
+            <DatePicker
+              modal
+              mode='date'
+              open={filterDate.show}
+              date={filterDate.val}
+              onConfirm={changeFilterDate}
+              onCancel={() => setFilterDate({...filterDate, show: false})}
+              minimumDate={new Date(2000, 1, 1)}
+              maximumDate={new Date()}
+              locale={"vi"}
+            />
+          )
+        }
+            {renderContent()}
+            <View
+              style={{
+position:'absolute',
+
+   bottom:20,
+   // left:0,
+    right:20,
+              }}
+            >
+            <IconButton
+              icons={icons.plus}
+              containerStyle={{
+             
+                width:50,
+                height:50,
+                borderRadius:25,
+                justifyContent:'center',
+                alignItems:'center',
+                backgroundColor:COLORS.green
+              }}
+              onPress={()=>navigation.navigate('AddTruck')}
+            />
+            </View>
+           
           </View>
-        </View>
-      </SafeAreaView>
     ) 
 };
 
@@ -101,7 +241,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
         flex: 1,
         padding: 16,
-        marginTop: 40,
+        //marginTop: 40,
       },
       autocompleteContainer: {
         backgroundColor: '#ffffff',
