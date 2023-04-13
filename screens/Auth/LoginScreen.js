@@ -33,6 +33,7 @@ import { useIsFocused,useFocusEffect } from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import { createAppConfigSelector } from "../../stores/selectors/AppSelectors";
 import { createVerifyTokenSelector } from '../../stores/selectors/PersistentStorageSelectors';
+
 const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,setTokenExpired,verifyToken}) => {
   const [email, setEmail] = useState('');
   const [emaiError, setEmailError] = useState('');
@@ -50,8 +51,27 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
   function isEnableSignIn() {
     return email != '' && password != '' && emaiError == '';
   }
-  const handleLogin = () => {
+  const getData = useCallback(async () => {
+    //const saveMeStore = await AsyncStorage.getItem('saveMe');
+    const userLogin = await AsyncStorage.getItem('userLogin');
+    if (userLogin) {
+      setEmail(userLogin);
+    }
+    const passwordLogin = await AsyncStorage.getItem('passwordLogin');
+    if (passwordLogin) {
+      setPassword(passwordLogin);
+    }
+    /* if (saveMeStore === 'true') {
+      setSaveMe(true);
+    } */
+  }, []);
+  useEffect(() => {
+    getData();
+  }, []);
+  const handleLogin = async () => {
     let action;
+    await AsyncStorage.setItem('userLogin', email);
+    await AsyncStorage.setItem('passwordLogin', password);
     setIsLoading(true);
     setError(null);
     setAccount({userName:email,password})
