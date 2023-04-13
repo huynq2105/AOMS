@@ -20,7 +20,7 @@ import DatePicker from 'react-native-date-picker';
 import icons from '../../../constants/icons';
 import moment from 'moment';
 import utils from '../../../utils/Utils';
-import { getDeliver } from '../../../api/OutboundAPI';
+import { getDeliver,getTruckFactoryPickup } from '../../../api/OutboundAPI';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
 import IconButton from '../../../components/IconButton';
 import { DMY_FORMAT } from '../../../utils/DateHelpers';
@@ -31,15 +31,15 @@ const FactoryPickupScreen = ({navigation}) => {
     val: new Date()
   });
   const today = moment();
-  console.log('FIlter Date===================',filterDate.val)
-  const params ={LoadingArrivalDate:'31/03/2023'};
+  const [params,setParams] = useState({LoadingArrivalDate:DMY_FORMAT(filterDate.val),CustomerId:0,TruckType:'PICK UP',Type: 'EXPORT'});
   const changeFilterDate = (date) => {
     console.log(date);
     setFilterDate({show: false, val: date ? date : filterDate.val});
+  setParams({...params,LoadingArrivalDate:DMY_FORMAT(date)});
     // loadData();
   }
-const handleNavigate = ()=>{
-
+const handleNavigate = (truck)=>{
+  navigation.navigate('TruckDetail', {truck: truck});
 }
   function renderHeader() {
     return (
@@ -91,7 +91,7 @@ const handleNavigate = ()=>{
           <DataRenderResult
             navigation={navigation}
             params={params}
-            fetchFn={getDeliver}
+            fetchFn={getTruckFactoryPickup}
             render={truck=>(
               <TouchableOpacity
                 style={{
@@ -132,7 +132,8 @@ const handleNavigate = ()=>{
                   style={{
                     flex:1
                   }}
-                >{utils.getTruckStatus(truck.status).des}</Text>
+             /*    >{utils.getTruckStatus(truck.status)?.des}</Text> */
+             >{truck.status}</Text>
                 <Image source={icons.right_arrow}
                   style={{
                     width:20,

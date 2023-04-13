@@ -9,10 +9,10 @@ export const getTruckUnloadingOutbound = (
       {params},
     )
     .then(({data}) => data);
-export const getPoDoByVihicle = (params = {maxResultCount: 20, skipCount: 0}) =>
-  api
-    .get('/api/outbound-module/do-po-manages/get-po-do-by-vehicle', {params})
-    .then(({data}) => data);
+// export const getPoDoByVihicle = (params = {maxResultCount: 20, skipCount: 0}) =>
+//   api
+//     .get('/api/outbound-module/do-po-manages/get-po-do-by-vehicle', {params})
+//     .then(({data}) => data);
 export const getDeliver = (params = {maxResultCount: 20, skipCount: 0}) =>
   api
     .get(
@@ -53,4 +53,20 @@ export const createTruck = body =>
 
   export const createDriver = body =>
   api.post('/api/master-data-module/drivers', body).then(({data}) => data);
+
+  export const getTruckFactoryPickup = (params = {maxResultCount: 1000, skipCount: 0}) => {
+    return api
+      .get('/api/master-data-module/vehicles-registrations/GetVehiclesLoadingListAsync', {params})
+      .then(({data}) => data);
+  };
+  export const getPoDoByVehicle = (params = {maxResultCount: 1000, skipCount: 0}) => {
+    return api
+      .get('/api/outbound-module/do-po-manages/get-po-do-by-vehicle', {params})
+      .then(({data}) => data);
+  };
+
+  export const getSumPoDoVehicleDetail = (params={}) =>
+  api.get(`/api/outbound-module/do-po-manages/get-sum-po-vehicle-detail`,{params}).then(({data}) => data);
+
+
 

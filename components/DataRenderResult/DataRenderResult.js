@@ -38,6 +38,7 @@ function DataRenderResult({
     if (isRefreshingActive) setLoading(true);
     return fetchFn({...params, maxResultCount, skipCount: skip})
       .then(({ items, totalCount: total }) => {
+        console.log('items Truck Pickup=======================',items)
         setTotalCount(total);
         setRecords(skip ? [...records, ...items] : items);
         setSkipCount(skip);
@@ -58,7 +59,7 @@ function DataRenderResult({
     useCallback(() => {
       setSkipCount(0);
       fetch(0, false);
-    }, []),
+    }, [params]),
   );
 
 

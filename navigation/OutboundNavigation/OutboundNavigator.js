@@ -10,6 +10,7 @@ import NBAUnloadingDetailScreen from '../../screens/Outbound/NBAUnloading/NBAUnl
 import AddTruckScreen from '../../screens/Outbound/FactoryPickup/AddTruck/AddTruckScreen';
 import HomeScreen from '../../screens/Home/HomeScreen';
 import MenuIcon from '../../components/MenuIcon/MenuIcon';
+import TruckDetailScreen from '../../screens/Outbound/FactoryPickup/TruckDetail/TruckDetailScreen';
 const Stack = createNativeStackNavigator();
 const OutboundNavigator = () => {
   return (
@@ -41,6 +42,7 @@ const OutboundNavigator = () => {
       <Stack.Screen name="ALSXUnloadingDetail" component={ALSXUnloadingDetailScreen} />
       <Stack.Screen name="NBAUnloadingDetail" component={NBAUnloadingDetailScreen} />
       <Stack.Screen name="AddTruck" component={AddTruckScreen} />
+      <Stack.Screen name="TruckDetail" component={TruckDetailScreen} />
     </Stack.Navigator>
   );
 };

@@ -231,7 +231,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
         initialValues={{
           vehicleRegNo: vihicle ? vihicle.vehicleRegNo : '',
           vhclMasterIsn: vihicle ? vihicle.id : 0,
-          vehicleLoadWeight: vihicle ? vihicle.vehicleLoadWeight+'' : '',
+          vehicleLoadWeight: vihicle ? vihicle.vehicleLoadWeight.toString() : '',
           vhclLoadingWarehouse: '',
           vhclProviderCustomerIsn: '',
           vhclDriverName: driver
