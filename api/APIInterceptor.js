@@ -27,7 +27,6 @@ export function initAPIInterceptor(store) {
       if (!request.headers.__tenant && tenant && tenant.tenantId) {
         request.headers.__tenant = tenant.tenantId;
       }
-      console.log('Request After========================================',request)
       return request;
     },
   
@@ -98,8 +97,6 @@ export function initAPIInterceptor(store) {
       title = 'Error details:';
     } else if (error.message) {
       message = '';
-     // console.log('Network error with message')
-      // message = error.message;
     } else {
       switch (status) {
         case 401:

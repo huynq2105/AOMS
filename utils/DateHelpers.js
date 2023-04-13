@@ -23,7 +23,25 @@ export const getMonths = (from, to, months) =>
   from.getTime() <= to.getTime()
     ? getMonths(startOfNextMonth(from), to, [...months, from])
     : months;
+    export const DMY_FORMAT = d => moment(d).format("DD/MM/yyyy");
+    export const DMY_FORMAT_DATE = d => moment(d).format("dd-MM-yyyy");
+    export const DMY_TIME = d => moment(d).format("dd/MM/yyyy HH:mm");
+    export const DATE_FORMAT_YYYY_MM_DD = d => moment(d).format("yyyy/MM/dd");
+    export const DATE_FORMAT_FOR_PARAMS = d => moment(d).format("yyyyMMdd");
+    export const SERVER_DATE_TIME = d => moment(d).format("yyyy-MM-dd HH:mm:ss");
+    export const TRANSACTION_DATE_TIME = d => moment(d).format("yyyy/MM/dd HH:mm:ss");
+    export const FULL_DATE_TIME_FORMAT = d => moment(d).format("yyyy-MM-dd'T'HH:mm:ss");
+    export const DELIVER_FORMAT_DATE = d => moment(d).format("YYYY-MM-dd'T'HH:mm:ss.SSS'Z'");
+    export const COMPLETED_DATE_TIME_FORMAT = d => moment(d).format("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    export const DELIVER_FORMAT_TIME = d => moment(d).format("HHmm");
+    export const FORMAT_TIME = d => moment(d).format("HH:mm");
+    export const FULL_TIME = d => moment(d).format("dd-MM-yyyy HH:mm");
 
+    export const ADD_TRUCK_FORMAT_TIME = d => moment(d).format("HHmmss");
+
+    export const EQUAL_DATE = 0;
+    export const AFTER_DATE = 1;
+    export const BEFORE_DATE = 2;
 export const dateWithDots = d => moment(d).format('DD.MM.YYYY');
 export const dateWithTime = d => d? moment(d).format('HH:mm | DD.MM.YYYY'):'';
 export const dateFormat = d => moment(d).format('DD/MM/YYYY HH:mm');

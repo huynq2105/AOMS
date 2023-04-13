@@ -8,4 +8,13 @@ export const getApplicationConfiguration = async () => {
   } catch (e) {
     console.log(e);
   }
+  return api
+    .get('/api/abp/application-configuration')
+    // .then(({data, headers}) => ({data, headers}))
+    .then(async ({data}) => {
+      return data;
+    })
+    .catch(function (e) {
+      return conf;
+    });
 };

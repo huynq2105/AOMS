@@ -18,7 +18,12 @@ const inititalState = {
         "roles": [],
         "password": "",
       },
-      token: {}, language: null, tenant: {},tokenDevice:{},verifyToken:'',cookie:null,tokenExpired:null
+      token: {}, language: null, tenant: {},tokenDevice:{},verifyToken:'',cookie:null,tokenExpired:null,
+      truckAddred:{
+        id:'',
+        bsx:'',
+        driver:''
+      }
 }
 
 
@@ -51,5 +56,8 @@ export default createReducer(inititalState,builder =>
       })
       .addCase(PersistentStorageActions.setTokenExpired, (state, action) => {
         state.tokenExpired = action.payload
+      })
+      .addCase(PersistentStorageActions.setTruckAdded, (state, action) => {
+        state.truckAddred = action.payload
       })
     )
