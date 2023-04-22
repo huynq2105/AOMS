@@ -5,7 +5,7 @@ import { SIZES,COLORS } from '../../constants/theme';
 import dummyData from '../../constants/dummyData';
 import OutboundItem from '../../components/OutboundItem';
 import icons from '../../constants/icons';
-const OutboundScreen = ({navigation}) => {
+const InboundScreen = ({navigation}) => {
     
     function renderHeader() {
         return (
@@ -18,7 +18,7 @@ const OutboundScreen = ({navigation}) => {
               backgroundColor: COLORS.primaryALS,
               //marginTop: Platform.OS == 'ios' ? 30 : 10,
             }}
-            title="Outbound"
+            title="Inbound"
             rightComponent={
               <View
                 style={{
@@ -68,7 +68,7 @@ const OutboundScreen = ({navigation}) => {
                 }}
             >
               <FlatList
-                data={dummyData.featuresExpData}
+                data={dummyData.featuresImpData}
                 numColumns={2}
                 keyExtractor={(item,index)=>item.id}
                 renderItem={renderItem}
@@ -98,4 +98,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default OutboundScreen;
+export default InboundScreen;

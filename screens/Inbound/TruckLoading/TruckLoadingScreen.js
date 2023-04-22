@@ -6,11 +6,12 @@ import Header from '../../../components/Header';
 import DatePicker from 'react-native-date-picker';
 import icons from '../../../constants/icons';
 import moment from 'moment';
-import {getTruckFactoryPickup} from '../../../api/OutboundAPI';
+import { getTruckUnloading,getTruckloading } from '../../../api/InboundAPI';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
 import IconButton from '../../../components/IconButton';
 import {DMY_FORMAT} from '../../../utils/DateHelpers';
-const FactoryPickupScreen = ({navigation}) => {
+
+const TruckLoadingScreen = ({navigation}) => {
   const [filterDate, setFilterDate] = useState({
     show: false,
     val: new Date(),
@@ -19,16 +20,15 @@ const FactoryPickupScreen = ({navigation}) => {
   const [params, setParams] = useState({
     LoadingArrivalDate: DMY_FORMAT(filterDate.val),
     CustomerId: 0,
-    TruckType: 'PICK UP',
-    Type: 'EXPORT',
+    TruckType: 'TRANSIT',
+    Type: 'IMPORT',
   });
   const changeFilterDate = date => {
-    console.log(date);
     setFilterDate({show: false, val: date ? date : filterDate.val});
     setParams({...params, LoadingArrivalDate: DMY_FORMAT(date)});
   };
   const handleNavigate = truck => {
-    navigation.navigate('TruckDetail', {truck: truck});
+    navigation.navigate('TruckUnloadingDetail', {truck: truck});
   };
   function renderHeader() {
     return (
@@ -41,7 +41,7 @@ const FactoryPickupScreen = ({navigation}) => {
           backgroundColor: COLORS.primaryALS,
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Truck Pickup"
+        title="Truck Unloading"
         rightComponent={
           <View
             style={{
@@ -82,7 +82,7 @@ const FactoryPickupScreen = ({navigation}) => {
         <DataRenderResult
           navigation={navigation}
           params={params}
-          fetchFn={getTruckFactoryPickup}
+          fetchFn={getTruckUnloading}
           render={truck => (
             <TouchableOpacity
               style={{
@@ -120,7 +120,7 @@ const FactoryPickupScreen = ({navigation}) => {
                 <View
                   style={{
                     marginLeft:SIZES.base,
-                    backgroundColor:truck?.status ==='Ready to load'? COLORS.orange : truck?.status==='Closed'?COLORS.red: COLORS.green,
+                    backgroundColor:truck?.status ==='Ready to load'? COLORS.orange : truck?.status==='Closed'?COLORS.red: truck?.status==='In Transit'?COLORS.gray: COLORS.green,
                     flex:1,
                     padding:5,
                     borderRadius:5,
@@ -211,57 +211,15 @@ const FactoryPickupScreen = ({navigation}) => {
         />
       )}
       {renderContent()}
-      <View
-        style={{
-          position: 'absolute',
-
-          bottom: 20,
-          right: 20,
-        }}>
-        <IconButton
-          icons={icons.plus}
-          iconStyle={{
-            tintColor:COLORS.white
-          }}
-          containerStyle={{
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: COLORS.green,
-          }}
-          onPress={() => navigation.navigate('AddTruck')}
-        />
-      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#F5FCFF',
-    flex: 1,
-    padding: 16,
-  },
-  autocompleteContainer: {
-    backgroundColor: '#ffffff',
-    borderWidth: 0,
-  },
-  descriptionContainer: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  itemText: {
-    fontSize: 35,
-    paddingTop: 5,
-    paddingBottom: 5,
-    margin: 2,
-  },
-  infoText: {
-    textAlign: 'center',
-    fontSize: 16,
-  },
-});
+    container: {
+        flex: 1,
+       
+    }
+})
 
-export default FactoryPickupScreen;
+export default TruckLoadingScreen;

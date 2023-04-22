@@ -1,16 +1,24 @@
 import React from 'react';
-import {Image, StyleSheet,FlatList, View,SafeAreaView} from 'react-native';
+import {Image, StyleSheet,FlatList, View,SafeAreaView,TouchableOpacity} from 'react-native';
 import { getEnvVars } from '../../Environment';
 import PropTypes from 'prop-types';
-import {Text,ListItem,Icon} from 'react-native-elements'
+import {Text,ListItem} from 'react-native-elements'
 import { getEnvConst } from '../../Environment';
+import images from '../../constants/images';
+import { COLORS, SIZES } from '../../constants/theme';
+import icons from '../../constants/icons';
+import { connectToRedux } from '../../utils/ReduxConnect';
+import AppActions from '../../stores/actions/AppActions';
+import PersistentStorageActions from '../../stores/actions/PersistentStorageActions';
+import TextButton from '../TextButton';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 const {version} = getEnvConst();
 const screens = {
     Home: {label: '::Menu:Home', requiredPolicy:'CCC', iconName: 'home'},
     // Dashboard: { label: '::Menu:Dashboard', requiredPolicy:'CCC, iconName: 'cube' },
-    Notification: {label: 'Notification', requiredPolicy:'', iconName: 'bell', o: true},
+    Notification: {label: 'Notification', requiredPolicy:'', iconName: 'plane-arrival', o: true},
     SecurityCheck: {label: 'Security Check', requiredPolicy:'CCC', iconName: 'user-shield', o: true},
-    Outbound: {label: 'Outbound', requiredPolicy:'', iconName: 'plane-departure', o: true},
+    Outbound: {label: 'Outbound', requiredPolicy:'', iconName: 'flight', o: true},
     Inbound: {label: 'Inbound', requiredPolicy:'CCC', iconName: 'plane-arrival', o: true},
     QuickScan: {label: 'Quick Scan', requiredPolicy:'CCC', iconName: 'search', o: true},
     Inventory: {label: 'Inventory', requiredPolicy:'CCC', iconName: 'boxes', o: true},
@@ -28,49 +36,75 @@ const screens = {
     // },
     Settings: {label: 'AbpSettingManagement::Settings', requiredPolicy:'', iconName: 'cog'},
   };
-  function DrawerContent({navigation, state: {routeNames, index: currentScreenIndex}}) {
+  const DrawerContent = ({navigation, state: {routeNames, index: currentScreenIndex},logOutHandle}) =>{
     const navigate = screen => {
-      navigation.navigate(screen);
+      //var screenName = screen.substring(0,screen.length-3)
       navigation.closeDrawer();
+      navigation.navigate(screen);
+     
     };
   
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.container} forceInset={{top: 'always', horizontal: 'never'}}>
           <View style={styles.headerView}>
-            <Image style={styles.logo} resizeMode='stretch' 
-                   source={require('../../assets/aoms_logo.png')}/>
+            <Text style={{
+              fontSize:25
+            }}>AOMS</Text>
           </View>
           <FlatList
             data={routeNames}
             keyExtractor={item => item}
-            renderItem={name => screens[name] ? (
-              <View
-              key={name}
+            renderItem={({item,index}) =>  (
+              <TouchableOpacity
+              key={item}
+              style={{
+                // justifyContent:'center',
+                 alignItems:'center',
+                 flexDirection:"row"
+              }}
+              onPress={()=>navigate(item)}
               >
                 <View>
-                  <View>
-                    <Icon
-                      dark={name !== routeNames[currentScreenIndex]}
-                      light={name === routeNames[currentScreenIndex]}
+                  <View
+                    style={{
+                      padding:10
+                    }}
+                  >
+                    {/* <Icon name={screens[item].iconName} size={24} /> */}
+                   {/*  <Icon
+                      dark={item !== routeNames[currentScreenIndex]}
+                      light={item === routeNames[currentScreenIndex]}
                       fontSize={16}
                       type='FontAwesome5'
-                      name={screens[name].iconName}
-                    />
+                      name='home'
+                    /> */}
                   </View>
                 </View>
                 <View style={{borderBottomWidth: 0}}>
                   <Text
                     style={{
-                      color: name === routeNames[currentScreenIndex] ? '#fff' : '#000',
+                      color: item === routeNames[currentScreenIndex] ? COLORS.primaryALS : COLORS.secondaryALS,
+                      fontSize:20,
+                      //marginHorizontal
                     }}>
-                    {screens[name].o ? screens[name].label : i18n.t(screens[name].label)}
+                {item}
                   </Text>
                 </View>
-              </View>
-            ) : null}
+              </TouchableOpacity>
+            )}
           />
         </SafeAreaView>
+        <TextButton
+          label={'Log out'}
+          onPress={logOutHandle}
+          buttonContainerStyle={{
+            marginHorizontal:SIZES.padding,
+            paddingVertical: SIZES.base,
+            borderRadius: SIZES.base
+          }}
+          
+        />
         <View style={styles.footer}>
           <Text note style={styles.copyRight}>© AOMS</Text>
           <Text note style={styles.version}>{version}</Text>
@@ -84,14 +118,17 @@ const screens = {
       flexGrow: 1,
     },
     logo: {
-      marginTop: 0,
-      marginBottom: 0,
-      width: '100%',
+      marginTop: 10,
+      //marginBottom: 0,
+      width: '90%',
+      //width:70,
+      height:50
     },
     headerView: {
       borderBottomWidth: 1,
       borderColor: '#eee',
       alignItems: 'center',
+      paddingVertical:SIZES.base
     },
     navItem: {
       marginLeft: 0,
@@ -113,10 +150,11 @@ const screens = {
     },
   });
   
-  DrawerContent.propTypes = {
-    state: PropTypes.object.isRequired,
-  };
-  
+  // DrawerContent.propTypes = {
+  //   state: PropTypes.object.isRequired,
+  // };
+  export default DrawerContent
   export {screens};
-  export default DrawerContent;
+  
+  
   

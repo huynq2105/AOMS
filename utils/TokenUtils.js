@@ -1,7 +1,6 @@
 import {dateFormat} from './dateHelpers'
 import moment from 'moment';
 export function isTokenValid(token,tokenExpired) {
-  console.log
     if (!token || typeof token !== 'object' || !token.expire_time) {
       return false;
     }

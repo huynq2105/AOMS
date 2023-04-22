@@ -55,16 +55,9 @@ const requestCameraPermission = async () => {
     }
   } catch (err) {
     console.log(err)
- /*    Toast.show({
-      text: err,
-      buttonText: 'x',
-      duration: 10000,
-      type: 'danger',
-      textStyle: {textAlign: 'center'}, swipeDisabled: false
-    }); */
   }
 };
-const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appConfig,tokenExpired}) => {
+const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appConfig,tokenExpired,store}) => {
   const now = new Date().valueOf();
     const isValid = useMemo(() => isTokenValid(token,tokenExpired), [token]);
     const localizationContext = useMemo(
@@ -89,7 +82,7 @@ const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appCon
     
     return(
         <>
-         {isValid ? <AppNavigator /> : <AuthNavigator />}
+         {isValid ? <AppNavigator store={store} /> : <AuthNavigator />}
          <Loading />
         </>
     )

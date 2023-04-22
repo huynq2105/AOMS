@@ -10,7 +10,7 @@ import i18n from 'i18n-js';
 import { SIZES,COLORS,FONTS } from '../../constants/theme';
 //import { connectStyle, Icon, Input, InputGroup, Item, List, Spinner, Text } from 'native-base';
 import PropTypes from 'prop-types';
-import { RefreshControl, StyleSheet, View,FlatList,Button,Text,TouchableOpacity,TextInput } from 'react-native';
+import { RefreshControl, StyleSheet, View,FlatList,Button,Text,TouchableOpacity,TextInput,Alert } from 'react-native';
 import { activeTheme } from '../../theme/variables';
 import { debounce } from '../../utils/Debounce';
 import { connectToRedux } from '../../utils/ReduxConnect';
@@ -22,6 +22,7 @@ function DataRenderResult({
   fetchFn,
   render,
   params,
+  renderFooter,
   maxResultCount = 15,
   debounceTime = 350,
   ...props
@@ -38,10 +39,17 @@ function DataRenderResult({
     if (isRefreshingActive) setLoading(true);
     return fetchFn({...params, maxResultCount, skipCount: skip})
       .then(({ items, totalCount: total }) => {
-        console.log('items Truck Pickup=======================',items)
+        if (!Array.isArray(items)) {
+          Alert.alert('Lỗi', 'Không thể lấy dữ liệu!');
+          return;
+        }
+
         setTotalCount(total);
         setRecords(skip ? [...records, ...items] : items);
         setSkipCount(skip);
+      }).catch(e=>{
+        console.log('DLV73', e);
+        Alert.alert('Lỗi', e.toString());
       })
       .finally(() => {
         if (isRefreshingActive) setLoading(false);
@@ -74,13 +82,8 @@ function DataRenderResult({
                   marginTop: SIZES.base,
                 }}></View>
             )}
-            ListFooterComponent={() => (
-              <View
-                style={{
-                  height: 80,
-                }}></View>
-            )}
-      
+            ListFooterComponent={renderFooter}
+      //is ={renderFooter}
             refreshing={loading}
             onRefresh={fetch}
             showsVerticalScrollIndicator={false}

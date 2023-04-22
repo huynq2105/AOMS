@@ -25,6 +25,7 @@ import moment from 'moment';
 import FormInputMik from '../../../../components/FormInputMik';
 import {Formik} from 'formik';
 import AddVihicleModal from './AddVihicleModal';
+import * as Yup from 'yup';
 import {
   getVehicles,
   getDrivers,
@@ -33,6 +34,7 @@ import {
   getDriversByVehicleId,
   createVehicle,
   createTruck,
+  getWareHousePickUp
 } from '../../../../api/OutboundAPI';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Picker} from '@react-native-picker/picker';
@@ -40,36 +42,39 @@ import TextButton from '../../../../components/TextButton';
 import {createLoadingSelector} from '../../../../stores/selectors/LoadingSelectors';
 import {connectToRedux} from '../../../../utils/ReduxConnect';
 import LoadingActions from '../../../../stores/actions/LoadingActions';
-//import { getVehicle } from '../../../../api/OutboundAPI';
+
+const validations = {
+  vehicleRegNo: Yup.string().required('Required.'),
+  vhclLoadingWarehouse: Yup.string().notOneOf(['--Choose--'], 'Phai set gia tri'),
+  vhclDriverName: Yup.string().required('Required.'),
+  vehicleLoadWeight: Yup.string().required('Required.'),
+};
 const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
   const [trucks, setTrucks] = useState([]);
   const [driver, setDriver] = useState(null);
   const [filteredTrucks, setFilteredTrucks] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
-  const [filterText, setFilterText] = useState('');
-  const [selectedValue, setSelectedValue] = useState({});
   const today = moment();
   const [drivers, setDrivers] = useState([]);
   const [filteredDrivers, setFilteredDrivers] = useState([]);
   const [agents, setAgents] = useState([]);
-  const [wareHouse, setWareHouse] = useState([]);
+  const [wareHouse, setWareHouse] = useState([{id: 0, label: '--Choose--', value: 0}]);
+  const [wareHousePickUp, setWareHousePickUp] = useState([{id: 0, label: '--Choose--', value: 0}]);
   const [vihicle, setVihicle] = useState();
   const handleAddTruck = () => {
-    console.log('Add Truck');
     setIsVisible(true);
   };
+
   const handleSelectTruck = id => {
     getDriversByVehicleId({VehicleId: id}).then(
       ({items, totalCount: total}) => {
-        console.log('Item driver ==================================', items);
         if (items.length > 0) {
-          console.log('Driver====================', items[0]);
           setDriver(items[0]);
         }
       },
     );
   };
-
+console.log('wareHousePickUp================================',wareHousePickUp)
   useEffect(() => {
     getVehicles({maxResultCount: 1000, skipCount: 0})
       .then(({items, totalCount: total}) => {
@@ -79,7 +84,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
             setDrivers(items);
             getWarehouse({maxResultCount: 1000, skipCount: 0}).then(
               ({items, totalCount: total}) => {
-                const loadWareHouse = [{id: 0, label: '--Choose--', value: 0}];
+                const loadWareHouse = [];
                 items.forEach((item, index) => {
                   return loadWareHouse.push({
                     id: item.id,
@@ -87,18 +92,19 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                     value: item.id,
                   });
                 });
-                setWareHouse(loadWareHouse);
-                getAgents({type: 'OUTBOUND', page: 0}).then(
+                setWareHouse([...wareHouse,...loadWareHouse]);
+                getWareHousePickUp({maxResultCount: 1000, skipCount: 0}).then(
                   ({items, totalCount: total}) => {
-                    const loadAgents = [{id: 0, label: '--Choose--', value: 0}];
+                    const loadWarehousePickup = [];
+                    console.log('danh sach warehouse',items)
                     items.forEach((item, index) => {
-                      return loadAgents.push({
-                        id: item.kundId,
-                        label: item.agentName,
-                        value: item.kundId,
+                      return loadWarehousePickup.push({
+                        id: item.id,
+                        label: item.code,
+                        value: item.id,
                       });
                     });
-                    setAgents(loadAgents);
+                    setWareHousePickUp([...wareHousePickUp,...loadWarehousePickup]);
                   },
                 );
               },
@@ -107,7 +113,14 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
         );
       })
       .catch(e => {
-        alert(e);
+        if(e==='AxiosError: Request failed with status code 401'){
+          alert('Hết phiên đăng nhập');
+        }
+        
+          else{
+            alert(e)
+          }
+        
       });
   }, []);
 
@@ -131,14 +144,17 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
       setFilteredDrivers([]);
     }
   };
-
+  function GetDateNowUCT() {
+    var Now = new Date();
+    var day = Now.getDate();
+    var month = Now.getMonth();
+    var year = Now.getFullYear();
+    var hour = Now.getHours();
+    var minutes = Now.getMinutes();
+    return new Date(Date.UTC(year, month, day, hour, minutes));
+  }
   const handleAddVihicle = (responseVehicle, responseDriver) => {
     setIsVisible(false);
-    console.log(
-      'responseVehicle==============================',
-      responseVehicle,
-    );
-    console.log('responseDriver==============================', responseDriver);
     setVihicle({
       ...vihicle,
       vehicleRegNo: responseVehicle.vehicleRegNo,
@@ -147,7 +163,6 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
     });
     setDriver(responseDriver);
   };
-  console.log('Vehicle============================================',vihicle)
   const onSubmit = values => {
     const date = DELIVER_FORMAT_DATE(today);
     const time = ADD_TRUCK_FORMAT_TIME(today);
@@ -157,32 +172,30 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
       vehicleLoadWeight: parseInt(values.vehicleLoadWeight),
       numberOfDoors: parseInt(values.numberOfDoors),
     };
-    //console.log('Data request============================',values)
     const truckData = {
       vehicRegNo: values.vehicleRegNo,
       vhclDriverName: values.vhclDriverName,
       vhclImportExport: 'EXPORT',
       vhclLoadingWarehouse: values.vhclLoadingWarehouse + '',
-      vhclLoadingArrivalDate: date,
+      vhclLoadingArrivalDate: GetDateNowUCT(),
       vhclLoadingArrivalTime: time,
-      vhclLoadingAtDoorDate: date,
+      vhclLoadingAtDoorDate: GetDateNowUCT(),
       vhclLoadingAtDoorTime: time,
       vhclUnloadingWarehouse: null,
-      vhclUnloadingEtaDate: date,
+      vhclUnloadingEtaDate: GetDateNowUCT(),
       vhclUnloadingEtaTime: unloadingTime,
       vhclTruckType: 'PICK UP',
-      vhclRemarks: values.vhclRemarks,
-      vhclMasterIsn: values.vhclMasterIsn,
-      vhclProviderCustomerIsn: values.vhclProviderCustomerIsn,
+      vhclRemarks: values.vhclRemarks + ' Mobile',
+      vhclMasterIsn: parseInt(values.vhclMasterIsn),
+      vhclWareHousePickupIsn: parseInt(values.vhclWareHousePickupIsn),
     };
-    console.log('Data request============================', truckData);
     startLoading({key: 'addTruck'});
     createTruck(truckData)
       .then(() => {
-        console.log('Add truck success!');
+        navigation.goBack();
       })
       .catch(e => {
-        console.log(e);
+        Alert.alert(e + '');
       })
       .finally(() => stopLoading({key: 'addTruck'}));
   };
@@ -228,12 +241,18 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
     return (
       <Formik
         enableReinitialize
+        validationSchema={Yup.object().shape({
+          ...validations,
+        })}
+        validateOnMount={true}
         initialValues={{
           vehicleRegNo: vihicle ? vihicle.vehicleRegNo : '',
-          vhclMasterIsn: vihicle ? vihicle.id : 0,
-          vehicleLoadWeight: vihicle ? vihicle.vehicleLoadWeight.toString() : '',
+          vhclMasterIsn: vihicle ? vihicle.id + '' : '',
+          vehicleLoadWeight: vihicle
+            ? vihicle.vehicleLoadWeight ? vihicle.vehicleLoadWeight.toString() : ''
+            : '',
           vhclLoadingWarehouse: '',
-          vhclProviderCustomerIsn: '',
+          vhclWareHousePickupIsn: '',
           vhclDriverName: driver
             ? driver.firstName + '-' + driver.phoneNumber
             : '',
@@ -284,7 +303,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                     marginTop: 10,
                     position: 'absolute',
                     zIndex: 1000,
-                    elevation: Platform.OS === 'android' ? 100 : 0,
+                    elevation: Platform.OS === 'android' ? 2 : 0,
                     // height:800
                   }}
                   keyboardType="number-pad"
@@ -301,13 +320,11 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                           borderWidth: 1,
                         }}
                         onPress={() => {
-                          console.log('Press!!!', item);
-
                           setFieldValue('vehicleRegNo', item.vehicleRegNo);
-                          setFieldValue('vhclMasterIsn', item.id);
+                          setFieldValue('vhclMasterIsn', item.id.toString());
                           setFieldValue(
                             'vehicleLoadWeight',
-                            item.vehicleLoadWeight,
+                            item.vehicleLoadWeight? item.vehicleLoadWeight.toString() :"",
                           );
                           setVihicle(item);
                           //setSelectedValue(item);
@@ -355,7 +372,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                 //borderBottomWidth:1,
                 borderBottomColor: COLORS.gray,
               }}
-              value={values.vehicleLoadWeight}
+              value={values.vehicleLoadWeight.toString()}
               onChangeText={handleChange('vehicleLoadWeight')}
               keyboardType="number-pad"
             />
@@ -379,7 +396,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                   borderWidth: 0,
                   elevation: Platform.OS === 'android' ? 1 : 0,
                   position: 'absolute',
-                  // zIndex: 1,
+                   zIndex: 1,
                 }}
                 style={{
                   backgroundColor: '#F5FCFF',
@@ -450,11 +467,11 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                 <Picker
                   mode="dropdown"
                   style={{}}
-                  selectedValue={values.vhclProviderCustomerIsn}
+                  selectedValue={values.vhclWareHousePickupIsn}
                   onValueChange={(itemValue, itemIndex) =>
-                    setFieldValue('vhclProviderCustomerIsn', itemValue)
+                    setFieldValue('vhclWareHousePickupIsn', itemValue)
                   }>
-                  {agents.map(it => (
+                  {wareHousePickUp.map(it => (
                     <Picker.Item
                       key={it.id.toString()}
                       label={it.label}
@@ -533,7 +550,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                   borderRadius: SIZES.base,
                   backgroundColor: COLORS.gray,
                 }}
-                onPress={()=>navigation.goBack()}
+                onPress={() => navigation.goBack()}
               />
               <TextButton
                 label="Save"
@@ -542,7 +559,9 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                   width: 120,
                   height: 40,
                   borderRadius: SIZES.base,
+                  backgroundColor: !isValid ? COLORS.lightGray1 : COLORS.primaryALS
                 }}
+                disabled={!isValid}
                 onPress={handleSubmit}
               />
             </View>

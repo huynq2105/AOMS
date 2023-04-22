@@ -10,7 +10,10 @@ import NBAUnloadingDetailScreen from '../../screens/Outbound/NBAUnloading/NBAUnl
 import AddTruckScreen from '../../screens/Outbound/FactoryPickup/AddTruck/AddTruckScreen';
 import HomeScreen from '../../screens/Home/HomeScreen';
 import MenuIcon from '../../components/MenuIcon/MenuIcon';
+import AddPoDoScreen from '../../screens/Outbound/FactoryPickup/TruckDetail/AddPoDoScreen';
 import TruckDetailScreen from '../../screens/Outbound/FactoryPickup/TruckDetail/TruckDetailScreen';
+import ScanDOScreen from '../../screens/Outbound/FactoryPickup/AddDoFromSo/ScanDOScreen';
+import { truncate } from 'lodash';
 const Stack = createNativeStackNavigator();
 const OutboundNavigator = () => {
   return (
@@ -28,21 +31,23 @@ const OutboundNavigator = () => {
           headerLeft: () => <MenuIcon onPress={() => navigation.openDrawer()}/>,
           title: 'Home',
         })}/> */}
-      <Stack.Screen name="Outbound" component={OutboundScreen}  options={({navigation}) => ({
-          headerLeft: () => <MenuIcon onPress={() => navigation.openDrawer()}/>,
-          title: 'Outbound',
-        })} />
+      <Stack.Screen name="Outbound" component={OutboundScreen}  />
       <Stack.Screen name="AlsxUnloading" component={AlsxUnloadingScreen} options={({navigation}) => ({
           headerLeft: () => <MenuIcon onPress={() => navigation.openDrawer()}/>,
           title: 'AlsxUnloading',
         })}/>
-      <Stack.Screen name="FactoryPickup" component={FactoryPickupScreen}   options={{unmountOnBlur: true,headerShown:false }} />
+      <Stack.Screen name="FactoryPickup" component={FactoryPickupScreen}  options={({navigation}) => ({
+          headerLeft: () => <MenuIcon onPress={() => navigation.openDrawer()}/>,
+          title: 'FactoryPickup',
+        })}/>
       <Stack.Screen name="NBAUnloading" component={NBAUnloadingScreen} />
       <Stack.Screen name="TruckTransit" component={TruckTransitScreen} />
       <Stack.Screen name="ALSXUnloadingDetail" component={ALSXUnloadingDetailScreen} />
       <Stack.Screen name="NBAUnloadingDetail" component={NBAUnloadingDetailScreen} />
       <Stack.Screen name="AddTruck" component={AddTruckScreen} />
       <Stack.Screen name="TruckDetail" component={TruckDetailScreen} />
+      <Stack.Screen name="AddPoDo" component={AddPoDoScreen} />
+      <Stack.Screen name="ScanDO" component={ScanDOScreen} />
     </Stack.Navigator>
   );
 };

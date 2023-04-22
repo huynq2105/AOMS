@@ -6,7 +6,7 @@ export const getApplicationConfiguration = async () => {
   try {
     await api.get('/abp/Swashbuckle/SetCsrfCookie')
   } catch (e) {
-    console.log(e);
+    console.log("getApplicationConfiguration",e);
   }
   return api
     .get('/api/abp/application-configuration')

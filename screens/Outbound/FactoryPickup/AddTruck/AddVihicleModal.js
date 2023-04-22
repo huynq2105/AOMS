@@ -4,7 +4,6 @@ import React, {useState, useEffect, useRef} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   Platform,
@@ -12,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Dimensions,
 } from 'react-native';
+import Text from '../../../../constants/Text'
 import {SIZES, COLORS, FONTS} from '../../../../constants/theme';
 import icons from '../../../../constants/icons';
 import Header from '../../../../components/Header';
@@ -97,7 +97,6 @@ const AddVihicleModal = ({
   //const [vehicleTypeOnwer,setvehicleTypeOnwer] = useState(0)
   const submitHandle = data => {
     //startvehicleLoadWeight({key: 'saveUser'});
-    console.log('signupHandle', data.userName);
     const {userName, email, password} = data;
 
     const body = {
@@ -110,13 +109,10 @@ const AddVihicleModal = ({
       captchaResponse: 'string',
     };
     startLoading;
-    console.log('Body', body);
     createVehicle(body)
       .then(({data}) => {
-        console.log(data);
       })
       .catch(e => {
-        console.log(e);
       })
       .finally(() => stopLoading({key: 'saveUser'}));
   };
@@ -144,14 +140,9 @@ const AddVihicleModal = ({
       vehicleType: values.vehicleType,
       vehicleTypeOnwer: values.vehicleTypeOnwer
     };
-    console.log(
-      'OnSubmit===============================================',
-      newVehicle,
-    );
     startLoading({key: 'addVehicle'});
     createVehicle(newVehicle)
       .then(data => {
-        console.log('data==============================', data);
         const newDriver = {
           firstName: values.firstName,
           lastName: values.lastName,
@@ -176,31 +167,33 @@ const AddVihicleModal = ({
   useEffect(() => {
     setShowModal(isVisible);
   }, [isVisible]);
-  console.log('SHow modal', isVisible);
   return (
     <Modal
-      //deviceWidth='120'
-      // deviceHeight={Dimensions.get('window').width * 0.8}
-      isVisible={showModal}
-      backdropOpacity={1}
+      backdropOpacity={0.1}
       onBackdropPress={() => {
         handleOffModal();
       }}
+      avoidKeyboard={true}
       onBackButtonPress={() => {
         handleOffModal();
       }}
-      style={{
-        backgroundColor: COLORS.white,
-        padding: SIZES.base,
-        margin: SIZES.padding,
-        //width: Dimensions.get('window').width * 0.8,
-        //height: Dimensions.get('window').width
-        // height:60
-      }}
-      backdropColor={'rgba(100,100,100,0.5)'}>
-      <View>
-        <Text>Add Vihicle</Text>
-        <Formik
+      animationType="slide"
+      transparent={true}
+      isVisible={showModal}
+      onRequestClose={() => {
+        Alert.alert('Modal has been closed.');
+        handleOffModal();
+      }}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          {/* <Text style={styles.modalText}>Add PO!</Text> */}
+          <View
+            style={{
+              width: 300,
+              marginBottom: SIZES.base,
+              height: 500,
+            }}>
+            <Formik
           validationSchema={Yup.object().shape({
             ...validations,
             //password: passwordValidation,
@@ -233,9 +226,20 @@ const AddVihicleModal = ({
             <>
               <View style={styles.container}>
                 <View
+                  style={{
+                    alignItems:'center'
+                  }}
+                >
+                <Text h3 primaryALS style={{
+                  
+                }}>Add Truck</Text>
+                </View>
+              
+                <View
                   style={
                     {
-                      // display: 'flex',
+                      marginTop:SIZES.padding,
+                      //backgroundColor:COLORS.green
                     }
                   }>
                   <Text
@@ -264,6 +268,7 @@ const AddVihicleModal = ({
                   <View
                     style={{
                       flexDirection: 'row',
+                      marginTop:SIZES.base
                       //backgroundColor:COLORS.lightGreen
                     }}>
                     <View
@@ -432,52 +437,6 @@ const AddVihicleModal = ({
                       value={values.phoneNumber}
                       onChangeText={handleChange('phoneNumber')}
                     />
-                    {/*   <KeyboardAvoidingView behavior="padding"> */}
-                    {/*  <FormInputMik
-                      label="Driver First Name"
-                      style={{
-                        backgroundColor: 'green',
-                      }}
-                      containerStyle={{}}
-                      inputRef={vehicleRegNoRef}
-                     // onSubmitEditing={() => emailRef.current.focus()}
-                      returnKeyType="next"
-                      onChangeText={handleChange('driverFn')}
-                      onBlur={handleBlur('driverFn')}
-                      inputValue={values.driverFn}
-                      autoCapitalize="none"
-                      errMsg={errors.driverFn}
-                    />
-                
-                            <FormInputMik
-                      label="Driver First Name"
-                      style={{
-                        backgroundColor: 'green',
-                      }}
-                      inputRef={vehicleRegNoRef}
-                     // onSubmitEditing={() => emailRef.current.focus()}
-                      returnKeyType="next"
-                      onChangeText={handleChange('driverLn')}
-                      onBlur={handleBlur('driverLn')}
-                      inputValue={values.driverLn}
-                      autoCapitalize="none"
-                      errMsg={errors.driverLn}
-                    />
-                        <FormInputMik
-                      label="Phone number"
-                      style={{
-                        backgroundColor: 'green',
-                      }}
-                      inputRef={vehicleRegNoRef}
-                     // onSubmitEditing={() => emailRef.current.focus()}
-                      returnKeyType="next"
-                      onChangeText={handleChange('phoneNo')}
-                      onBlur={handleBlur('phoneNo')}
-                      inputValue={values.phoneNo}
-                      autoCapitalize="none"
-                      errMsg={errors.phoneNo}
-                    /> */}
-                    {/* </KeyboardAvoidingView> */}
                   </View>
                 </View>
                 <View
@@ -504,6 +463,7 @@ const AddVihicleModal = ({
                     borderRadius: SIZES.base,
                     backgroundColor: COLORS.gray,
                   }}
+                  onPress={()=>{handleOffModal()}}
                 />
                 <TextButton
                   label="Save"
@@ -519,21 +479,56 @@ const AddVihicleModal = ({
             </>
           )}
         </Formik>
-
-        {/*    <Picker
-                    
-                    ></Picker> */}
-        {/*    <TouchableOpacity onPress={handleSubmit}>
-          <Text>Submit</Text>
-        </TouchableOpacity> */}
+          </View>
+        </View>
       </View>
     </Modal>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 50,
-    padding: SIZES.base,
+    flex: 1,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
 //export default AddVihicleModal;

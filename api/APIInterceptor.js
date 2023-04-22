@@ -72,8 +72,8 @@ export function initAPIInterceptor(store) {
       if (errorRes) {
         if (errorRes.headers._abperrorformat && errorRes.status === 401) {
           store.dispatch(PersistentStorageActions.setToken({}));
-         // store.dispatch(AppActions.logoutAsync());
-          Alert.alert('Phiên làm việc của bạn đã hết hạn')
+          store.dispatch(AppActions.logoutAsync());
+          console.log('Phiên làm việc của bạn đã hết hạn')
         }
         //showError({ error: errorRes.data.error || {}, status: errorRes.status });
       } else {

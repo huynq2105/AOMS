@@ -8,8 +8,8 @@ const featuresHomeData = [
       description: 'Inbound',
       bgColor:['#ffc465', '#ff9c5f'],
       backgroundColor: COLORS.lightyellow,
-      screenName: 'FactoryPickupScreen',
-      srceenNavigagor: 'FactoryPickup',
+      screenName: 'InboundNavigator',
+      srceenNavigagor: 'InboundNav',
     },
     {
       id: 102,
@@ -98,8 +98,42 @@ const featuresExpData = [
         srceenNavigagor: 'NBAUnloading',
       },
   ];
+  const featuresImpData = [
+    {
+      id: 301,
+      icon: icons.awb,
+      color: COLORS.yellow,
+      description: 'Pickup Awb',
+      bgColor:['#ffc465', '#ff9c5f'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'PickupAwbScreen',
+      srceenNavigagor: 'PickupAwb',
+    },
+    {
+      id: 302,
+      icon: icons.flightDepart,
+      color: COLORS.purple,
+      description: 'Truck Loading',
+      bgColor:['#fcaba8', '#fe6bba'],
+      backgroundColor: COLORS.lightpurple,
+      screenName: 'TruckLoadingScreen',
+      srceenNavigagor: 'TruckLoading',
+    },
+  
+    {
+      id: 303,
+      icon: icons.bill,
+      color: COLORS.yellow,
+      description: 'Truck Unloading',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'TruckUnloadingScreen',
+      srceenNavigagor: 'TruckUnloading',
+    },
+  ]
   export default {
     featuresHomeData,
     featuresExpData,
+    featuresImpData
   };
   

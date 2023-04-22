@@ -25,7 +25,7 @@ export const getMonths = (from, to, months) =>
     : months;
     export const DMY_FORMAT = d => moment(d).format("DD/MM/yyyy");
     export const DMY_FORMAT_DATE = d => moment(d).format("dd-MM-yyyy");
-    export const DMY_TIME = d => moment(d).format("dd/MM/yyyy HH:mm");
+    export const DMY_TIME = d => moment(d).format("DD/MM/yyyy HH:mm");
     export const DATE_FORMAT_YYYY_MM_DD = d => moment(d).format("yyyy/MM/dd");
     export const DATE_FORMAT_FOR_PARAMS = d => moment(d).format("yyyyMMdd");
     export const SERVER_DATE_TIME = d => moment(d).format("yyyy-MM-dd HH:mm:ss");

@@ -40,33 +40,95 @@ export const getWarehouse = (params = {maxResultCount: 1000, skipCount: 0}) => {
 };
 export const getAgents = (params = {type: 'OUTBOUND', page: 0}) => {
   return api
-    .get('/api/master-data-module/kunds/get-paged-list-agent-for-select2', {params})
+    .get('/api/master-data-module/kunds/get-paged-list-agent-for-select2', {
+      params,
+    })
     .then(({data}) => data);
 };
+export const getWareHousePickUp = (params = {maxResultCount: 1000, skipCount: 0}) => {
+  return api
+    .get('/api/master-data-module/ware-house-pickup', {
+      params,
+    })
+    .then(({data}) => data);
+};
+
 export const getDriversByVehicleId = (params = {VehicleId: 0}) => {
   return api
     .get('/api/master-data-module/drivers', {params})
     .then(({data}) => data);
 };
 export const createTruck = body =>
-  api.post('/api/master-data-module/vehicles-registrations', body).then(({data}) => data);
+  api
+    .post('/api/master-data-module/vehicles-registrations', body)
+    .then(({data}) => data);
 
-  export const createDriver = body =>
+export const createDriver = body =>
   api.post('/api/master-data-module/drivers', body).then(({data}) => data);
 
-  export const getTruckFactoryPickup = (params = {maxResultCount: 1000, skipCount: 0}) => {
-    return api
-      .get('/api/master-data-module/vehicles-registrations/GetVehiclesLoadingListAsync', {params})
-      .then(({data}) => data);
-  };
-  export const getPoDoByVehicle = (params = {maxResultCount: 1000, skipCount: 0}) => {
-    return api
-      .get('/api/outbound-module/do-po-manages/get-po-do-by-vehicle', {params})
-      .then(({data}) => data);
-  };
+export const getTruckFactoryPickup = (
+  params = {maxResultCount: 1000, skipCount: 0},
+) => {
+  return api
+    .get(
+      '/api/master-data-module/vehicles-registrations/GetVehiclesLoadingListAsync',
+      {params},
+    )
+    .then(({data}) => data);
+};
+export const getPoDoByVehicle = (
+  params = {maxResultCount: 1000, skipCount: 0},
+) => {
+  return api
+    .get('/api/outbound-module/do-po-manages/get-po-do-by-vehicle', {params})
+    .then(({data}) => data);
+};
 
-  export const getSumPoDoVehicleDetail = (params={}) =>
-  api.get(`/api/outbound-module/do-po-manages/get-sum-po-vehicle-detail`,{params}).then(({data}) => data);
+export const getSumPoDoVehicleDetail = (params = {}) =>
+  api
+    .get(`/api/outbound-module/do-po-manages/get-sum-po-vehicle-detail`, {
+      params,
+    })
+    .then(({data}) => data);
 
+export const getListPoDo = (params = {maxResultCount: 1000, skipCount: 0}) => {
+  return api
+    .get('/api/outbound-module/do-po-manages/get-po-do-list', {params})
+    .then(({data}) => data);
+};
 
+export const AddPoDoToTruck = body =>
+  api
+    .post('/api/outbound-module/truck-pickups/add-po-do-to-truck', body)
+    .then(({data}) => data);
 
+export const closeTruck = (body, id) =>
+  api
+    .put(`/api/master-data-module/vehicles-registrations/${id}`, body)
+    .then(({data}) => data);
+
+export const createPo = body =>
+  api
+    .post('/api/outbound-module/shipment-orders/create-new-po', body)
+    .then(({data}) => data);
+export const removeAllGroupByMawb = (listLabId, vehicleRegId) => {
+  return api
+    .post(
+      `/api/master-data-module/vhld-vehicledetails/remove-all-group-by-mawb?vehicleRegId=${vehicleRegId}&listLabId=${listLabId}`,
+    )
+    .then(({data}) => data);
+};
+export const UpdatePiecesLoaded = (vehicleRegId, piecesLoaded) => {
+  return api
+    .put(
+      `/api/master-data-module/vhld-vehicledetails/update-pcs-loaded?vehicleDetailId=${vehicleRegId}&pcs=${piecesLoaded}`,
+    )
+    .then(({data}) => data);
+};
+
+export const getDoByNumber = (params = {maxResultCount: 1000, skipCount: 0}) =>
+  api
+    .get(`/api/outbound-module/do-po-manages`, {params})
+    .then(({data}) => data);
+export const getTruckById = id =>
+    api.get(`/api/master-data-module/vehicles-registrations/${id}`).then(({data}) => data);

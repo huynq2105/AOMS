@@ -10,7 +10,7 @@ const IconButton = ({containerStyle, icons, iconStyle, onPress}) => {
         style={{
           width: 30,
           height: 30,
-          tintColor: COLORS.white,
+          tintColor: COLORS.primaryALS,
           //tintColor:COLORS.white,
           ...iconStyle,
         }}

@@ -18,8 +18,6 @@ export const login = ({userName, password}) =>
     baseURL: oAuthConfig.issuer,
   }).then(({data}) => data);
 
-// export const register = body =>
-// api.post('/api/account/register', body).then(({data}) => console.log(data));
 export const register = body =>
   api({
     method: 'POST',

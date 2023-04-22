@@ -34,7 +34,7 @@ import {useDispatch} from 'react-redux';
 import { createAppConfigSelector } from "../../stores/selectors/AppSelectors";
 import { createVerifyTokenSelector } from '../../stores/selectors/PersistentStorageSelectors';
 
-const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,setTokenExpired,verifyToken}) => {
+const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,verifyToken}) => {
   const [email, setEmail] = useState('');
   const [emaiError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
@@ -81,7 +81,7 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
           Alert.alert('Login Fail',data.description);
           return;
         }
-        console.log('data Login',data)
+        setIsLoading(false);
         setToken({
           "access_token": "",
           "expires_in": 1800000,
@@ -92,12 +92,11 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
         });
       })
       .catch(e => {
-        console.log('Login Error',e)
         setError(e);
         setIsLoading(false);
       }).finally(()=>{
         console.log('Login finally')
-        setIsLoading(false);
+     //  
         new Promise(resolve =>
           fetchAppConfig({showLoading: false, callback: () => resolve(true)}),
         )
@@ -252,7 +251,7 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
+    //backgroundColor: 'red',
   },
   text: {
     color: 'white',
@@ -274,7 +273,7 @@ export default connectToRedux({
     setTenant: PersistentStorageActions.setTenant,
     setAccount: PersistentStorageActions.setCurrentUser,
     fetchAppConfig: AppActions.fetchAppConfigAsync,
-    setTokenExpired:PersistentStorageActions.setTokenExpired
+    //setTokenExpired:PersistentStorageActions.setTokenExpired
   },
 });
 
