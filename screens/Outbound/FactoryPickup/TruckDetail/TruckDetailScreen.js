@@ -75,7 +75,6 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
           return;
         }
-        items.forEach((item, index) => {
           const result = [];
           let piece = 0;
           items.forEach((item, index) => {
@@ -96,7 +95,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           setFilterListPo(result);
           setTotalPieces(piece);
           stopLoading('Load data')
-        });
+        
       })
       .catch(e => {
         console.log(e)
