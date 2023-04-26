@@ -58,7 +58,12 @@
     "reselect": "^4.1.7",
     "validator": "^13.9.0",
     "yup": "^1.0.2"
-  },
+  },  
+  "reactNativePermissionsIOS": [    
+    "Camera",
+    "PhotoLibrary",
+    "PhotoLibraryAddOnly"
+  ],
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",

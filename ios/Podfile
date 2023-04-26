@@ -11,12 +11,15 @@ target 'AOMS' do
     # to enable hermes on iOS, change `false` to `true` and then install pods
     :hermes_enabled => false
   )
-
+  pod 'CodePush', :path => '../node_modules/react-native-code-push'
   target 'AOMSTests' do
     inherit! :complete
     # Pods for testing
   end
-
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
