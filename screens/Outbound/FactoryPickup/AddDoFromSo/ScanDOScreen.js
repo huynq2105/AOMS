@@ -15,6 +15,7 @@ import {
   FlatList,
   Modal,
 } from 'react-native';
+import { FORMAT_TIME } from '../../../../utils/DateHelpers';
 import Text from '../../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../../constants/theme';
 import icons from '../../../../constants/icons';
@@ -41,6 +42,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import EditPoModal from '../TruckDetail/EditPoModal';
 const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   const truck = route?.params?.truck ?? {};
+  const today = moment();
   const [truckDetail, setTruckDetail] = useState(null);
   const [piecesPO, setpiecesPO] = useState(0);
   const [disableButton,setDisablebutton] = useState(true);
@@ -77,8 +79,9 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   };
   const handleAddSo = () => {
     startLoading('AddDo');
+    const DoValue = searchText.length > 10 ? searchText.substring(0,10) : searchText
     //get DO
-    getDoByNumber({DomgrDono: searchText})
+    getDoByNumber({DomgrDono: DoValue})
       .then(({items, totalCount}) => {
         if (totalCount > 0) {
           //ton tai DO
@@ -86,7 +89,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           stopLoading('AddDo');
         } else {
           var DoPo = {
-            domgrDono: searchText,
+            domgrDono: DoValue,
             domgrPieces: 1,
           };
           createPo(DoPo).then(data => {
@@ -166,7 +169,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           justifyContent: 'center',
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Truck Detail"
+        title="Scan DO"
         leftComponent={
           <TouchableOpacity
             style={{
@@ -214,6 +217,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   };
   const [modalVisibleEditPO, setModalVisibleEditPO] = useState(false);
   const handleCloseTruck = () => {
+    console.log('CLose Truck!!!',truck.id)
     getTruckById(truck.id)
       .then(data => {
         const truckPut = {
@@ -222,14 +226,17 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           vhclLoadingVehicleClosedDate: GetDateNowUCT(),
           vhclLoadingVehicleClosedTime: ADD_TRUCK_FORMAT_TIME(today),
         };
+        console.log('Truck Put.................',truckPut)
         closeTruck(truckPut, truck.id).then(() => {
-          navigation.goBack();
+          navigation.navigate('TruckDetail',{truck:{...truck,status:'Closed'}})
         });
       })
-      .catch(e => {});
+      .catch(e => {
+        console.log(e)
+      });
   };
   const handleConfirm = () => {
-    Alert.alert('Đóng xe', 'Bạn có chắc chắn đóng xe' + truck.vehicRegNo, [
+    Alert.alert('Đóng xe', 'Bạn có chắc chắn đóng xe ' + truck.vehicRegNo, [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),
@@ -255,6 +262,9 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
       .then(() => {
         loadPoDoByVehicle();
         setSearchText('')
+        setTimeout(() => {
+          textInputRef.current.focus();
+        }, 100);
         stopLoading('ScanDO')
       })
       .catch(e => {
@@ -335,21 +345,61 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
         </View>
         <FlatList
           data={listPo}
-          ListHeaderComponent={
-            <View
-              style={{
-                marginTop: SIZES.padding,
-              }}>
-              <Text>Tổng số kiện: {totalPieces}</Text>
-            </View>
-          }
+          ListFooterComponent={()=><View
+            style={{
+              height:1,
+              backgroundColor:COLORS.gray
+            }}
+            ></View>}
+            ListHeaderComponent={
+              <View
+                style={{
+                  marginTop: SIZES.padding,
+                  borderBottomWidth: 1,
+                  borderBottomColor: COLORS.gray,
+                  flexDirection: 'row',
+                }}>
+                <View
+                  style={{
+                    flex: 1,
+                  }}></View>
+                <View
+                  style={{
+                    flex: 3,
+                    justifyContent:'center',
+                    alignItems:'center'
+                  }}>
+                  <Text>DO No</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 3,
+                    justifyContent:'center',
+                    alignItems:'center'
+                  }}>
+                  <Text>Time PDA</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 2,
+                    justifyContent:'center',
+                    alignItems:'center'
+                  }}>
+                  <Text> Loaded</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                  }}><Text>Edit</Text></View>
+              </View>
+            }
           ItemSeparatorComponent={() => (
             <LineDivider
               lineStyle={{
                 height: 1,
                 backgroundColor: COLORS.gray,
-                marginTop: SIZES.base,
-                marginBottom: SIZES.base,
+               // marginTop: SIZES.base,
+               // marginBottom: SIZES.base,
               }}
             />
           )}
@@ -358,46 +408,77 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
             <View
               style={{
                 flexDirection: 'row',
+                backgroundColor: item?.checkPo
+                  ? COLORS.transparentprimaryALS
+                  : null,
               }}>
-              <CheckComponent
-                check={item?.checkPo}
-                size={24}
-                color={COLORS.lightGray1}
-                onPress={e => {
-                  handleCheckItem(e, item);
-                  //handleSeachByHawb(e)
-                }}
-              />
               <View
                 style={{
-                  flexDirection: 'row',
-                  marginLeft: SIZES.radius,
-                  justifyContent: 'center',
-                  alignItems: 'center',
                   flex: 1,
-                  //backgroundColor:COLORS.green,
-                  paddingRight: SIZES.padding,
+                  paddingVertical:SIZES.radius
                 }}>
-                  <View>
-                  <Text h3 primaryALS>
+                <CheckComponent
+                  check={item?.checkPo}
+                  size={24}
+                  color={COLORS.lightGray1}
+                  onPress={e => {
+                    handleCheckItem(e, item);
+                    //handleSeachByHawb(e)
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  flex: 3,
+                  borderLeftWidth:1,
+                  borderLeftColor:COLORS.gray,
+                  justifyContent:'center',
+                  alignItems:'center'
+                  //backgroundColor:COLORS.green,
+                }}>
+                <Text h3 primaryALS>
                   {item?.poNumber}
                 </Text>
-               
-                  </View>
-               
-                <View
-                  style={{
-                    flex: 1,
-                    marginLeft:SIZES.base
-                  //  backgroundColor: COLORS.red,
-                  }}>
-                 <Text>{item?.time}</Text>
-                </View>
+              </View>
+              <View
+                style={{
+                  flex: 3,
+                  borderLeftWidth:1,
+                  borderLeftColor:COLORS.gray,
+                  justifyContent:'center',
+                  alignItems:'center'
+                  // backgroundColor:COLORS.lightGreen
+                }}>
                 <Text h3 primaryALS>
+                  {FORMAT_TIME(item?.date)}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  borderLeftWidth:1,
+                  borderLeftColor:COLORS.gray,
+                  justifyContent:'center',
+                  alignItems:'center'
+                  // backgroundColor:COLORS.lightGreen
+                }}>
+                <Text h2 primaryALS>
                   {item?.piecesLoaded}
                 </Text>
               </View>
-              <TouchableOpacity onPress={() => handleEditPO(item)}>
+              <TouchableOpacity
+                style={{
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent:'center',
+                  alignItems:'center',
+                  //paddingHorizontal: SIZES.radius,
+                 // paddingVertical: SIZES.base,
+                  flex: 1,
+                  //backgroundColor:COLORS.lightGreen
+                }}
+                onPress={() => handleEditPO(item)}>
                 <Icon
                   name="edit"
                   size={24}
@@ -457,7 +538,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           flex: 1,
           //backgroundColor: COLORS.green,
         }}>
-        <View
+       <View
           style={{
             flexDirection: 'row',
             paddingHorizontal: SIZES.base,
@@ -472,8 +553,14 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               tintColor: COLORS.primaryALS,
             }}
           />
-          <Text h2 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
+          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
             {truck?.vehicRegNo}
+          </Text>
+          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
+            Total:{totalPieces}pcs
+          </Text>
+          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
+            {truck?.warehousePickup}
           </Text>
           <View
             style={{

@@ -78,6 +78,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken}) => 
             boderColor: COLORS.secondaryALS,
             marginLeft:SIZES.base
           }}
+          image={item.icon}
            title={item.description}
            onPress={() =>
             navigation.navigate(item.srceenNavigagor, {

@@ -23,6 +23,8 @@ function DataRenderResult({
   render,
   params,
   renderFooter,
+  renderHeader,
+  renderSeparator,
   maxResultCount = 15,
   debounceTime = 350,
   ...props
@@ -43,7 +45,6 @@ function DataRenderResult({
           Alert.alert('Lỗi', 'Không thể lấy dữ liệu!');
           return;
         }
-
         setTotalCount(total);
         setRecords(skip ? [...records, ...items] : items);
         setSkipCount(skip);
@@ -76,13 +77,9 @@ function DataRenderResult({
       
       <View style={styles.container}>
       <FlatList
-            ListHeaderComponent={() => (
-              <View
-                style={{
-                  marginTop: SIZES.base,
-                }}></View>
-            )}
+            ListHeaderComponent={renderHeader}
             ListFooterComponent={renderFooter}
+            ItemSeparatorComponent={renderSeparator}
       //is ={renderFooter}
             refreshing={loading}
             onRefresh={fetch}

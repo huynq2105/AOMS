@@ -13,6 +13,7 @@ import MenuIcon from '../../components/MenuIcon/MenuIcon';
 import AddPoDoScreen from '../../screens/Outbound/FactoryPickup/TruckDetail/AddPoDoScreen';
 import TruckDetailScreen from '../../screens/Outbound/FactoryPickup/TruckDetail/TruckDetailScreen';
 import ScanDOScreen from '../../screens/Outbound/FactoryPickup/AddDoFromSo/ScanDOScreen';
+import TruckSealScreen from '../../screens/Outbound/TruckSeal/TruckSealScreen';
 import { truncate } from 'lodash';
 const Stack = createNativeStackNavigator();
 const OutboundNavigator = () => {
@@ -48,6 +49,7 @@ const OutboundNavigator = () => {
       <Stack.Screen name="TruckDetail" component={TruckDetailScreen} />
       <Stack.Screen name="AddPoDo" component={AddPoDoScreen} />
       <Stack.Screen name="ScanDO" component={ScanDOScreen} />
+      <Stack.Screen name="TruckSeal" component={TruckSealScreen} />
     </Stack.Navigator>
   );
 };

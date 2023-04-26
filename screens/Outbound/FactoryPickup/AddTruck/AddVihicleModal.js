@@ -250,7 +250,7 @@ const AddVihicleModal = ({
                         //marginTop: 60,
                       }
                     }>
-                    Biển số xe:
+                    Biển số xe: <Text style={{color:COLORS.red}}>(*)</Text>
                   </Text>
                   <TextInput
                     style={{
@@ -277,7 +277,7 @@ const AddVihicleModal = ({
                         marginRight: SIZES.padding,
                       }}>
                       <Text>
-                        Vehicle Type*
+                        Vehicle Type <Text style={{color:COLORS.red}}>(*)</Text>
                         <Text>
                           {errors.vehicleType ? errors.vehicleType : ''}
                         </Text>
@@ -327,7 +327,7 @@ const AddVihicleModal = ({
                     </View>
                   </View>
                   <View>
-                    <Text>No door</Text>
+                    <Text>No door <Text style={{color:COLORS.red}}>(*)</Text></Text>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -383,7 +383,7 @@ const AddVihicleModal = ({
                           //marginTop: 60,
                         }
                       }>
-                      Lái xe:
+                      Lái xe: <Text style={{color:COLORS.red}}>(*)</Text>
                     </Text>
                     <TextInput
                       style={{

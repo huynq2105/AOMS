@@ -70,12 +70,13 @@ const App = () => {
 
   return (
     <Provider store={store}>
+           <ToastProvider>
         <SafeAreaProvider>
         <PersistGate loading={null} persistor={persistor}>
         <AppContainer />
       </PersistGate>
         </SafeAreaProvider>
-     
+        </ToastProvider>
     </Provider>
   );
 };
