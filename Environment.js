@@ -29,12 +29,17 @@ const ENV = {
       },
     },
   };
-  
+  const EnvironmentList = [
+    {id:0,value:'https://aoms-alsb.alssys.vn',label:'ALSB PRODUCT'},
+    {id:0,value:'https://aoms.alssys.vn',label:'ALSW PRODUCT'},
+    {id:0,value:'https://aoms-uat.alssys.vn',label:'ALSW UAT'},
+  ]
   export const getEnvVars = () => {
     // eslint-disable-next-line no-undef
     // return __DEV__ ? ENV.dev : ENV.prod;
     return ENV.dev;
   };
+  export default EnvironmentList;
   export const getEnvConst = () => {
     return ENV.constant;
   };

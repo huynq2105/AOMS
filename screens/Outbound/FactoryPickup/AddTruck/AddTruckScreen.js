@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //import all the components we are going to use
 import {
   SafeAreaView,
@@ -48,6 +48,7 @@ const validations = {
   vhclLoadingWarehouse: Yup.string().notOneOf(['--Choose--'], 'Phai set gia tri'),
   vhclDriverName: Yup.string().required('Required.'),
   vehicleLoadWeight: Yup.string().required('Required.'),
+  vhclRemarks: Yup.string().required('Required.'),
 };
 const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
   const [trucks, setTrucks] = useState([]);
@@ -55,6 +56,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
   const [filteredTrucks, setFilteredTrucks] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const today = moment();
+  const [valueWareHouse,setValueWareHouse] = useState('')
   const [drivers, setDrivers] = useState([]);
   const [filteredDrivers, setFilteredDrivers] = useState([]);
   const [agents, setAgents] = useState([]);
@@ -74,8 +76,18 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
       },
     );
   };
-console.log('wareHousePickUp================================',wareHousePickUp)
+  const loadWareHouse = async () =>{
+  
+    const wareHouseSaved = await AsyncStorage.getItem('wareHouseSave');
+    if(wareHouseSaved) {
+      setValueWareHouse(wareHouseSaved)
+      return wareHouseSaved;
+    }
+    return null;
+  }
   useEffect(() => {
+/*     const wareSaved = loadWareHouse();
+    console.log('wareSaved=====================================',wareSaved) */
     getVehicles({maxResultCount: 1000, skipCount: 0})
       .then(({items, totalCount: total}) => {
         setTrucks(items);
@@ -85,18 +97,21 @@ console.log('wareHousePickUp================================',wareHousePickUp)
             getWarehouse({maxResultCount: 1000, skipCount: 0}).then(
               ({items, totalCount: total}) => {
                 const loadWareHouse = [];
+                let valueWareHouseInit = ''
                 items.forEach((item, index) => {
+                  valueWareHouseInit = item.id +'';
                   return loadWareHouse.push({
                     id: item.id,
                     label: item.warehouseShortCode,
                     value: item.id,
                   });
                 });
-                setWareHouse([...wareHouse,...loadWareHouse]);
+                setValueWareHouse(valueWareHouseInit)
+                setWareHouse(loadWareHouse)
+              
                 getWareHousePickUp({maxResultCount: 1000, skipCount: 0}).then(
                   ({items, totalCount: total}) => {
                     const loadWarehousePickup = [];
-                    console.log('danh sach warehouse',items)
                     items.forEach((item, index) => {
                       return loadWarehousePickup.push({
                         id: item.id,
@@ -176,7 +191,7 @@ console.log('wareHousePickUp================================',wareHousePickUp)
       vehicRegNo: values.vehicleRegNo,
       vhclDriverName: values.vhclDriverName,
       vhclImportExport: 'EXPORT',
-      vhclLoadingWarehouse: values.vhclLoadingWarehouse + '',
+      vhclLoadingWarehouse: values.vhclLoadingWarehouse,
       vhclLoadingArrivalDate: GetDateNowUCT(),
       vhclLoadingArrivalTime: time,
       vhclLoadingAtDoorDate: GetDateNowUCT(),
@@ -189,6 +204,7 @@ console.log('wareHousePickUp================================',wareHousePickUp)
       vhclMasterIsn: parseInt(values.vhclMasterIsn),
       vhclWareHousePickupIsn: parseInt(values.vhclWareHousePickupIsn),
     };
+    console.log('Truck Data===============',truckData)
     startLoading({key: 'addTruck'});
     createTruck(truckData)
       .then(() => {
@@ -251,7 +267,7 @@ console.log('wareHousePickUp================================',wareHousePickUp)
           vehicleLoadWeight: vihicle
             ? vihicle.vehicleLoadWeight ? vihicle.vehicleLoadWeight.toString() : ''
             : '',
-          vhclLoadingWarehouse: '',
+          vhclLoadingWarehouse: valueWareHouse+'',
           vhclWareHousePickupIsn: '',
           vhclDriverName: driver
             ? driver.firstName + '-' + driver.phoneNumber
@@ -281,7 +297,7 @@ console.log('wareHousePickUp================================',wareHousePickUp)
               style={{
                 marginTop: SIZES.base,
               }}>
-              Truck Number
+              Truck Number <Text style={{color:COLORS.red}}>(*)</Text>
             </Text>
             <View
               style={{
@@ -306,7 +322,6 @@ console.log('wareHousePickUp================================',wareHousePickUp)
                     elevation: Platform.OS === 'android' ? 2 : 0,
                     // height:800
                   }}
-                  keyboardType="number-pad"
                   data={filteredTrucks}
                   defaultValue={values.vehicleRegNo}
                   onChangeText={text => findTruck(text)}
@@ -361,7 +376,7 @@ console.log('wareHousePickUp================================',wareHousePickUp)
               style={{
                 marginTop: 60,
               }}>
-              Load weight
+              Load weight <Text style={{color:COLORS.red}}>(*)</Text>
             </Text>
             <TextInput
               style={{
@@ -382,7 +397,7 @@ console.log('wareHousePickUp================================',wareHousePickUp)
               style={{
                 marginTop: SIZES.base,
               }}>
-              Driver
+              Driver <Text style={{color:COLORS.red}}>(*)</Text>
             </Text>
             <View
               style={{
@@ -437,7 +452,7 @@ console.log('wareHousePickUp================================',wareHousePickUp)
                 style={{
                   flex: 1,
                 }}>
-                From
+                Factory <Text style={{color:COLORS.red}}>(*)</Text>
               </Text>
               <Text
                 h3
@@ -497,14 +512,18 @@ console.log('wareHousePickUp================================',wareHousePickUp)
                   }}
                   mode="dropdown"
                   selectedValue={values.vhclLoadingWarehouse}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setFieldValue('vhclLoadingWarehouse', itemValue)
+                  onValueChange={(itemValue, itemIndex) =>{
+                    setFieldValue('vhclLoadingWarehouse', itemValue+'')
+                   AsyncStorage.setItem('wareHouseSave', itemValue+'');
+                  }
+                    
                   }>
                   {wareHouse.map(it => (
                     <Picker.Item
                       key={it.id.toString()}
                       label={it.label}
                       value={it.value}
+                      
                     />
                   ))}
                 </Picker>
@@ -518,7 +537,7 @@ console.log('wareHousePickUp================================',wareHousePickUp)
                   marginTop: SIZES.base,
                   //flex: 1,
                 }}>
-                Remark
+                W.H <Text style={{color:COLORS.red}}>(*)</Text>
               </Text>
               <TextInput
                 style={{

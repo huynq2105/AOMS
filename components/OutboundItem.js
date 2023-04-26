@@ -4,13 +4,14 @@ import { COLORS,SIZES } from "../constants/theme";
 import icons from "../constants/icons";
 import Text from "../constants/Text";
 import images from "../constants/images";
-const OutboundItem = ({customContainerStyle,onPress,title}) =>{
+const OutboundItem = ({customContainerStyle,onPress,title,image}) =>{
   
     return(
         <TouchableOpacity
             style={{
                 width:'45%',
                 padding: SIZES.base,
+                height:120,
                 alignItems:'center',
                 marginBottom:SIZES.padding,
                 borderRadius: SIZES.radius,
@@ -28,10 +29,10 @@ const OutboundItem = ({customContainerStyle,onPress,title}) =>{
             >
              <Text h3  primaryALS>{title}  </Text>
             </View>
-            <Image source={images.logoALS}
+            <Image source={image}
             style={{
-              width:80,
-              height:40,
+              width:60,
+              height:60,
               tintColor: COLORS.primaryALS,
             }}
           /> 

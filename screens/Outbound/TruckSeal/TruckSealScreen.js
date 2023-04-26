@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, TouchableOpacity, View, Image, Alert} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Image,Alert} from 'react-native';
 import Text from '../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../constants/theme';
 import Header from '../../../components/Header';
@@ -9,8 +9,8 @@ import moment from 'moment';
 import {getTruckFactoryPickup} from '../../../api/OutboundAPI';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
 import IconButton from '../../../components/IconButton';
-import {DMY_FORMAT, DMY_TIME, FORMAT_TIME} from '../../../utils/DateHelpers';
-const FactoryPickupScreen = ({navigation}) => {
+import {DMY_FORMAT,FORMAT_TIME} from '../../../utils/DateHelpers';
+const TruckSealScreen = ({navigation}) => {
   const [filterDate, setFilterDate] = useState({
     show: false,
     val: new Date(),
@@ -21,6 +21,7 @@ const FactoryPickupScreen = ({navigation}) => {
     CustomerId: 0,
     TruckType: 'PICK UP',
     Type: 'EXPORT',
+    Status:'Closed'
   });
   const changeFilterDate = date => {
     console.log(date);
@@ -28,7 +29,7 @@ const FactoryPickupScreen = ({navigation}) => {
     setParams({...params, LoadingArrivalDate: DMY_FORMAT(date)});
   };
   const handleNavigate = truck => {
-    navigation.navigate('TruckDetail', {truck: truck,screenParent:'FactoryPickup'});
+    navigation.navigate('TruckDetail', {truck: truck,screenParent:'AddSeal'});
   };
   function renderHeader() {
     return (
@@ -41,7 +42,7 @@ const FactoryPickupScreen = ({navigation}) => {
           backgroundColor: COLORS.primaryALS,
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Truck Pickup"
+        title="Add Seal"
         rightComponent={
           <View
             style={{
@@ -112,7 +113,7 @@ const FactoryPickupScreen = ({navigation}) => {
                   justifyContent:"center",
                   alignItems:'center',
                 }}>
-                <Text>Truck No</Text>
+                <Text primaryALS>Truck No</Text>
               </View>
               <View
                 style={{
@@ -123,7 +124,7 @@ const FactoryPickupScreen = ({navigation}) => {
                   justifyContent:"center",
                   alignItems:'center',
                 }}>
-                <Text>W.H</Text>
+                <Text primaryALS>W.H</Text>
               </View>
               <View
                 style={{
@@ -134,7 +135,7 @@ const FactoryPickupScreen = ({navigation}) => {
                   justifyContent:"center",
                   alignItems:'center',
                 }}>
-                <Text>Time</Text>
+                <Text primaryALS>Time</Text>
               </View>
               <View
                 style={{
@@ -145,7 +146,7 @@ const FactoryPickupScreen = ({navigation}) => {
                   alignItems:'center',
                  // marginRight
                 }}>
-                <Text
+                <Text primaryALS
                   style={{
                     marginRight:SIZES.padding
                   }}
@@ -210,7 +211,7 @@ const FactoryPickupScreen = ({navigation}) => {
                   paddingHorizontal:SIZES.radius,
                   justifyContent:'center'
                 }}>
-                <Text> {FORMAT_TIME(truck.loadingArrivalDate)}</Text>
+                <Text> {FORMAT_TIME(truck.date)}</Text>
               </View>
 
               <View
@@ -330,7 +331,7 @@ const FactoryPickupScreen = ({navigation}) => {
         <IconButton
           icons={icons.plus}
           iconStyle={{
-            tintColor: COLORS.white,
+            tintColor:COLORS.white
           }}
           containerStyle={{
             width: 50,
@@ -373,4 +374,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FactoryPickupScreen;
+export default TruckSealScreen;

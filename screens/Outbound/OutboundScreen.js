@@ -55,6 +55,7 @@ const OutboundScreen = ({navigation}) => {
             boderColor: COLORS.secondaryALS,
             marginLeft:SIZES.base
           }}
+          image={item.icon}
            title={item.description}
             onPress={() =>
               navigation.navigate(item.srceenNavigagor,{screen:item.screenName})

@@ -14,12 +14,12 @@ import TextButton from '../TextButton';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 const {version} = getEnvConst();
 const screens = {
-    Home: {label: '::Menu:Home', requiredPolicy:'CCC', iconName: 'home'},
+    HomeNav: {label: 'Home', requiredPolicy:'CCC', iconName: 'home'},
     // Dashboard: { label: '::Menu:Dashboard', requiredPolicy:'CCC, iconName: 'cube' },
     Notification: {label: 'Notification', requiredPolicy:'', iconName: 'plane-arrival', o: true},
     SecurityCheck: {label: 'Security Check', requiredPolicy:'CCC', iconName: 'user-shield', o: true},
-    Outbound: {label: 'Outbound', requiredPolicy:'', iconName: 'flight', o: true},
-    Inbound: {label: 'Inbound', requiredPolicy:'CCC', iconName: 'plane-arrival', o: true},
+    OutboundNav: {label: 'Outbound', requiredPolicy:'', iconName: 'flight', o: true},
+    InboundNav: {label: 'Inbound', requiredPolicy:'CCC', iconName: 'star', o: true},
     QuickScan: {label: 'Quick Scan', requiredPolicy:'CCC', iconName: 'search', o: true},
     Inventory: {label: 'Inventory', requiredPolicy:'CCC', iconName: 'boxes', o: true},
     Report: {label: 'Reports', requiredPolicy:'CCC', iconName: 'chart-bar', o: true},
@@ -71,7 +71,7 @@ const screens = {
                       padding:10
                     }}
                   >
-                    {/* <Icon name={screens[item].iconName} size={24} /> */}
+                    <Icon name={screens[item].iconName} size={24} />
                    {/*  <Icon
                       dark={item !== routeNames[currentScreenIndex]}
                       light={item === routeNames[currentScreenIndex]}
@@ -85,10 +85,10 @@ const screens = {
                   <Text
                     style={{
                       color: item === routeNames[currentScreenIndex] ? COLORS.primaryALS : COLORS.secondaryALS,
-                      fontSize:20,
+                      fontSize:16,
                       //marginHorizontal
                     }}>
-                {item}
+                {screens[item].label}
                   </Text>
                 </View>
               </TouchableOpacity>
