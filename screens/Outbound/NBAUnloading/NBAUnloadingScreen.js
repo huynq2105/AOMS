@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, TouchableOpacity, View, Image,Alert} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Image, Alert} from 'react-native';
 import Text from '../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../constants/theme';
 import Header from '../../../components/Header';
@@ -10,8 +10,9 @@ import {getDeliver} from '../../../api/OutboundAPI';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
 import IconButton from '../../../components/IconButton';
 import {DMY_FORMAT} from '../../../utils/DateHelpers';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const params ={LoadingArrivalDate:'31/03/2023'};
+const params = {LoadingArrivalDate: '31/03/2023'};
 const NBAUnloadingScreen = ({navigation}) => {
   const [filterDate, setFilterDate] = useState({
     show: false,
@@ -34,41 +35,43 @@ const NBAUnloadingScreen = ({navigation}) => {
   function renderHeader() {
     return (
       <Header
-        // eslint-disable-next-line react-native/no-inline-styles
         containerStyle={{
           height: 60,
           paddingHorizontal: SIZES.padding,
           alignItems: 'center',
-          backgroundColor: COLORS.primaryALS,
+          //backgroundColor: COLORS.green,
+          flex: 1,
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Truck Pickup"
-        rightComponent={
-          <View
-            style={{
-              width: 35,
-              height: 35,
-            }}></View>
-        }
         leftComponent={
           <TouchableOpacity
             style={{
               width: 35,
               height: 35,
-              justifyContent:'center'
+              //backgroundColor:COLORS.red,
+              // alignItems:'center',
+              justifyContent: 'center',
             }}
-            onPress={() => navigation.openDrawer()}>
+            onPress={() => navigation.goBack()}>
             <Image
-              source={icons.menu}
+              source={icons.back}
               style={{
-                width: 20,
-                height: 20,
+                width: 25,
+                height: 25,
                 tintColor: COLORS.white,
               }}
             />
           </TouchableOpacity>
         }
-
+        rightComponent={
+          <View
+            style={{
+              width: 35,
+              height: 35,
+            }}
+          />
+        }
+        title="NBA Unloading"
         /*  rightComponent={<CartQuantityButton quantity={cartLagiQuantity} onPress={()=>navigation.navigate("CartLagi")} />} */
       />
     );
@@ -78,7 +81,8 @@ const NBAUnloadingScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
-          marginTop:SIZES.padding
+          marginTop: SIZES.padding,
+          marginHorizontal:SIZES.base
         }}>
         <DataRenderResult
           navigation={navigation}
@@ -115,20 +119,25 @@ const NBAUnloadingScreen = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  flex: 5
-
+                  flex: 5,
                 }}>
                 <View
                   style={{
-                    marginLeft:SIZES.base,
-                    backgroundColor:truck?.status ==='Ready to load'? COLORS.orange : truck?.status==='Closed'?COLORS.red: truck?.status==='In Transit'?COLORS.gray: COLORS.green,
-                    flex:1,
-                    padding:5,
-                    borderRadius:5,
-                    justifyContent:'center',
-                    alignItems:'center'
-                  }}
-                >
+                    marginLeft: SIZES.base,
+                    backgroundColor:
+                      truck?.status === 'Ready to load'
+                        ? COLORS.orange
+                        : truck?.status === 'Closed'
+                        ? COLORS.red
+                        : truck?.status === 'In Transit'
+                        ? COLORS.gray
+                        : COLORS.green,
+                    flex: 1,
+                    padding: 5,
+                    borderRadius: 5,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <Text
                     style={{
                       flex: 1,
@@ -137,20 +146,19 @@ const NBAUnloadingScreen = ({navigation}) => {
                   </Text>
                 </View>
                 <View
-                style={{
-                  justifyContent:'center'
-                }}>
-                <Image
-                  source={icons.right_arrow}
                   style={{
-                    width: 20,
-                    height: 20,
-                    tintColor: COLORS.primaryALS,
-                    marginLeft:SIZES.radius
-                  }}
-                />
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={icons.right_arrow}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      tintColor: COLORS.primaryALS,
+                      marginLeft: SIZES.radius,
+                    }}
+                  />
                 </View>
-              
               </View>
             </TouchableOpacity>
           )}
@@ -159,11 +167,11 @@ const NBAUnloadingScreen = ({navigation}) => {
     );
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {renderHeader()}
       <View
         style={{
-          marginTop: 60,
+          marginTop: Platform.OS === 'android' ? 80 : 60,
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
@@ -212,15 +220,16 @@ const NBAUnloadingScreen = ({navigation}) => {
         />
       )}
       {renderContent()}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-       
-    }
-})
+  container: {
+    backgroundColor: '#F5FCFF',
+    flex: 1,
+    //padding: 16,
+  },
+});
 
 export default NBAUnloadingScreen;

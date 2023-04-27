@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 //import all the components we are going to use
@@ -31,7 +32,6 @@ import {
   UpdatePiecesLoaded,
 } from '../../../../api/OutboundAPI';
 import {
-  DELIVER_FORMAT_TIME,
   ADD_TRUCK_FORMAT_TIME,
   FORMAT_TIME,
 } from '../../../../utils/DateHelpers';
@@ -58,10 +58,8 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   const [vedhicleEditing, setVehicleEditing] = useState(0);
   const [disableButtonRemove, setDisablebuttonRemove] = useState(true);
   const textInputRef = useRef();
-  const [searchSelected, setSearchSelected] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [check, setCheck] = useState(false);
-  const [checkSearch, setCheckSearch] = useState(false);
   const [serialNo, setSerialNo] = useState('');
   const params = {VehicleIsn: truck.id};
   const [listPo, setListPo] = useState([]);
@@ -75,31 +73,31 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
           return;
         }
-          const result = [];
-          let piece = 0;
-          items.forEach((item, index) => {
-            piece += item.piecesLoaded;
-            const po = {
-              vehicleDetailId: item.vehicleDetailId,
-              id: item.doId,
-              checkPo: false,
-              time: item.time,
-              date:item.date,
-              poNumber: item.poNumber,
-              piecesLoaded: item.piecesLoaded,
-              pieces: item.pieces,
-            };
-            result.push(po);
-          });
-          setListPo(result);
-          setFilterListPo(result);
-          setTotalPieces(piece);
-          stopLoading('Load data')
-        
+        const result = [];
+        let piece = 0;
+        items.forEach((item, index) => {
+          piece += item.piecesLoaded;
+          const po = {
+            vehicleDetailId: item.vehicleDetailId,
+            id: item.doId,
+            checkPo: false,
+            time: item.time,
+            date: item.date,
+            poNumber: item.poNumber,
+            piecesLoaded: item.piecesLoaded,
+            pieces: item.pieces,
+          };
+          result.push(po);
+        });
+        setListPo(result);
+        setFilterListPo(result);
+        setTotalPieces(piece);
+        stopLoading('Load data');
       })
       .catch(e => {
-        console.log(e)
-        stopLoading('Load data')
+        console.log(e);
+        Alert.alert('Lỗi', e.toString());
+        stopLoading('Load data');
       });
   };
   useEffect(() => {
@@ -115,7 +113,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         });
         loadPoDoByVehicle();
       })
-      .catch(e => Alert.alert(e));
+      .catch(e => {
+        console.log('DLV73', e);
+        Alert.alert('Lỗi', e.toString());
+      });
   }, []);
 
   function GetDateNowUCT() {
@@ -384,28 +385,27 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text>DO No</Text>
               </View>
               <View
                 style={{
                   flex: 3,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text>Time PDA</Text>
               </View>
               <View
                 style={{
                   flex: 2,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text> Loaded</Text>
               </View>
-            
             </View>
           }
           renderFooter={
@@ -413,18 +413,17 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               lineStyle={{backgroundColor: COLORS.secondaryALS, height: 2}}
             />
           }
-        
           render={truck => (
             <View
               style={{
                 flexDirection: 'row',
-                            }}>
+              }}>
               <View
                 style={{
                   flex: 1,
-                  paddingVertical:SIZES.radius
+                  paddingVertical: SIZES.radius,
                 }}>
-                 <Image
+                <Image
                   source={icons.awb}
                   style={{
                     width: 30,
@@ -438,39 +437,39 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-               
-                  justifyContent:'center',
-                  alignItems:'center'
+
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
                 <Text h3 primaryALS>
-                {truck.poNumber}
+                  {truck.poNumber}
                 </Text>
               </View>
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth:1,
-                  borderLeftColor:COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
                 <Text h3 primaryALS>
-                {FORMAT_TIME(truck.date)}
+                  {FORMAT_TIME(truck.date)}
                 </Text>
               </View>
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth:1,
-                  borderLeftColor:COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
                 <Text h2 primaryALS>
-                {truck.piecesLoaded}
+                  {truck.piecesLoaded}
                 </Text>
               </View>
             </View>
@@ -572,31 +571,33 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text>DO No</Text>
               </View>
               <View
                 style={{
                   flex: 3,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text>Time PDA</Text>
               </View>
               <View
                 style={{
                   flex: 2,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text> Loaded</Text>
               </View>
               <View
                 style={{
                   flex: 1,
-                }}><Text>Edit</Text></View>
+                }}>
+                <Text>Edit</Text>
+              </View>
             </View>
           }
           ListFooterComponent={
@@ -605,8 +606,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 //marginTop:SIZES.padding,
                 borderBottomWidth: 1,
                 borderBottomColor: COLORS.gray,
-                marginBottom:40
-              }}></View>
+                marginBottom: 40,
+              }}
+            />
           }
           ItemSeparatorComponent={() => (
             <LineDivider
@@ -630,7 +632,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 1,
-                  paddingVertical:SIZES.radius
+                  paddingVertical: SIZES.radius,
                 }}>
                 <CheckComponent
                   check={item?.checkPo}
@@ -646,10 +648,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth:1,
-                  borderLeftColor:COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
                 <Text h3 primaryALS>
@@ -659,10 +661,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth:1,
-                  borderLeftColor:COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
                 <Text h3 primaryALS>
@@ -672,10 +674,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth:1,
-                  borderLeftColor:COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
                 <Text h2 primaryALS>
@@ -686,10 +688,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 style={{
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
-                 // paddingVertical: SIZES.base,
+                  // paddingVertical: SIZES.base,
                   flex: 1,
                   //backgroundColor:COLORS.lightGreen
                 }}
@@ -773,6 +775,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
     <View style={styles.container}>
       {renderHeader()}
       <View
+        // eslint-disable-next-line react-native/no-inline-styles
         style={{
           marginTop: 80,
           //backgroundColor: COLORS.green,
@@ -792,10 +795,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               tintColor: COLORS.primaryALS,
             }}
           />
-          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
+          <Text h3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             {truck?.vehicRegNo}
           </Text>
-          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
+          <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             Total:{totalPieces}pcs
           </Text>
           <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
@@ -819,8 +822,16 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         </View>
       </View>
 
-          {(truck?.status === 'Completed' || truck?.status === 'Closed'|| truck?.status === 'In Transit'|| truck?.status === 'Unloading' ) && renderDetail()}
-      {(truck?.status === 'Completed' || truck?.status === 'Closed'|| truck?.status === 'In Transit'|| truck?.status === 'Unloading') && renderPoDo()}
+      {(truck?.status === 'Completed' ||
+        truck?.status === 'Closed' ||
+        truck?.status === 'In Transit' ||
+        truck?.status === 'Unloading') &&
+        renderDetail()}
+      {(truck?.status === 'Completed' ||
+        truck?.status === 'Closed' ||
+        truck?.status === 'In Transit' ||
+        truck?.status === 'Unloading') &&
+        renderPoDo()}
       {(truck?.status === 'Loading' || truck?.status === 'Ready to load') &&
         renderLoad()}
       {truck?.status === 'Closed' && (
@@ -844,18 +855,20 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               setModalVisible(true);
             }}
           />
-          {screenParent !== 'AddSeal'&& <TextButton
-            buttonContainerStyle={{
-              height: 45,
-              backgroundColor: COLORS.red,
-              borderRadius: SIZES.radius,
-              paddingHorizontal: SIZES.radius,
-            }}
-            label="Unclosed"
-            onPress={() => {
-              handleUncloseTruck(true);
-            }}
-          />}
+          {screenParent !== 'AddSeal' && (
+            <TextButton
+              buttonContainerStyle={{
+                height: 45,
+                backgroundColor: COLORS.red,
+                borderRadius: SIZES.radius,
+                paddingHorizontal: SIZES.radius,
+              }}
+              label="Unclosed"
+              onPress={() => {
+                handleUncloseTruck(true);
+              }}
+            />
+          )}
         </View>
       )}
       <AddSealModal
