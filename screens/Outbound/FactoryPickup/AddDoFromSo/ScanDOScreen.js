@@ -98,8 +98,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
         }
       })
       .catch(e => {
-        stopLoading('AddDo');
-        Alert.alert('System error, please contact the developer team.');
+       console.log(e)
       })
       .finally(() => {
         stopLoading('AddDo');
