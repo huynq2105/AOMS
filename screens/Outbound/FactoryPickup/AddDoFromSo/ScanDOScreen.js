@@ -533,7 +533,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
       {renderHeader()}
       <View
         style={{
-          marginTop: 80,
+          marginTop: 90,
           flex: 1,
           //backgroundColor: COLORS.green,
         }}>
@@ -552,10 +552,10 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               tintColor: COLORS.primaryALS,
             }}
           />
-          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
+          <Text h3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             {truck?.vehicRegNo}
           </Text>
-          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
+          <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             Total:{totalPieces}pcs
           </Text>
           <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>

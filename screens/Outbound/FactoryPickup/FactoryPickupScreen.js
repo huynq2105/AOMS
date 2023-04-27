@@ -1,5 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, TouchableOpacity, View, Image, Alert} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+  Alert,
+  Platform,
+} from 'react-native';
 import Text from '../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../constants/theme';
 import Header from '../../../components/Header';
@@ -37,7 +45,6 @@ const FactoryPickupScreen = ({navigation}) => {
   function renderHeader() {
     return (
       <Header
-        // eslint-disable-next-line react-native/no-inline-styles
         containerStyle={{
           height: 60,
           paddingHorizontal: SIZES.padding,
@@ -71,7 +78,8 @@ const FactoryPickupScreen = ({navigation}) => {
             style={{
               width: 35,
               height: 35,
-            }}></View>
+            }}
+          />
         }
         title="Truck Pickup"
         /*  rightComponent={<CartQuantityButton quantity={cartLagiQuantity} onPress={()=>navigation.navigate("CartLagi")} />} */
@@ -84,6 +92,7 @@ const FactoryPickupScreen = ({navigation}) => {
         style={{
           flex: 1,
           marginTop: SIZES.padding,
+         // marginHorizontal:SIZES.base
         }}>
         <DataRenderResult
           navigation={navigation}
@@ -93,7 +102,8 @@ const FactoryPickupScreen = ({navigation}) => {
               style={{
                 borderBottomWidth: 1,
                 borderBottomColor: COLORS.secondaryALS,
-              }}></View>
+              }}
+            />
           }
           renderHeader={
             <View
@@ -102,11 +112,10 @@ const FactoryPickupScreen = ({navigation}) => {
                 borderTopColor: COLORS.secondaryALS,
                 borderTopWidth: 1,
               }}>
-              {/* <View
+              <View
                 style={{
                   flex: 1,
-                }}>
-              </View> */}
+                }}></View>
               <View
                 style={{
                   flex: 3,
@@ -121,14 +130,14 @@ const FactoryPickupScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  flex: 1,
+                  flex: 2,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
-                  paddingHorizontal: SIZES.radius,
+                  // paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text>W.H</Text>
+                <Text body3>W.H</Text>
               </View>
               <View
                 style={{
@@ -160,7 +169,7 @@ const FactoryPickupScreen = ({navigation}) => {
             </View>
           }
           fetchFn={getTruckFactoryPickup}
-          render={truck => (
+          render={(truck, index) => (
             <TouchableOpacity
               style={{
                 // paddingVertical: SIZES.radius,
@@ -172,22 +181,17 @@ const FactoryPickupScreen = ({navigation}) => {
                 // alignItems: 'center',
               }}
               onPress={() => handleNavigate(truck)}>
-              {/* <View
+              <View
                 style={{
-                  //flexDirection: 'row',
                   flex: 1,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
                   alignItems: 'center',
+                  //  paddingHorizontal: SIZES.radius,
+                  justifyContent: 'center',
                 }}>
-                <Image
-                  source={icons.truck}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    marginRight: SIZES.base,
-                    tintColor: COLORS.primaryALS,
-                  }}
-                />
-              </View> */}
+                <Text>{index + 1}</Text>
+              </View>
               <View
                 style={{
                   flex: 3,
@@ -200,10 +204,11 @@ const FactoryPickupScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  flex: 1,
+                  flex: 2,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
-                  paddingHorizontal: SIZES.radius,
+                  alignItems: 'center',
+                  //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
                 }}>
                 <Text> {truck.warehousePickup}</Text>
@@ -276,7 +281,7 @@ const FactoryPickupScreen = ({navigation}) => {
       {renderHeader()}
       <View
         style={{
-          marginTop: 60,
+          marginTop: Platform.OS === 'android' ? 80 : 60,
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
