@@ -2,6 +2,7 @@ import api from './API'
 import { parseCookie } from '../utils/Cookies'
 import PersistentStorageActions from '../stores/actions/PersistentStorageActions'
 import LoadingActions from '../stores/actions/LoadingActions';
+import i18n from 'i18n-js';
 import { Alert } from 'react-native';
 import AppActions from '../stores/actions/AppActions';
 import moment from 'moment';
@@ -67,57 +68,66 @@ export function initAPIInterceptor(store) {
       return response;
     },
     error => {
+   
       store.dispatch(LoadingActions.clear());
       const errorRes = error.response;
       if (errorRes) {
         if (errorRes.headers._abperrorformat && errorRes.status === 401) {
           store.dispatch(PersistentStorageActions.setToken({}));
-          store.dispatch(AppActions.logoutAsync());
-          console.log('Phiên làm việc của bạn đã hết hạn')
+          //Alert.alert('Phiên làm việc của bạn đã hết hạn')
         }
-        //showError({ error: errorRes.data.error || {}, status: errorRes.status });
+        showError({ error: errorRes.data.error || {}, status: errorRes.status });
       } else {
-        console.log('An unexpected error has occurred')
+        Alert.alert('An unexpected error has occurred')
       }
 
       return Promise.reject(error);
     },
   );
 }
-  function showError({error = {}, status}) {
-    let message = '';
-    let title = 'DefaultErrorMessage';
-  
+function showError({ error = {}, status }) {
+  let message = '';
+  let title = 'Thông báo';
+  if(status == 401){
+    message = 'Phiên làm việc của bạn đã hết hạn';
+  }else{
     if (typeof error === 'string') {
-      // message = error;
-      message = 'Network error';
+      message = 'Code ' + status + ': '+ error;
     } else if (error.details) {
-      // message = error.details;
-      message = error.message;
-      title = 'Error details:';
+      message = 'Code ' +status + ': '+  error.details;
     } else if (error.message) {
-      message = '';
+      message = 'Code ' +status + ': ' + error.message;
     } else {
+      console.log('da chay vao 4',status)
       switch (status) {
+        case 400:
+          message = '400 Bad Request';
+          break;
         case 401:
-          title = 'DefaultErrorMessage401';
-          message ='DefaultErrorMessage401Detail';
+          title = 'Thông báo';
+          message = 'Phiên làm việc của bạn đã hết hạn';
           break;
         case 403:
-          title = 'DefaultErrorMessage403';
-          message = 'DefaultErrorMessage403Detail';
+          message = '403 Forbidden';
           break;
         case 404:
-          title = 'DefaultErrorMessage404';
-          message = 'DefaultErrorMessage404Detail';
+          message = '404 Not Found';
           break;
         case 500:
-          title = '500Message';
-          message = 'InternalServerErrorMessage';
+          message = '500 Server Error';
           break;
         default:
           break;
       }
     }
-  console.log( `${title}\n${message}`)
   }
+  
+Alert.alert(`${title}\n${message}`)
+ /*  Toast.show({
+    text: `${title}\n${message}`,
+    buttonText: 'x',
+    duration: 10000,
+    type: 'danger',
+    textStyle: { textAlign: 'center' },
+  }); */
+}

@@ -27,6 +27,7 @@ import FormInput from '../../components/FormInput';
 import {useToast} from 'react-native-toast-notifications';
 import AppActions from '../../stores/actions/AppActions'
 import TenantBox from '../../components/TenantBox/TenantBox'
+import LoadingActions from '../../stores/actions/LoadingActions';
 import utils from '../../utils/Utils';
 import moment from 'moment';
 import { useIsFocused,useFocusEffect } from '@react-navigation/native';
@@ -34,7 +35,7 @@ import {useDispatch} from 'react-redux';
 import { createAppConfigSelector } from "../../stores/selectors/AppSelectors";
 import { createVerifyTokenSelector } from '../../stores/selectors/PersistentStorageSelectors';
 
-const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,verifyToken}) => {
+const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,verifyToken,startLoading,stopLoading}) => {
   const [email, setEmail] = useState('');
   const [emaiError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
@@ -72,7 +73,7 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
     let action;
     await AsyncStorage.setItem('userLogin', email);
     await AsyncStorage.setItem('passwordLogin', password);
-    setIsLoading(true);
+    startLoading({ key: 'login' });
     setError(null);
     setAccount({userName:email,password})
     login({userName: email, password: password})
@@ -90,17 +91,13 @@ const LoginScreen = ({setToken, setTenant, navigation,setAccount,fetchAppConfig,
           "expire_time": new Date().valueOf() + 1800000,
           "scope": undefined,
         });
-      })
-      .catch(e => {
-        setError(e);
-        setIsLoading(false);
-      }).finally(()=>{
-        console.log('Login finally')
-     //  
-        new Promise(resolve =>
-          fetchAppConfig({showLoading: false, callback: () => resolve(true)}),
-        )
-      });
+      }).then(
+        () =>
+          new Promise(resolve =>
+            fetchAppConfig({ showLoading: false, callback: () => resolve(true) }),
+          ),
+      )
+      .finally(()=>stopLoading({ key: 'login' }));
     //action = authActions.login(email, password);
   };
 /*   useEffect(() => {
@@ -273,6 +270,8 @@ export default connectToRedux({
     setTenant: PersistentStorageActions.setTenant,
     setAccount: PersistentStorageActions.setCurrentUser,
     fetchAppConfig: AppActions.fetchAppConfigAsync,
+    startLoading: LoadingActions.start,
+    stopLoading: LoadingActions.stop,
     //setTokenExpired:PersistentStorageActions.setTokenExpired
   },
 });
