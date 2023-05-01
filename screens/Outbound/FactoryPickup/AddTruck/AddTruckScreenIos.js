@@ -53,7 +53,7 @@ const validations = {
   vehicleLoadWeight: Yup.string().required('Required.'),
   vhclRemarks: Yup.string().required('Required.'),
 };
-const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
+const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
   const [trucks, setTrucks] = useState([]);
   const [driver, setDriver] = useState(null);
   const [filteredTrucks, setFilteredTrucks] = useState([]);
@@ -238,7 +238,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
 
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Add Truck"
+        title="Add Truck Ios"
         rightComponent={
           <View
             style={{
@@ -421,6 +421,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
               <Autocomplete
                 autoCapitalize="none"
                 autoCorrect={false}
+                    
                 containerStyle={{
                   backgroundColor: '#F5FCFF',
                   borderWidth: 0,
@@ -660,7 +661,7 @@ const styles = StyleSheet.create({
   },
 });
 export default connectToRedux({
-  component: AddTruckScreen,
+  component: AddTruckScreenIos,
   stateProps: state => ({loading: createLoadingSelector()(state)}),
   dispatchProps: {
     startLoading: LoadingActions.start,

@@ -92,7 +92,7 @@ const FactoryPickupScreen = ({navigation}) => {
         style={{
           flex: 1,
           marginTop: SIZES.padding,
-         // marginHorizontal:SIZES.base
+          // marginHorizontal:SIZES.base
         }}>
         <DataRenderResult
           navigation={navigation}
@@ -350,7 +350,11 @@ const FactoryPickupScreen = ({navigation}) => {
             alignItems: 'center',
             backgroundColor: COLORS.green,
           }}
-          onPress={() => navigation.navigate('AddTruck')}
+          onPress={() =>
+            Platform.OS === 'ios'
+              ? navigation.navigate('AddTruckIos')
+              : navigation.navigate('AddTruckAnd')
+          }
         />
       </View>
     </SafeAreaView>

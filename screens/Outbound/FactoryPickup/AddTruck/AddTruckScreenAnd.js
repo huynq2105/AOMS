@@ -34,7 +34,7 @@ import {
   getDriversByVehicleId,
   createVehicle,
   createTruck,
-  getWareHousePickUp,
+  getWareHousePickUp
 } from '../../../../api/OutboundAPI';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Picker} from '@react-native-picker/picker';
@@ -45,30 +45,23 @@ import LoadingActions from '../../../../stores/actions/LoadingActions';
 
 const validations = {
   vehicleRegNo: Yup.string().required('Required.'),
-  vhclLoadingWarehouse: Yup.string().notOneOf(
-    ['--Choose--'],
-    'Phai set gia tri',
-  ),
+  vhclLoadingWarehouse: Yup.string().notOneOf(['--Choose--'], 'Phai set gia tri'),
   vhclDriverName: Yup.string().required('Required.'),
   vehicleLoadWeight: Yup.string().required('Required.'),
   vhclRemarks: Yup.string().required('Required.'),
 };
-const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
+const AddTruckScreenAnd = ({startLoading, stopLoading, navigation}) => {
   const [trucks, setTrucks] = useState([]);
   const [driver, setDriver] = useState(null);
   const [filteredTrucks, setFilteredTrucks] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const today = moment();
-  const [valueWareHouse, setValueWareHouse] = useState('');
+  const [valueWareHouse,setValueWareHouse] = useState('')
   const [drivers, setDrivers] = useState([]);
   const [filteredDrivers, setFilteredDrivers] = useState([]);
   const [agents, setAgents] = useState([]);
-  const [wareHouse, setWareHouse] = useState([
-    {id: 0, label: '--Choose--', value: 0},
-  ]);
-  const [wareHousePickUp, setWareHousePickUp] = useState([
-    {id: 0, label: '--Choose--', value: 0},
-  ]);
+  const [wareHouse, setWareHouse] = useState([{id: 0, label: '--Choose--', value: 0}]);
+  const [wareHousePickUp, setWareHousePickUp] = useState([{id: 0, label: '--Choose--', value: 0}]);
   const [vihicle, setVihicle] = useState();
   const handleAddTruck = () => {
     setIsVisible(true);
@@ -83,16 +76,17 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
       },
     );
   };
-  const loadWareHouse = async () => {
+  const loadWareHouse = async () =>{
+  
     const wareHouseSaved = await AsyncStorage.getItem('wareHouseSave');
-    if (wareHouseSaved) {
-      setValueWareHouse(wareHouseSaved);
+    if(wareHouseSaved) {
+      setValueWareHouse(wareHouseSaved)
       return wareHouseSaved;
     }
     return null;
-  };
+  }
   useEffect(() => {
-    /*     const wareSaved = loadWareHouse();
+/*     const wareSaved = loadWareHouse();
     console.log('wareSaved=====================================',wareSaved) */
     getVehicles({maxResultCount: 1000, skipCount: 0})
       .then(({items, totalCount: total}) => {
@@ -103,18 +97,18 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
             getWarehouse({maxResultCount: 1000, skipCount: 0}).then(
               ({items, totalCount: total}) => {
                 const loadWareHouse = [];
-                let valueWareHouseInit = '';
+                let valueWareHouseInit = ''
                 items.forEach((item, index) => {
-                  valueWareHouseInit = item.id + '';
+                  valueWareHouseInit = item.id +'';
                   return loadWareHouse.push({
                     id: item.id,
                     label: item.warehouseShortCode,
                     value: item.id,
                   });
                 });
-                setValueWareHouse(valueWareHouseInit);
-                setWareHouse(loadWareHouse);
-
+                setValueWareHouse(valueWareHouseInit)
+                setWareHouse(loadWareHouse)
+              
                 getWareHousePickUp({maxResultCount: 1000, skipCount: 0}).then(
                   ({items, totalCount: total}) => {
                     const loadWarehousePickup = [];
@@ -125,10 +119,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                         value: item.id,
                       });
                     });
-                    setWareHousePickUp([
-                      ...wareHousePickUp,
-                      ...loadWarehousePickup,
-                    ]);
+                    setWareHousePickUp([...wareHousePickUp,...loadWarehousePickup]);
                   },
                 );
               },
@@ -137,11 +128,14 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
         );
       })
       .catch(e => {
-        if (e === 'AxiosError: Request failed with status code 401') {
+        if(e==='AxiosError: Request failed with status code 401'){
           alert('Hết phiên đăng nhập');
-        } else {
-          alert(e);
         }
+        
+          else{
+            alert(e)
+          }
+        
       });
   }, []);
 
@@ -210,7 +204,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
       vhclMasterIsn: parseInt(values.vhclMasterIsn),
       vhclWareHousePickupIsn: parseInt(values.vhclWareHousePickupIsn),
     };
-    console.log('Truck Data===============', truckData);
+    console.log('Truck Data===============',truckData)
     startLoading({key: 'addTruck'});
     createTruck(truckData)
       .then(() => {
@@ -238,7 +232,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
 
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Add Truck"
+        title="Add Truck And"
         rightComponent={
           <View
             style={{
@@ -271,11 +265,9 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
           vehicleRegNo: vihicle ? vihicle.vehicleRegNo : '',
           vhclMasterIsn: vihicle ? vihicle.id + '' : '',
           vehicleLoadWeight: vihicle
-            ? vihicle.vehicleLoadWeight
-              ? vihicle.vehicleLoadWeight.toString()
-              : ''
+            ? vihicle.vehicleLoadWeight ? vihicle.vehicleLoadWeight.toString() : ''
             : '',
-          vhclLoadingWarehouse: valueWareHouse + '',
+          vhclLoadingWarehouse: valueWareHouse+'',
           vhclWareHousePickupIsn: '',
           vhclDriverName: driver
             ? driver.firstName + '-' + driver.phoneNumber
@@ -305,7 +297,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
               style={{
                 marginTop: SIZES.base,
               }}>
-              Truck Number <Text style={{color: COLORS.red}}>(*)</Text>
+              Truck Number <Text style={{color:COLORS.red}}>(*)</Text>
             </Text>
             <View
               style={{
@@ -321,6 +313,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                     borderLeftWidth: 0,
                     borderWidth: 0,
                   }}
+                   
                   containerStyle={{
                     backgroundColor: '#F5FCFF',
                     borderWidth: 0,
@@ -347,9 +340,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                           setFieldValue('vhclMasterIsn', item.id.toString());
                           setFieldValue(
                             'vehicleLoadWeight',
-                            item.vehicleLoadWeight
-                              ? item.vehicleLoadWeight.toString()
-                              : '',
+                            item.vehicleLoadWeight? item.vehicleLoadWeight.toString() :"",
                           );
                           setVihicle(item);
                           //setSelectedValue(item);
@@ -385,9 +376,8 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
               primaryALS
               style={{
                 marginTop: 60,
-                zIndex: -1,
               }}>
-              Load weight <Text style={{color: COLORS.red}}>(*)</Text>
+              Load weight <Text style={{color:COLORS.red}}>(*)</Text>
             </Text>
             <TextInput
               style={{
@@ -397,7 +387,6 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                 marginTop: SIZES.base,
                 //borderBottomWidth:1,
                 borderBottomColor: COLORS.gray,
-                zIndex: -1,
               }}
               value={values.vehicleLoadWeight.toString()}
               onChangeText={handleChange('vehicleLoadWeight')}
@@ -408,15 +397,12 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
               primaryALS
               style={{
                 marginTop: SIZES.base,
-                zIndex: -1,
               }}>
-              Driver <Text style={{color: COLORS.red}}>(*)</Text>
+              Driver <Text style={{color:COLORS.red}}>(*)</Text>
             </Text>
             <View
               style={{
-                top: 200,
-                zIndex: Platform.OS === 'ios' ? -1 : 2,
-                position:'absolute'
+                marginTop: 10,
               }}>
               <Autocomplete
                 autoCapitalize="none"
@@ -424,9 +410,9 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                 containerStyle={{
                   backgroundColor: '#F5FCFF',
                   borderWidth: 0,
-                  elevation: Platform.OS === 'android' ? 2 : 0,
+                  elevation: Platform.OS === 'android' ? 1 : 0,
                   position: 'absolute',
-                  zIndex: 2,
+                   zIndex: 1,
                 }}
                 style={{
                   backgroundColor: '#F5FCFF',
@@ -460,16 +446,14 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
               style={{
                 flexDirection: 'row',
                 marginTop: 50,
-                zIndex: -2,
               }}>
               <Text
                 h3
                 primaryALS
                 style={{
                   flex: 1,
-                  zIndex: -2,
                 }}>
-                Factory <Text style={{color: COLORS.red}}>(*)</Text>
+                Factory <Text style={{color:COLORS.red}}>(*)</Text>
               </Text>
               <Text
                 h3
@@ -484,7 +468,6 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-around',
-                zIndex: -2,
                 // marginTop: 5,
                 //backgroundColor:COLORS.yellow
               }}>
@@ -493,16 +476,13 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                   borderBottomWidth: 1,
                   borderBottomColor: COLORS.black,
                   width: 140,
-                  zIndex: -2,
                   //padding: 10,
                   //  flex: 1,
-                  backgroundColor:COLORS.green
+                  //backgroundColor:COLORS.green
                 }}>
                 <Picker
                   mode="dropdown"
-                  style={{
-                    zIndex:-2
-                  }}
+                  style={{}}
                   selectedValue={values.vhclWareHousePickupIsn}
                   onValueChange={(itemValue, itemIndex) =>
                     setFieldValue('vhclWareHousePickupIsn', itemValue)
@@ -533,38 +513,36 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                   }}
                   mode="dropdown"
                   selectedValue={values.vhclLoadingWarehouse}
-                  onValueChange={(itemValue, itemIndex) => {
-                    setFieldValue('vhclLoadingWarehouse', itemValue + '');
-                    AsyncStorage.setItem('wareHouseSave', itemValue + '');
-                  }}>
+                  onValueChange={(itemValue, itemIndex) =>{
+                    setFieldValue('vhclLoadingWarehouse', itemValue+'')
+                   AsyncStorage.setItem('wareHouseSave', itemValue+'');
+                  }
+                    
+                  }>
                   {wareHouse.map(it => (
                     <Picker.Item
                       key={it.id.toString()}
                       label={it.label}
                       value={it.value}
+                      
                     />
                   ))}
                 </Picker>
               </View>
             </View>
-            <View
-              style={{
-                zIndex: Platform.OS === 'ios' ? -2 : null,
-              }}>
+            <View>
               <Text
                 h3
                 primaryALS
                 style={{
                   marginTop: SIZES.base,
-                 zIndex: -2,
                   //flex: 1,
                 }}>
-                W.H <Text style={{color: COLORS.red}}>(*)</Text>
+                W.H <Text style={{color:COLORS.red}}>(*)</Text>
               </Text>
               <TextInput
                 style={{
                   padding: 0,
-                  zIndex: -2,
                   // flex: 1,
                   borderBottomWidth: 1,
                   borderBottomColor: COLORS.gray,
@@ -601,9 +579,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                   width: 120,
                   height: 40,
                   borderRadius: SIZES.base,
-                  backgroundColor: !isValid
-                    ? COLORS.lightGray1
-                    : COLORS.primaryALS,
+                  backgroundColor: !isValid ? COLORS.lightGray1 : COLORS.primaryALS
                 }}
                 disabled={!isValid}
                 onPress={handleSubmit}
@@ -660,7 +636,7 @@ const styles = StyleSheet.create({
   },
 });
 export default connectToRedux({
-  component: AddTruckScreen,
+  component: AddTruckScreenAnd,
   stateProps: state => ({loading: createLoadingSelector()(state)}),
   dispatchProps: {
     startLoading: LoadingActions.start,
