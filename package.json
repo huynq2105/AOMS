@@ -42,7 +42,7 @@
     "react-native-modal": "^13.0.1",
     "react-native-permissions": "^3.8.0",
     "react-native-reanimated": "^2.2.3",
-    "react-native-safe-area-context": "^4.5.0",
+    "react-native-safe-area-context": "^4.5.1",
     "react-native-screens": "^3.13.1",
     "react-native-size-scaling": "^0.5.1",
     "react-native-toast-notifications": "^3.3.1",
@@ -58,8 +58,8 @@
     "reselect": "^4.1.7",
     "validator": "^13.9.0",
     "yup": "^1.0.2"
-  },  
-  "reactNativePermissionsIOS": [    
+  },
+  "reactNativePermissionsIOS": [
     "Camera",
     "PhotoLibrary",
     "PhotoLibraryAddOnly"
