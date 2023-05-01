@@ -72,7 +72,7 @@ const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appCon
       //setTokenDevice(tokenDevice)
       if (!isValid && token) {
           setToken({});
-          //logoutAsync()
+          logoutAsync()
         }
       }, [isValid]);
       useEffect(() => {
