@@ -25,7 +25,7 @@ const AuthLayout = ({title, subTitle, titleContailner, children}) => {
       <SafeAreaView
         style={{
           flex: 1,
-          backgroundColor:COLORS.red
+          //backgroundColor:COLORS.red
           //paddingTop: SIZES.padding,
         }}>
         <KeyboardAwareScrollView

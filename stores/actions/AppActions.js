@@ -7,7 +7,12 @@ const fetchAppConfigAsync = createAction(
      }, showLoading = true
    } = {}) => ({payload: {callback, showLoading}}),
 );
-
+const fetchAppConfigNoAuthAsync = createAction(
+  'app/fetchAppConfigNoAuthAsync',({
+    callback = () => {
+    }, showLoading = true
+  } = {}) => ({payload: {callback, showLoading}}),
+);
 const setAppModal = createAction('app/setAppModal');
 
 const setAppConfig = createAction('app/setAppConfig');
@@ -18,6 +23,7 @@ const logoutAsync = createAction('app/logoutAsync');
 
 export default {
   fetchAppConfigAsync,
+  fetchAppConfigNoAuthAsync,
   setAppModal,
   setAppConfig,
   setLanguageAsync,

@@ -38,7 +38,7 @@ const FormInputMik = ({
             justifyContent: "space-between",
           }}
         >
-          <Text gray body4>
+          <Text red body4>
             {label}
           </Text>
           <Text red body4>
@@ -49,12 +49,14 @@ const FormInputMik = ({
         <View
           style={{
             flexDirection: "row",
-            height: 55,
-            backgroundColor: 55,
+            //height: 55,
+            //backgroundColor: 55,
             marginTop: SIZES.base,
             paddingHorizontal: SIZES.padding,
             borderRadius: SIZES.radius,
-            backgroundColor:COLORS.lightGray2,
+            borderBottomColor:COLORS.gray,
+            borderBottomWidth:1,
+           // backgroundColor:COLORS.lightGray2,
             ...inputContainerStyle
           }}
         >

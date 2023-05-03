@@ -11,9 +11,11 @@ import Loading from "../components/Loading/Loading";
 import { isTokenValid } from "../utils/TokenUtils";
 import AppActions from "../stores/actions/AppActions";
 import { useToast } from "react-native-toast-notifications";
-import { createAppConfigSelector } from "../stores/selectors/AppSelectors";
+import { createAppConfigSelector, createLanguageSelector } from "../stores/selectors/AppSelectors";
 import {createTokenExpiredSelector} from '../stores/selectors/PersistentStorageSelectors'
 import AppNavigator from "../navigation/AppNavigator";
+import i18n from 'i18n-js';
+import AuthNavigator from "../navigation/AuthNavigator/AuthNavigator";
 //initAPIInterceptor(store);
 
 const requestCameraPermission = async () => {
@@ -53,24 +55,18 @@ const requestCameraPermission = async () => {
     }
   } catch (err) {
     console.log(err)
- /*    Toast.show({
-      text: err,
-      buttonText: 'x',
-      duration: 10000,
-      type: 'danger',
-      textStyle: {textAlign: 'center'}, swipeDisabled: false
-    }); */
   }
 };
-const AppContainer = ({token,setToken,logoutAsync,fetchAppConfig,appConfig,tokenExpired}) => {
+const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appConfig,tokenExpired,store}) => {
   const now = new Date().valueOf();
-  console.log('token=======================',token)
-  console.log('token het han Expired=======================',token?.expire_time)
-  console.log('token  Expired=======================',tokenExpired)
-    const isValid = useMemo(() => isTokenValid(token,tokenExpired), [token,tokenExpired]);
-    
-    console.log('Token is valid',isTokenValid(token))
-    console.log('da chay vao App Container',isValid)
+    const isValid = useMemo(() => isTokenValid(token,tokenExpired), [token]);
+    const localizationContext = useMemo(
+      () => ({
+        t: i18n.t,
+        locale: (language || {}).cultureName,
+      }),
+      [language],
+    );
     const toast = useToast()
     useEffect(() => {
       //setTokenDevice(tokenDevice)
@@ -86,7 +82,7 @@ const AppContainer = ({token,setToken,logoutAsync,fetchAppConfig,appConfig,token
     
     return(
         <>
-         {isValid ? <AppNavigator /> : <LoginScreen />}
+         {isValid ? <AppNavigator store={store} /> : <AuthNavigator />}
          <Loading />
         </>
     )
@@ -97,7 +93,8 @@ export default connectToRedux({
     stateProps: state => ({
       token: createTokenSelector()(state),
       appConfig: createAppConfigSelector()(state),
-      tokenExpired: createTokenExpiredSelector()(state)
+      tokenExpired: createTokenExpiredSelector()(state),
+      language:createLanguageSelector()(state)
     }),
     dispatchProps: {
       setToken: PersistentStorageActions.setToken,

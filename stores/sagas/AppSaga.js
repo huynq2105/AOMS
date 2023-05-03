@@ -4,6 +4,7 @@ import AppActions from '../actions/AppActions';
 import PersistentStorageActions from '../actions/PersistentStorageActions';
 import LoadingActions from '../actions/LoadingActions';
 import { getApplicationConfiguration } from '../../api/ApplicationConfigurationAPI';
+import { getApplicationConfigurationNoAuthAPI } from '../../api/ApplicationConfigurationNoAuthAPI';
 import i18n from 'i18n-js';
 
 function* fetchAppConfig({payload: {showLoading, callback}}) {
@@ -14,6 +15,17 @@ function* fetchAppConfig({payload: {showLoading, callback}}) {
     yield put(PersistentStorageActions.setCurrentUser(data?.currentUser));
   }
   yield put(PersistentStorageActions.setLanguage(data?.localization?.currentCulture?.cultureName ?? 'en'));
+  if (showLoading) yield put(LoadingActions.stop({key: 'appConfig'}));
+  if (callback) callback();
+}
+function* fetchAppConfigNoAuth({payload: {showLoading, callback}}) {
+  if (showLoading) yield put(LoadingActions.start({key: 'appConfig', opacity: 1}));
+  const data = yield call(getApplicationConfigurationNoAuthAPI);
+ // yield put(AppActions.setAppConfig(data));
+ /*  if (data?.currentUser && data?.currentUser?.userName) {
+    yield put(PersistentStorageActions.setCurrentUser(data?.currentUser));
+  } */
+  //yield put(PersistentStorageActions.setLanguage(data?.localization?.currentCulture?.cultureName ?? 'en'));
   if (showLoading) yield put(LoadingActions.stop({key: 'appConfig'}));
   if (callback) callback();
 }
@@ -39,17 +51,24 @@ function* setAppConfigWatcher(action) {
     ...(i18n.translations[i18n.locale] || {}),
   };
 }
+function* setLanguage(action) {
+  yield put(PersistentStorageActions.setLanguage(action.payload));
+  yield put(AppActions.fetchAppConfigAsync());
+}
 
 function* logoutWatcher() {
+  yield call(logout);
     yield put(PersistentStorageActions.setToken({}));
-    yield put(PersistentStorageActions.setTokenExpired(null));
-    yield call(logout);
+   // yield put(PersistentStorageActions.setCookie(null));
+  //  yield put(PersistentStorageActions.setVerifyToken(''));
+   // yield call(getApplicationConfigurationNoAuthAPI)
     yield put(AppActions.fetchAppConfigAsync());
   }
   export default function* () {
     yield all([
-      //takeLatest(AppActions.setLanguageAsync.type, setLanguage),
+      takeLatest(AppActions.setLanguageAsync.type, setLanguage),
       takeLatest(AppActions.fetchAppConfigAsync.type, fetchAppConfig),
+     // takeLatest(AppActions.fetchAppConfigNoAuthAsync.type, fetchAppConfigNoAuth),
       takeLatest(AppActions.setAppConfig.type, setAppConfigWatcher),
       takeLatest(AppActions.logoutAsync.type, logoutWatcher),
     ]);

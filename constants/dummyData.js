@@ -1,15 +1,16 @@
 import icons from "./icons";
+import images from "./images";
 import { COLORS } from "./theme";
 const featuresHomeData = [
     {
       id: 101,
-      icon: icons.awb,
+      icon: icons.flightLanded,
       color: COLORS.yellow,
       description: 'Inbound',
       bgColor:['#ffc465', '#ff9c5f'],
       backgroundColor: COLORS.lightyellow,
-      screenName: 'FactoryPickupScreen',
-      srceenNavigagor: 'FactoryPickup',
+      screenName: 'InboundNavigator',
+      srceenNavigagor: 'InboundNav',
     },
     {
       id: 102,
@@ -24,7 +25,7 @@ const featuresHomeData = [
   
     {
       id: 103,
-      icon: icons.bill,
+      icon: icons.awb,
       color: COLORS.yellow,
       description: 'AWB details',
       bgColor:['#7cf1fb', '#4ebefd'],
@@ -38,7 +39,7 @@ const featuresHomeData = [
 const featuresExpData = [
     {
       id: 201,
-      icon: icons.awb,
+      icon: icons.awb_factory_pickup,
       color: COLORS.yellow,
       description: 'Factory Pickup',
       bgColor:['#ffc465', '#ff9c5f'],
@@ -59,17 +60,17 @@ const featuresExpData = [
   
     {
       id: 203,
-      icon: icons.bill,
+      icon: icons.awb,
       color: COLORS.yellow,
-      description: 'Weight Scaling',
+      description: 'Truck Seal',
       bgColor:['#7cf1fb', '#4ebefd'],
       backgroundColor: COLORS.lightyellow,
-      screenName: 'InvoiceScreen',
-      srceenNavigagor: 'Invoice',
+      screenName: 'TruckSealScreen',
+      srceenNavigagor: 'TruckSeal',
     },
     {
         id: 204,
-        icon: icons.bill,
+        icon: icons.awb,
         color: COLORS.yellow,
         description: 'Move Shipment',
         bgColor:['#7cf1fb', '#4ebefd'],
@@ -79,7 +80,7 @@ const featuresExpData = [
       },
       {
         id: 205,
-        icon: icons.bill,
+        icon: icons.awb,
         color: COLORS.yellow,
         description: 'Truck Transit',
         bgColor:['#7cf1fb', '#4ebefd'],
@@ -89,7 +90,7 @@ const featuresExpData = [
       },
       {
         id: 206,
-        icon: icons.bill,
+        icon: icons.awb,
         color: COLORS.yellow,
         description: 'NBA Unloading',
         bgColor:['#7cf1fb', '#4ebefd'],
@@ -98,8 +99,42 @@ const featuresExpData = [
         srceenNavigagor: 'NBAUnloading',
       },
   ];
+  const featuresImpData = [
+    {
+      id: 301,
+      icon: icons.awb,
+      color: COLORS.yellow,
+      description: 'Pickup Awb',
+      bgColor:['#ffc465', '#ff9c5f'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'PickupAwbScreen',
+      srceenNavigagor: 'PickupAwb',
+    },
+    {
+      id: 302,
+      icon: icons.flightDepart,
+      color: COLORS.purple,
+      description: 'Truck Loading',
+      bgColor:['#fcaba8', '#fe6bba'],
+      backgroundColor: COLORS.lightpurple,
+      screenName: 'TruckLoadingScreen',
+      srceenNavigagor: 'TruckLoading',
+    },
+  
+    {
+      id: 303,
+      icon: icons.bill,
+      color: COLORS.yellow,
+      description: 'Truck Unloading',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'TruckUnloadingScreen',
+      srceenNavigagor: 'TruckUnloading',
+    },
+  ]
   export default {
     featuresHomeData,
     featuresExpData,
+    featuresImpData
   };
   

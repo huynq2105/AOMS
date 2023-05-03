@@ -1,126 +1,390 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-
-//import all the components we are going to use
 import {
-  SafeAreaView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
+  Image,
+  Alert,
+  Platform,
 } from 'react-native';
-
-//import Autocomplete component
-import Autocomplete from 'react-native-autocomplete-input';
-import {getUsers} from '../../../api/IdentityAPI'
-const FactoryPickupScreen = props => {
-    const [films, setFilms] = useState([]);
-  const [filteredFilms, setFilteredFilms] = useState([]);
-  const [selectedValue, setSelectedValue] = useState({});
-   useEffect(() => {
-    getUsers({maxResultCount:20,skipCount:0})
-    .then(({ items, totalCount: total }) => {
-       // console.log('Danh sach usser===========',items)
-        setFilms(items)
-      /*   setTotalCount(total);
-        setRecords(skip ? [...records, ...items] : items);
-        setSkipCount(skip); */
-      })
-   /*  .then(({item,totalCount}) => {
-        console.log('Danh sach usser===========',item)
-        setFilms(item)
-    }) */
-    //   .then((json) => {
-    //     const {results: films} = x``;
-    //     setFilms(films);
-    //     //setting the data in the films state
-    //   })
-      .catch((e) => {
-        alert(e);
-      });
-  }, []); 
-console.log('danh sach film',filteredFilms)
-  const findFilm = (query) => {
-    //method called everytime when we change the value of the input
-    if (query) {
-      //making a case insensitive regular expression to get similar value from the film json
-      const regex = new RegExp(`${query.trim()}`, 'i');
-      //setting the filtered film array according the query from the input
-      setFilteredFilms(films.filter((film) => film.userName.search(regex) >= 0));
-    } else {
-      //if the query is null then return blank
-      setFilteredFilms([]);
-    }
+import Text from '../../../constants/Text';
+import {SIZES, COLORS, FONTS} from '../../../constants/theme';
+import Header from '../../../components/Header';
+import DatePicker from 'react-native-date-picker';
+import icons from '../../../constants/icons';
+import moment from 'moment';
+import {getTruckFactoryPickup} from '../../../api/OutboundAPI';
+import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
+import IconButton from '../../../components/IconButton';
+import {DMY_FORMAT, DMY_TIME, FORMAT_TIME} from '../../../utils/DateHelpers';
+import {SafeAreaView} from 'react-native-safe-area-context';
+const FactoryPickupScreen = ({navigation}) => {
+  const [filterDate, setFilterDate] = useState({
+    show: false,
+    val: new Date(),
+  });
+  const today = moment();
+  const [params, setParams] = useState({
+    LoadingArrivalDate: DMY_FORMAT(filterDate.val),
+    CustomerId: 0,
+    TruckType: 'PICK UP',
+    Type: 'EXPORT',
+  });
+  const changeFilterDate = date => {
+    console.log(date);
+    setFilterDate({show: false, val: date ? date : filterDate.val});
+    setParams({...params, LoadingArrivalDate: DMY_FORMAT(date)});
   };
+  const handleNavigate = truck => {
+    navigation.navigate('TruckDetail', {
+      truck: truck,
+      screenParent: 'FactoryPickup',
+    });
+  };
+  function renderHeader() {
     return (
-        <SafeAreaView style={{flex: 1}}>
-        <View style={styles.container}>
-          <Autocomplete
-            autoCapitalize="none"
-            autoCorrect={false}
-            containerStyle={styles.autocompleteContainer}
-            //data to show in suggestion
-            data={filteredFilms}
-            //default value if you want to set something in input
-            defaultValue={
-              JSON.stringify(selectedValue) === '{}' ? '' : selectedValue.userName
-            }
-            /*onchange of the text changing the state of the query which will trigger
-            the findFilm method to show the suggestions*/
-            onChangeText={(text) => findFilm(text)}
-            placeholder="Enter the film title"
-            flatListProps={{
-              keyExtractor: (_, idx) => idx,
-              renderItem: ({ item }) => <TouchableOpacity
-              onPress={() => {
-                setSelectedValue(item);
-                setFilteredFilms([]);
-              }}>
-             <Text style={styles.itemText}>{item.name}/{item.email}</Text>
-            </TouchableOpacity>
+      <Header
+        containerStyle={{
+          height: 60,
+          paddingHorizontal: SIZES.padding,
+          alignItems: 'center',
+          //backgroundColor: COLORS.green,
+          flex: 1,
+          //marginTop: Platform.OS == 'ios' ? 30 : 10,
+        }}
+        leftComponent={
+          <TouchableOpacity
+            style={{
+              width: 35,
+              height: 35,
+              //backgroundColor:COLORS.red,
+              // alignItems:'center',
+              justifyContent: 'center',
+            }}
+            onPress={() => navigation.goBack()}>
+            <Image
+              source={icons.back}
+              style={{
+                width: 25,
+                height: 25,
+                tintColor: COLORS.white,
+              }}
+            />
+          </TouchableOpacity>
+        }
+        rightComponent={
+          <View
+            style={{
+              width: 35,
+              height: 35,
             }}
           />
-          <View style={styles.descriptionContainer}>
-            {films.length > 0 ? (
-              <>
-                <Text style={styles.infoText}>Selected Data</Text>
-                <Text style={styles.infoText}>
-                  {JSON.stringify(selectedValue)}
+        }
+        title="Truck Pickup"
+        /*  rightComponent={<CartQuantityButton quantity={cartLagiQuantity} onPress={()=>navigation.navigate("CartLagi")} />} */
+      />
+    );
+  }
+  function renderContent() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          marginTop: SIZES.padding,
+          // marginHorizontal:SIZES.base
+        }}>
+        <DataRenderResult
+          navigation={navigation}
+          params={params}
+          renderFooter={
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderBottomColor: COLORS.secondaryALS,
+              }}
+            />
+          }
+          renderHeader={
+            <View
+              style={{
+                flexDirection: 'row',
+                borderTopColor: COLORS.secondaryALS,
+                borderTopWidth: 1,
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                }}></View>
+              <View
+                style={{
+                  flex: 3,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  paddingHorizontal: SIZES.radius,
+                  paddingVertical: SIZES.base,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text>Truck No</Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  // paddingHorizontal: SIZES.radius,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text body3>W.H</Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  paddingHorizontal: SIZES.radius,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text>Time</Text>
+              </View>
+              <View
+                style={{
+                  flex: 5,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  // marginRight
+                }}>
+                <Text
+                  style={{
+                    marginRight: SIZES.padding,
+                  }}>
+                  Status
                 </Text>
-              </>
-            ) : (
-              <Text style={styles.infoText}>Enter The Film Title</Text>
-            )}
-          </View>
+              </View>
+            </View>
+          }
+          fetchFn={getTruckFactoryPickup}
+          render={(truck, index) => (
+            <TouchableOpacity
+              style={{
+                // paddingVertical: SIZES.radius,
+                // paddingHorizontal: SIZES.base,
+                borderTopWidth: 1,
+                borderColor: COLORS.secondaryALS,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                // alignItems: 'center',
+              }}
+              onPress={() => handleNavigate(truck)}>
+              <View
+                style={{
+                  flex: 1,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  alignItems: 'center',
+                  //  paddingHorizontal: SIZES.radius,
+                  justifyContent: 'center',
+                }}>
+                <Text>{index + 1}</Text>
+              </View>
+              <View
+                style={{
+                  flex: 3,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  paddingHorizontal: SIZES.radius,
+                  paddingVertical: SIZES.radius,
+                }}>
+                <Text primaryALS>{truck.vehicRegNo}</Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  alignItems: 'center',
+                  //paddingHorizontal: SIZES.radius,
+                  justifyContent: 'center',
+                }}>
+                <Text> {truck.warehousePickup}</Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  paddingHorizontal: SIZES.radius,
+                  justifyContent: 'center',
+                }}>
+                <Text> {FORMAT_TIME(truck.loadingArrivalDate)}</Text>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 5,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                }}>
+                <View
+                  style={{
+                    // marginLeft: SIZES.base,
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    // padding: 5,
+                    //  borderRadius: 5,
+                    //justifyContent: 'center',
+                    //alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      //flex: 1,
+                      color:
+                        truck?.status === 'Ready to load'
+                          ? COLORS.gray
+                          : truck?.status === 'Closed'
+                          ? COLORS.red
+                          : COLORS.green,
+                    }}>
+                    {truck.status}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    source={icons.right_arrow}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      tintColor: COLORS.primaryALS,
+                      marginLeft: SIZES.radius,
+                    }}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    );
+  }
+  return (
+    <SafeAreaView style={styles.container}>
+      {renderHeader()}
+      <View
+        style={{
+          marginTop: Platform.OS === 'android' ? 80 : 60,
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'row',
+        }}>
+        <Text h3 primaryALS>
+          Pickup Date
+        </Text>
+        <View
+          style={{
+            height: 40,
+            width: 100,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            marginLeft: SIZES.base,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text>{DMY_FORMAT(filterDate.val)}</Text>
         </View>
-      </SafeAreaView>
-    ) 
+        <TouchableOpacity
+          style={{
+            marginLeft: SIZES.base,
+          }}
+          onPress={() => setFilterDate({...filterDate, show: true})}>
+          <Image
+            source={icons.calendar}
+            style={{
+              width: 20,
+              height: 20,
+              tintColor: COLORS.green,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+      {filterDate.show && (
+        <DatePicker
+          modal
+          mode="date"
+          open={filterDate.show}
+          date={filterDate.val}
+          onConfirm={changeFilterDate}
+          onCancel={() => setFilterDate({...filterDate, show: false})}
+          minimumDate={new Date(2000, 1, 1)}
+          maximumDate={new Date()}
+          locale={'vi'}
+        />
+      )}
+      {renderContent()}
+      <View
+        style={{
+          position: 'absolute',
+
+          bottom: 20,
+          right: 20,
+        }}>
+        <IconButton
+          icons={icons.plus}
+          iconStyle={{
+            tintColor: COLORS.white,
+          }}
+          containerStyle={{
+            width: 50,
+            height: 50,
+            borderRadius: 25,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.green,
+          }}
+          onPress={() =>
+            Platform.OS === 'ios'
+              ? navigation.navigate('AddTruckIos')
+              : navigation.navigate('AddTruckAnd')
+          }
+        />
+      </View>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#F5FCFF',
-        flex: 1,
-        padding: 16,
-        marginTop: 40,
-      },
-      autocompleteContainer: {
-        backgroundColor: '#ffffff',
-        borderWidth: 0,
-      },
-      descriptionContainer: {
-        flex: 1,
-        justifyContent: 'center',
-      },
-      itemText: {
-        fontSize: 35,
-        paddingTop: 5,
-        paddingBottom: 5,
-        margin: 2,
-      },
-      infoText: {
-        textAlign: 'center',
-        fontSize: 16,
-      },
-})
+  container: {
+    backgroundColor: '#F5FCFF',
+    flex: 1,
+    //padding: 16,
+  },
+  autocompleteContainer: {
+    backgroundColor: '#ffffff',
+    borderWidth: 0,
+  },
+  descriptionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  itemText: {
+    fontSize: 35,
+    paddingTop: 5,
+    paddingBottom: 5,
+    margin: 2,
+  },
+  infoText: {
+    textAlign: 'center',
+    fontSize: 16,
+  },
+});
 
 export default FactoryPickupScreen;

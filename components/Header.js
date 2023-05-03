@@ -1,9 +1,11 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {FONTS, COLORS} from '../constants/theme';
+import {SafeAreaView} from 'react-native-safe-area-context';
 const Header = ({containerStyle, title, leftComponent, rightComponent}) => {
   return (
-    <View
+    <SafeAreaView
+      // eslint-disable-next-line react-native/no-inline-styles
       style={{
         flexDirection: 'row',
         position: 'absolute',
@@ -14,19 +16,21 @@ const Header = ({containerStyle, title, leftComponent, rightComponent}) => {
         zIndex: 100,
         borderBottomWidth: 1,
         borderBottomColor: COLORS.lightGray1,
-        //  borderBottomRightRadius:SIZES.radius*2,
-        //  backgroundColor:COLORS.red,
+        backgroundColor: COLORS.primaryALS,
         ...containerStyle,
       }}>
       {/* left */}
       {leftComponent}
       <View
+        // eslint-disable-next-line react-native/no-inline-styles
         style={{
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
+          height: 60,
         }}>
         <Text
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{
             ...FONTS.h3,
             fontSize: 18,
@@ -38,7 +42,7 @@ const Header = ({containerStyle, title, leftComponent, rightComponent}) => {
       </View>
       {/*  right */}
       {rightComponent}
-    </View>
+    </SafeAreaView>
   );
 };
 export default Header;

@@ -4,7 +4,6 @@ import {getEnvVars} from '../Environment'
 const {oAuthConfig} = getEnvVars();
 
 export const login = ({ username, password }) =>{
-  console.log('===============da chay vao log in ================')
   api({
     method: 'POST',
     url: '/connect/token',
@@ -21,6 +20,7 @@ export const Logout = () =>
 api({
   method: 'GET',
   url: '/api/account/logout',
+  withCredentials:false
 }).then(({data}) => data).catch(data => data);
 
 export const getTenant = tenantName =>

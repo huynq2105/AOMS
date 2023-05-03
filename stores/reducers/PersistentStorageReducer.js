@@ -18,7 +18,12 @@ const inititalState = {
         "roles": [],
         "password": "",
       },
-      token: {}, language: null, tenant: {},tokenDevice:{},verifyToken:'',tokenExpired:null
+      token: {}, language: null, tenant: {},tokenDevice:{},verifyToken:'',cookie:null,tokenExpired:null,
+      truckAddred:{
+        id:'',
+        bsx:'',
+        driver:''
+      }
 }
 
 
@@ -34,6 +39,9 @@ export default createReducer(inititalState,builder =>
     .addCase(PersistentStorageActions.setVerifyToken, (state, action) => {
         state.verifyToken = action.payload;
       })
+      .addCase(PersistentStorageActions.setCookie, (state, action) => {
+        state.cookie = action.payload;
+      })
       .addCase(PersistentStorageActions.setTenant, (state, action) => {
         state.tenant = action.payload;
       })
@@ -48,5 +56,8 @@ export default createReducer(inititalState,builder =>
       })
       .addCase(PersistentStorageActions.setTokenExpired, (state, action) => {
         state.tokenExpired = action.payload
+      })
+      .addCase(PersistentStorageActions.setTruckAdded, (state, action) => {
+        state.truckAddred = action.payload
       })
     )

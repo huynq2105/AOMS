@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AOMS</string>
+        <string moduleConfig="true" name="CodePushDeploymentKey">YgCPQTJGLvk8HaDoe5V-_LQan829N2nAmyb_x</string>
 </resources>

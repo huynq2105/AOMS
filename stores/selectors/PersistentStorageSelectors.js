@@ -7,9 +7,14 @@ export function createTokenSelector() {
   export function createCurrentUserSelector() {
     return createSelector([getPersistentStorage], persistentStorage => persistentStorage.currentUser);
   }
-  
+  export function createTruckAddedSelector() {
+    return createSelector([getPersistentStorage], persistentStorage => persistentStorage.truckAddred);
+  }
   export function createVerifyTokenSelector() {
     return createSelector([getPersistentStorage], persistentStorage => persistentStorage.verifyToken);
+  }
+  export function createCookieSelector() {
+    return createSelector([getPersistentStorage], persistentStorage => persistentStorage.cookie);
   }
    
   export function createTenantSelector() {

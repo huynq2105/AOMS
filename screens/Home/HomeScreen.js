@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet,Platform,FlatList } from 'react-native';
+import { View, Text, StyleSheet,Platform,FlatList,TouchableOpacity,Image } from 'react-native';
 import Header from '../../components/Header';
 import { SIZES,COLORS } from '../../constants/theme';
 import dummyData from '../../constants/dummyData';
@@ -8,8 +8,8 @@ import TextButton from '../../components/TextButton';
 import AppActions from '../../stores/actions/AppActions';
 import { connectToRedux } from '../../utils/ReduxConnect';
 import PersistentStorageActions from '../../stores/actions/PersistentStorageActions';
-
-const HomeScreen = ({navigation,logoutAsync,setTokenExpired}) => {
+import icons from '../../constants/icons';
+const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken}) => {
 
     function renderLogout(){
     return(
@@ -22,6 +22,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired}) => {
   }}
   onPress={()=>{
     setTokenExpired(null);
+    //setVerifyToken('');
     logoutAsync();
   }}
   />)
@@ -37,7 +38,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired}) => {
               backgroundColor: COLORS.primaryALS,
               //marginTop: Platform.OS == 'ios' ? 30 : 10,
             }}
-            title="HomeS"
+            title="Home"
             rightComponent={
               <View
                 style={{
@@ -46,13 +47,23 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired}) => {
                 }}></View>
             }
             leftComponent={
-              <View
-              style={{
-                width: 35,
-                height: 35,
-              }}></View>
-            
-          }
+              <TouchableOpacity
+                style={{
+                  width: 35,
+                  height: 35,
+                  justifyContent:'center'
+                }}
+                onPress={() => navigation.openDrawer()}>
+                <Image
+                  source={icons.menu}
+                  style={{
+                    width: 20,
+                    height: 20,
+                    tintColor: COLORS.white,
+                  }}
+                />
+              </TouchableOpacity>
+            }
     
     
             /*  rightComponent={<CartQuantityButton quantity={cartLagiQuantity} onPress={()=>navigation.navigate("CartLagi")} />} */
@@ -67,6 +78,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired}) => {
             boderColor: COLORS.secondaryALS,
             marginLeft:SIZES.base
           }}
+          image={item.icon}
            title={item.description}
            onPress={() =>
             navigation.navigate(item.srceenNavigagor, {
@@ -114,7 +126,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired}) => {
         Gần đây
       </Text> */}
       {renderContent()}
-      {renderLogout()}
+     
     </View>
     ) 
 };
@@ -130,6 +142,7 @@ export default connectToRedux({
   component: HomeScreen,
   dispatchProps: {
     logoutAsync: AppActions.logoutAsync,
-    setTokenExpired: PersistentStorageActions.setTokenExpired
+    setTokenExpired: PersistentStorageActions.setTokenExpired,
+    setVerifyToken: PersistentStorageActions.setVerifyToken
   },
 });

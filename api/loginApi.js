@@ -1,5 +1,6 @@
 import api from './API';
 import {getEnvVars} from '../Environment';
+import {Platform} from 'react-native';
 const {oAuthConfig} = getEnvVars();
 
 export const login = ({userName, password}) =>
@@ -18,8 +19,6 @@ export const login = ({userName, password}) =>
     baseURL: oAuthConfig.issuer,
   }).then(({data}) => data);
 
-// export const register = body =>
-// api.post('/api/account/register', body).then(({data}) => console.log(data));
 export const register = body =>
   api({
     method: 'POST',
@@ -29,8 +28,7 @@ export const register = body =>
     },
     data: body,
     baseURL: oAuthConfig.issuer,
-  }).then(({data}) => {
-  });
+  }).then(({data}) => {});
 
 // export const login = ({ username, password }) =>
 //   api({
@@ -40,16 +38,22 @@ export const register = body =>
 //     data: `grant_type=password&scope=${oAuthConfig.scope}&username=${username}&password=${password}&client_id=${oAuthConfig.clientId}&client_secret=${oAuthConfig.clientSecret}`,
 //     baseURL: oAuthConfig.issuer,
 //   }).then(({ data }) => data);
-export const logout = () =>{
-  console.log('da chay vao logout')
-  api({
+export const logout = () => {
+  console.log('da chay vao logout');
+  if (Platform.OS === 'ios') {
+    try {
+      api.get('/abp/Swashbuckle/SetCsrfCookie');
+    } catch (e) {
+      console.log('getApplicationConfiguration', e);
+    }
+  }
+  return api({
     method: 'GET',
     url: '/api/account/logout',
   })
     .then(({data}) => data)
     .catch(data => data);
-}
-  
+};
 
 export const getTenant = tenantName =>
   api({
@@ -63,11 +67,9 @@ export const getTenantById = tenantId =>
     url: `/api/abp/multi-tenancy/tenants/by-id/${tenantId}`,
   }).then(({data}) => data);
 
-  export const getTenantByApi = (url,tenantName) =>
+export const getTenantByApi = (url, tenantName) =>
   api({
     method: 'GET',
     url: `/api/abp/multi-tenancy/tenants/by-name/${tenantName}`,
-    baseURL:url
+    baseURL: url,
   }).then(({data}) => data);
-
-

@@ -41,11 +41,19 @@ const setting = require('../assets/icons/setting.png');
 const star = require('../assets/icons/star.png');
 const wallet = require('../assets/icons/wallet.png');
 const history = require('../assets/icons/history.png');
-
+const awb_number = require('../assets/icons/ic_awb_number.png');
+const awb_deliver = require('../assets/icons/ic_delivery_awb.png');
+const awb_factory_pickup = require('../assets/icons/ic_factory_pickup.png');
+const awb_load = require('../assets/icons/ic_load_cargo.png');
+const awb_truck_location = require('../assets/icons/ic_truck_loacation.png');
+const awb_unload = require('../assets/icons/ic_unload_cargo.png');
+const awb_weight = require('../assets/icons/ic_weight.png');
 const disable_eye = require('../assets/icons/disable_eye.png');
 const down = require('../assets/icons/down.png');
 //const eye = require("../assets/icons/eye.png")
 const game = require('../assets/icons/games.png');
+const plus = require('../assets/icons/plus.png');
+const minus = require('../assets/icons/minus.png');
 const barcode = require('../assets/icons/barcode.png');
 const info = require('../assets/icons/info.png');
 const internet = require('../assets/icons/internet.png');
@@ -77,6 +85,13 @@ export const up_arrow = require('../assets/icons/up_arrow.png');
 const dotted_line = require('../assets/icons/dotted_line.png');
 const check_circle = require('../assets/icons/check_circle.png');
 export default {
+  awb_deliver,
+  awb_factory_pickup,
+  awb_load,
+  awb_number,
+  awb_truck_location,
+  awb_unload,
+  awb_weight,
   coupon,
   cross,
   cart,
@@ -90,6 +105,8 @@ export default {
   filter,
   down_arrow,
   truck,
+  minus,
+  plus,
   eye,
   eye_close,
   email,
