@@ -155,5 +155,26 @@ export const getDelivers = (params = {maxResultCount: 20, skipCount: 0}) =>
   api
     .post('/api/master-data-module/vehicles-registrations', body)
     .then(({data}) => data);
+    export const getTruckDetail = (
+      params = {maxResultCount: 1000, skipCount: 0},
+    ) => {
+      return api
+        .get('/api/inbound-module/truck-loadings/get-mawb-by-vehicleisn', {params})
+        .then(({data}) => data);
+    };
+    export const getSumVehicleDetail = (params = {}) =>
+  api
+    .get(`/api/inbound-module/truck-loadings/get-sum-vehicle-detail`, {
+      params,
+    })
+    .then(({data}) => data);
+    export const getTruckById = id =>
+    api.get(`/api/master-data-module/vehicles-registrations/${id}`).then(({data}) => data);
+    export const getAwbList = (params = {maxResultCount: 1000, skipCount: 0}) => {
+      return api
+        .get('/api/inbound-module/truck-loadings/get-list-group-hawb-v1', {params})
+        .then(({data}) => data);
+    };
+    
      
     

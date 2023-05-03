@@ -5,6 +5,10 @@ import PickupAwbScreen from '../../screens/Inbound/PickupAwb/PickupAwbScreen';
 import PickupAwbDetailScreen from '../../screens/Inbound/PickupAwb/PickupAwbDetail/PickupAwbDetailScreen';
 import TruckUnloadingScreen from '../../screens/Inbound/TruckUnloading/TruckUnloadingScreen';
 import TruckUnloadingDetailScreen from '../../screens/Inbound/TruckUnloading/TruckUnloadingDetail/TruckUnloadingDetailScreen';
+import TruckLoadingScreen from '../../screens/Inbound/TruckLoading/TruckLoadingScreen';
+import AddTruckLoadingAndScreen from '../../screens/Inbound/TruckLoading/AddTruckLoading/AddTruckLoadingAndScreen';
+import TruckLoadingDetailScreen from '../../screens/Inbound/TruckLoading/TruckLoadingDetail/TruckLoadingDetailScreen';
+import AddAwbToTruckScreen from '../../screens/Inbound/TruckLoading/TruckLoadingDetail/AddAwbToTruckScreen';
 const Stack = createNativeStackNavigator();
 const InboundNavigator = () => {
   return (
@@ -31,6 +35,10 @@ const InboundNavigator = () => {
       <Stack.Screen name="PickupAwbDetail" component={PickupAwbDetailScreen} />  
       <Stack.Screen name="TruckUnloading" component={TruckUnloadingScreen} />
       <Stack.Screen name="TruckUnloadingDetail" component={TruckUnloadingDetailScreen} />
+      <Stack.Screen name="TruckLoading" component={TruckLoadingScreen} />
+      <Stack.Screen name="AddTruckLoading" component={AddTruckLoadingAndScreen} />
+      <Stack.Screen name="TruckLoadingDetail" component={TruckLoadingDetailScreen} />
+      <Stack.Screen name="AddAwbToTruck" component={AddAwbToTruckScreen} />
     </Stack.Navigator>
   );
 };
