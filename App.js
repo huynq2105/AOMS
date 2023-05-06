@@ -30,7 +30,7 @@ import {enableScreens} from 'react-native-screens';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {ToastProvider} from 'react-native-toast-notifications';
-import { AppContainer } from './appContainer';
+import {AppContainer} from './AppContainer/index'
 import { initAPIInterceptor } from './api/APIInterceptor';
 import {persistor, store} from './stores';
 import HomeScreen from './screens/Home/HomeScreen';

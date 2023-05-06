@@ -175,6 +175,9 @@ export const getDelivers = (params = {maxResultCount: 20, skipCount: 0}) =>
         .get('/api/inbound-module/truck-loadings/get-list-group-hawb-v1', {params})
         .then(({data}) => data);
     };
-    
+    export const AddAwbToTruck = body =>
+  api
+    .post('/api/inbound-module/truck-loadings/add-hawb-to-truck', body)
+    .then(({data}) => data);
      
     

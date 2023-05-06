@@ -88,7 +88,7 @@ const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appCon
     )
 }
 
-export default connectToRedux({
+ export default connectToRedux({
     component: AppContainer,
     stateProps: state => ({
       token: createTokenSelector()(state),

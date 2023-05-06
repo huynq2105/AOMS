@@ -15,17 +15,21 @@ import {SIZES, COLORS} from '../../../../constants/theme';
 import icons from '../../../../constants/icons';
 import Header from '../../../../components/Header';
 import CheckComponent from '../../../../components/Checkbox';
-import {
-getAwbList
-} from '../../../../api/InboundAPI';
+import {getAwbList} from '../../../../api/InboundAPI';
 import {createLoadingSelector} from '../../../../stores/selectors/LoadingSelectors';
 import {connectToRedux} from '../../../../utils/ReduxConnect';
 import LoadingActions from '../../../../stores/actions/LoadingActions';
 import TextButton from '../../../../components/TextButton';
 import {FlatList} from 'react-native-gesture-handler';
 import StepperInput from '../../../../components/StepperInput';
-import LineDevider from '../../../../components/LineDivider'
-const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => {
+import LineDevider from '../../../../components/LineDivider';
+import {AddAwbToTruck} from '../../../../api/InboundAPI'
+const AddAwbToTruckScreen = ({
+  navigation,
+  startLoading,
+  stopLoading,
+  route,
+}) => {
   const truck = route?.params?.truck ?? {};
   const [awbs, setawbs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -34,8 +38,8 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
   const [check, setCheck] = useState(false);
 
   function updateQuantityHandler(newQuantity, id) {
-    const newMycartList = awbs.map((cl) =>
-      cl.id === id ? { ...cl, pieces: newQuantity } : cl
+    const newMycartList = awbs.map(cl =>
+      cl.id === id ? {...cl, pieces: newQuantity} : cl,
     );
     setawbs(newMycartList);
   }
@@ -46,7 +50,6 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
           Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
           return;
         }
-        console.log('Danh sach van don',items)
         const result = [];
         items.forEach((item, index) => {
           const awb = {
@@ -55,10 +58,10 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
             flight: item.flight,
             flightDate: item.flightDate,
             mawb: item.mawbPrefix + item.mawbSerial,
-            hawb:item.hawb,
+            hawb: item.hawb,
             pieces: item.pieces,
             piecesLoaded: item.piecesLoaded,
-            piecesUnloaded:item.piecesUnloaded
+            piecesUnloaded: item.piecesUnloaded,
           };
           result.push(awb);
         });
@@ -83,11 +86,11 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
       setCheck(false);
     }
   };
-  const handleAddPoDo = () => {
+  const handleAddAwbs = () => {
     const listAwbToAdd = [];
     awbs.forEach((item, index) => {
       if (item.checkAwb === true) {
-        const data = {labId: item.labId, doId: item.id, pieces: item.pieces};
+        const data = {lagiId: item.id, pieces: item.pieces};
         listAwbToAdd.push(data);
       }
     });
@@ -95,16 +98,15 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
       vehicleIsn: truck ? truck.id : 0,
       listItem: listAwbToAdd,
     };
-    AddPoDoToTruck(dataToAdd).then((data) => {
-     /*  if (!data) {
-        Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
-        return;
-      } */
-      navigation.goBack();
-    }).catch(e =>Alert.alert('Lỗi', 'Liên hệ với quản trị viên',e));
+    console.log('Data Add',dataToAdd)
+    AddAwbToTruck(dataToAdd)
+      .then(data => {
+        navigation.goBack();
+      })
+      .catch(e => Alert.alert('Lỗi', 'Liên hệ với quản trị viên', e));
   };
   const closeModal = () => {
-    setModalVisible(false)
+    setModalVisible(false);
   };
   useEffect(() => {
     loadAwb();
@@ -119,16 +121,16 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
           alignItems: 'center',
           backgroundColor: COLORS.primaryALS,
           marginBottom: 80,
-          
+
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Add PO"
+        title="Add Awb To Truck"
         rightComponent={
           <TouchableOpacity
             style={{
               width: 35,
               height: 35,
-              justifyContent:'center'
+              justifyContent: 'center',
             }}
             onPress={() => setModalVisible(true)}>
             <Image
@@ -146,7 +148,7 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
             style={{
               width: 35,
               height: 35,
-              justifyContent:'center'
+              justifyContent: 'center',
             }}
             onPress={() => navigation.goBack()}>
             <Image
@@ -230,19 +232,20 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
             <LineDevider
               lineStyle={{
                 height: 2,
-                marginBottom:SIZES.base,
-                marginTop:SIZES.base
+                marginBottom: SIZES.base,
+                marginTop: SIZES.base,
                 //backgroundColor: COLORS.red,
               }}
             />
           )}
-          ListHeaderComponent={()=>(
+          ListHeaderComponent={() => (
             <View
               style={{
-                marginTop:SIZES.padding
-              }}
-            >
-              <Text h2 primaryALS>Danh sách PO:</Text>
+                marginTop: SIZES.padding,
+              }}>
+              <Text h2 primaryALS>
+                Danh sách Vận đơn:
+              </Text>
             </View>
           )}
           keyExtractor={item => `Po-${item?.id}`}
@@ -250,8 +253,9 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
             <View
               style={{
                 flexDirection: 'row',
-                backgroundColor:item?.checkAwb ? COLORS.transparentprimaryALS: null
-
+                backgroundColor: item?.checkAwb
+                  ? COLORS.transparentprimaryALS
+                  : null,
               }}>
               <CheckComponent
                 check={item?.checkAwb}
@@ -261,72 +265,104 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
                   handleCheckItem(e, item);
                 }}
               />
-              <View>
               <View
-              style={{
-                flexDirection:'row',
-                marginLeft:SIZES.padding,
-                alignItems:'center',
-                flex:1
-              }}
+                style={{
+                  flex:1
+                }}
               >
-                <Text h2 style={{
-                  //flex:1
-                }}>{item?.mawb}/{item?.hawb}</Text>
                 <View
                   style={{
-                    flex:1
-                  }}
-                ></View>
-             
-              {/*   <Text body3 style={{
+                    flexDirection: 'row',
+                    marginLeft: SIZES.radius,
+                   // alignItems: 'center',
+                    //backgroundColor: COLORS.lightGreen,
+                    // flex:1
+                  }}>
+                  <Text
+                    body2
+                    style={
+                      {
+                        //flex:1
+                      }
+                    }>
+                    {item?.mawb}/{item?.hawb}
+                  </Text>
+                  <View
+                    style={{
+                      flex: 1,
+                    }}></View>
+
+                  {/*   <Text body3 style={{
                   marginRight:SIZES.padding
                   //marginLeft: SIZES.padding
                 }}>{item?.pieces}</Text> */}
-              </View>
-              <View
-                style={{
-                  flexDirection:'row'
-                }}
-              >
-                <View>
-                <Image source={icons.flightDepart}
+                </View>
+                <View
                   style={{
-                    width:20,
-                    height:20
-                  }}
-                />
-                <Text>{item?.flight}</Text>
-                </View>
-                <View>
-                <Image source={icons.awb_number}
-                  style={{
-                    width:20,
-                    height:20
-                  }}
-                />
-                <Text>{item?.piecesLoaded}/{item?.piecesUnloaded}</Text>
-                </View>
-                <StepperInput
-              containerStyle={{
-                height: 50,
-                width: 125,
-                backgroundColor: COLORS.lightGray1,
-                borderRadius:5,
-                flex:1
-              }}
-              value={item?.pieces}
-              onAdd={() =>
-                updateQuantityHandler(item?.pieces + 1, item.id)
-              }
-              onMinus={() => {
-                if (item?.pieces > 1) {
-                  updateQuantityHandler(item?.pieces - 1, item.id);
-                }
-              }}
-            />
+                    flexDirection: 'row',
+                    marginLeft:SIZES.radius,
+                    //backgroundColor:COLORS.lightOrange
+                  }}>
+                  <View
+                    style={{
+                      flexDirection:'row',
+                      alignItems:'center',
+                      flex:2
+                    }}
+                  >
+                    <Image
+                      source={icons.flightDepart}
+                      style={{
+                        width: 25,
+                        height: 25,
+                      }}
+                    />
+                    <Text body3 style={{
+                      marginLeft:SIZES.base
+                    }}>{item?.flight}</Text>
+                  </View>
+                  <View
+                     style={{
+                      flexDirection:'row',
+                      alignItems:'center',
+                      flex:1
+                    }}
+                  >
+                    <Image
+                      source={icons.awb_number}
+                      style={{
+                        width: 25,
+                        height: 25,
+                      }}
+                    />
+                    <Text body3 style={{
+                      marginLeft:SIZES.base
+                    }}>
+                      {item?.piecesLoaded}/{item?.pieces}
+                    </Text>
+                  </View>
+                  <StepperInput
+                    containerStyle={{
+                      height: 40,
+                      width: 105,
+                      backgroundColor: COLORS.lightGray1,
+                      borderRadius: 10,
+                      marginLeft:SIZES.base,
+                      flex: 2,
+                    }}
+                    value={item?.pieces}
+                    onAdd={() =>
+                      updateQuantityHandler(item?.pieces + 1, item.id)
+                    }
+                    onMinus={() => {
+                      if (item?.pieces > 1) {
+                        updateQuantityHandler(item?.pieces - 1, item.id);
+                      }
+                    }}
+                  />
                 </View>
               </View>
+              <View></View>
             </View>
           )}
         />
@@ -358,11 +394,10 @@ const AddAwbToTruckScreen = ({navigation, startLoading, stopLoading, route}) => 
               height: 40,
               borderRadius: SIZES.base,
             }}
-            onPress={handleAddPoDo}
+            onPress={handleAddAwbs}
           />
         </View>
       </View>
-    
     </View>
   );
 };

@@ -14,11 +14,12 @@ import {
 } from 'react-native';
 import Text from '../../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../../constants/theme';
-import {
+import { DELIVER_FORMAT_DATE,DELIVER_FORMAT_TIME,ADD_TRUCK_FORMAT_TIME } from '../../../../utils/DateHelpers'
+/* import {
   DELIVER_FORMAT_DATE,
   ADD_TRUCK_FORMAT_TIME,
   DELIVER_FORMAT_TIME,
-} from '../../../../utils/DateHelpers';
+} from '../../../../utils/DateHelpers'; */
 import icons from '../../../../constants/icons';
 import Header from '../../../../components/Header';
 import moment from 'moment';
@@ -34,7 +35,7 @@ import {
   getDriversByVehicleId,
   createVehicle,
   createTruck,
-  getWareHousePickUp
+  getWareHousePickUp,
 } from '../../../../api/InboundAPI';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Picker} from '@react-native-picker/picker';
@@ -45,7 +46,10 @@ import LoadingActions from '../../../../stores/actions/LoadingActions';
 
 const validations = {
   vehicleRegNo: Yup.string().required('Required.'),
-  vhclLoadingWarehouse: Yup.string().notOneOf(['--Choose--'], 'Phai set gia tri'),
+  vhclLoadingWarehouse: Yup.string().notOneOf(
+    ['--Choose--'],
+    'Phai set gia tri',
+  ),
   vhclDriverName: Yup.string().required('Required.'),
   vehicleLoadWeight: Yup.string().required('Required.'),
   vhclRemarks: Yup.string().required('Required.'),
@@ -56,13 +60,19 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
   const [filteredTrucks, setFilteredTrucks] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const today = moment();
-  const [valueWareHouse,setValueWareHouse] = useState('')
+  const [valueWareHouse, setValueWareHouse] = useState('');
   const [drivers, setDrivers] = useState([]);
   const [filteredDrivers, setFilteredDrivers] = useState([]);
   const [agents, setAgents] = useState([]);
-  const [cargoTSO,setCargoTSO] = useState([{id: 0, label: '--Choose--', value: 0}]);
-  const [wareHouse, setWareHouse] = useState([{id: 0, label: '--Choose--', value: 0}]);
-  const [wareHousePickUp, setWareHousePickUp] = useState([{id: 0, label: '--Choose--', value: 0}]);
+  const [cargoTSO, setCargoTSO] = useState([
+    {id: 0, label: '--Choose--', value: 0},
+  ]);
+  const [wareHouse, setWareHouse] = useState([
+    {id: 0, label: '--Choose--', value: 0},
+  ]);
+  const [wareHousePickUp, setWareHousePickUp] = useState([
+    {id: 0, label: '--Choose--', value: 0},
+  ]);
   const [vihicle, setVihicle] = useState();
   const handleAddTruck = () => {
     setIsVisible(true);
@@ -77,17 +87,16 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
       },
     );
   };
-  const loadWareHouse = async () =>{
-  
+  const loadWareHouse = async () => {
     const wareHouseSaved = await AsyncStorage.getItem('wareHouseSave');
-    if(wareHouseSaved) {
-      setValueWareHouse(wareHouseSaved)
+    if (wareHouseSaved) {
+      setValueWareHouse(wareHouseSaved);
       return wareHouseSaved;
     }
     return null;
-  }
+  };
   useEffect(() => {
-/*     const wareSaved = loadWareHouse();
+    /*     const wareSaved = loadWareHouse();
     console.log('wareSaved=====================================',wareSaved) */
     getVehicles({maxResultCount: 1000, skipCount: 0})
       .then(({items, totalCount: total}) => {
@@ -98,46 +107,45 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
             getWarehouse({maxResultCount: 1000, skipCount: 0}).then(
               ({items, totalCount: total}) => {
                 const loadWareHouse = [];
-                let valueWareHouseInit = ''
+                let valueWareHouseInit = '';
                 items.forEach((item, index) => {
-                  valueWareHouseInit = item.id +'';
+                  valueWareHouseInit = item.id + '';
                   return loadWareHouse.push({
                     id: item.id,
                     label: item.warehouseShortCode,
                     value: item.id,
                   });
                 });
-                setValueWareHouse(valueWareHouseInit)
-                setWareHouse(loadWareHouse)
-              
-                getCargoTerminalErtsCode({ErtsShedType:'TSO', maxResultCount:50, skipCount: 0}).then(
-                  ({items, totalCount: total}) => {
-                    const loadCargo = [];
-                    console.log('danh sach Terminal',items)
-                    items.forEach((item, index) => {
-                      return loadCargo.push({
-                        id: item.id,
-                        label: item.ertsShedCode,
-                        value: item.id,
-                      });
+                setValueWareHouse(valueWareHouseInit);
+                setWareHouse(loadWareHouse);
+
+                getCargoTerminalErtsCode({
+                  ErtsShedType: 'TSO',
+                  maxResultCount: 50,
+                  skipCount: 0,
+                }).then(({items, totalCount: total}) => {
+                  const loadCargo = [];
+                  console.log('danh sach Terminal', items);
+                  items.forEach((item, index) => {
+                    return loadCargo.push({
+                      id: item.id,
+                      label: item.ertsShedCode,
+                      value: item.id,
                     });
-                    setCargoTSO([...cargoTSO,...loadCargo]);
-                  },
-                );
+                  });
+                  setCargoTSO([...cargoTSO, ...loadCargo]);
+                });
               },
             );
           },
         );
       })
       .catch(e => {
-        if(e==='AxiosError: Request failed with status code 401'){
+        if (e === 'AxiosError: Request failed with status code 401') {
           alert('Hết phiên đăng nhập');
+        } else {
+          alert(e);
         }
-        
-          else{
-            alert(e)
-          }
-        
       });
   }, []);
 
@@ -204,9 +212,9 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
       vhclTruckType: 'TRANSIT',
       vhclRemarks: values.vhclRemarks + ' Mobile',
       vhclMasterIsn: parseInt(values.vhclMasterIsn),
-      vhclUnloadingWarehouse: values.vhclUnloadingWarehouse+'',
+      vhclUnloadingWarehouse: values.vhclUnloadingWarehouse + '',
     };
-    console.log('Truck Data===============',truckData)
+    console.log('Truck Data===============', truckData);
     startLoading({key: 'addTruck'});
     createTruck(truckData)
       .then(() => {
@@ -267,9 +275,11 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
           vehicleRegNo: vihicle ? vihicle.vehicleRegNo : '',
           vhclMasterIsn: vihicle ? vihicle.id + '' : '',
           vehicleLoadWeight: vihicle
-            ? vihicle.vehicleLoadWeight ? vihicle.vehicleLoadWeight.toString() : ''
+            ? vihicle.vehicleLoadWeight
+              ? vihicle.vehicleLoadWeight.toString()
+              : ''
             : '',
-          vhclLoadingWarehouse: valueWareHouse+'',
+          vhclLoadingWarehouse: valueWareHouse + '',
           vhclUnloadingWarehouse: '',
           vhclDriverName: driver
             ? driver.firstName + '-' + driver.phoneNumber
@@ -299,7 +309,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
               style={{
                 marginTop: SIZES.base,
               }}>
-              Truck Number <Text style={{color:COLORS.red}}>(*)</Text>
+              Truck Number <Text style={{color: COLORS.red}}>(*)</Text>
             </Text>
             <View
               style={{
@@ -315,7 +325,6 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                     borderLeftWidth: 0,
                     borderWidth: 0,
                   }}
-                   
                   containerStyle={{
                     backgroundColor: '#F5FCFF',
                     borderWidth: 0,
@@ -342,7 +351,9 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                           setFieldValue('vhclMasterIsn', item.id.toString());
                           setFieldValue(
                             'vehicleLoadWeight',
-                            item.vehicleLoadWeight? item.vehicleLoadWeight.toString() :"",
+                            item.vehicleLoadWeight
+                              ? item.vehicleLoadWeight.toString()
+                              : '',
                           );
                           setVihicle(item);
                           //setSelectedValue(item);
@@ -379,7 +390,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
               style={{
                 marginTop: 60,
               }}>
-              Load weight <Text style={{color:COLORS.red}}>(*)</Text>
+              Load weight <Text style={{color: COLORS.red}}>(*)</Text>
             </Text>
             <TextInput
               style={{
@@ -400,7 +411,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
               style={{
                 marginTop: SIZES.base,
               }}>
-              Driver <Text style={{color:COLORS.red}}>(*)</Text>
+              Driver <Text style={{color: COLORS.red}}>(*)</Text>
             </Text>
             <View
               style={{
@@ -414,7 +425,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                   borderWidth: 0,
                   elevation: Platform.OS === 'android' ? 1 : 0,
                   position: 'absolute',
-                   zIndex: 1,
+                  zIndex: 1,
                 }}
                 style={{
                   backgroundColor: '#F5FCFF',
@@ -455,7 +466,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                 style={{
                   flex: 1,
                 }}>
-                Factory <Text style={{color:COLORS.red}}>(*)</Text>
+                Factory <Text style={{color: COLORS.red}}>(*)</Text>
               </Text>
               <Text
                 h3
@@ -515,18 +526,15 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                   }}
                   mode="dropdown"
                   selectedValue={values.vhclLoadingWarehouse}
-                  onValueChange={(itemValue, itemIndex) =>{
-                    setFieldValue('vhclLoadingWarehouse', itemValue+'')
-                   AsyncStorage.setItem('wareHouseSave', itemValue+'');
-                  }
-                    
-                  }>
+                  onValueChange={(itemValue, itemIndex) => {
+                    setFieldValue('vhclLoadingWarehouse', itemValue + '');
+                    AsyncStorage.setItem('wareHouseSave', itemValue + '');
+                  }}>
                   {wareHouse.map(it => (
                     <Picker.Item
                       key={it.id.toString()}
                       label={it.label}
                       value={it.value}
-                      
                     />
                   ))}
                 </Picker>
@@ -540,7 +548,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                   marginTop: SIZES.base,
                   //flex: 1,
                 }}>
-                W.H <Text style={{color:COLORS.red}}>(*)</Text>
+                W.H <Text style={{color: COLORS.red}}>(*)</Text>
               </Text>
               <TextInput
                 style={{
@@ -581,7 +589,9 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                   width: 120,
                   height: 40,
                   borderRadius: SIZES.base,
-                  backgroundColor: !isValid ? COLORS.lightGray1 : COLORS.primaryALS
+                  backgroundColor: !isValid
+                    ? COLORS.lightGray1
+                    : COLORS.primaryALS,
                 }}
                 disabled={!isValid}
                 onPress={handleSubmit}

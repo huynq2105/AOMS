@@ -61,7 +61,7 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
   const params = {VehicleIsn: truck.id};
   const [listMawb, setListMawb] = useState([]);
   const [filterListMawb, setFilterListMawb] = useState([]);
-
+const [totalPieces,setTotalPieces] = useState(0)
   const loadTruckDetail = () => {
     startLoading('Load data');
     getTruckDetail({VehicleIsn: truck.id})
@@ -73,23 +73,24 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
         }
         const result = [];
         let piece = 0;
-        /* items.forEach((item, index) => {
+        items.forEach((item, index) => {
           piece += item.piecesLoaded;
-          const po = {
-            vehicleDetailId: item.vehicleDetailId,
-            id: item.doId,
-            checkPo: false,
-            time: item.time,
-            date: item.date,
-            poNumber: item.poNumber,
+          const awb = {
+            vehicleRegID: item.vehicleRegID,
+            lagiId: item.lagiId,
+            checkAwb: false,
+            flightDate: item.flightDate,
+            hawb: item.hawb,
+            mawb: item.mawb,
+            flightNo: item.flightNo,
             piecesLoaded: item.piecesLoaded,
             pieces: item.pieces,
           };
-          result.push(po);
+          result.push(awb);
         });
-        setListPo(result);
-        setFilterListPo(result);
-        setTotalPieces(piece); */
+        setListMawb(result);
+        setFilterListMawb(result);
+        setTotalPieces(piece);
         stopLoading('Load data');
       })
       .catch(e => {
@@ -98,6 +99,7 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
         stopLoading('Load data');
       });
   };
+  console.log('List Filter',filterListMawb)
   useEffect(() => {
     getSumVehicleDetail({vehicleIsn: truck.id})
       .then(data => {
@@ -129,7 +131,7 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
   const removeSoFromTruck = () => {
     let listLabId = '';
     filterListMawb.forEach((item, index) => {
-      if (item.checkPo) {
+      if (item.checkAwb) {
         listLabId += item.id + ',';
       }
     });
@@ -222,22 +224,22 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
     const newState = filterListMawb.map(obj => {
       // 👇️ if id equals 2, update country property
       if (obj.id === item.id) {
-        return {...obj, checkPo: e};
+        return {...obj, checkAwb: e};
       }
       // 👇️ otherwise return the object as is
       return obj;
     });
     setFilterListMawb(newState);
-    if (newState.every(item => item.checkPo === true)) {
+    if (newState.every(item => item.checkAwb === true)) {
       setCheck(true);
     }
-    if (newState.every(item => item.checkPo === false)) {
+    if (newState.every(item => item.checkAwb === false)) {
       setDisablebuttonRemove(true);
     }
-    if (newState.some(item => item.checkPo === false)) {
+    if (newState.some(item => item.checkAwb === false)) {
       setCheck(false);
     }
-    if (newState.some(item => item.checkPo === true)) {
+    if (newState.some(item => item.checkAwb === true)) {
       setDisablebuttonRemove(false);
     }
   };
@@ -250,7 +252,7 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
     }
     const newState = filterListMawb.map(obj => {
       // 👇️ if id equals 2, update country property
-      return {...obj, checkPo: e};
+      return {...obj, checkAwb: e};
     });
     setFilterListMawb(newState);
   };
@@ -618,12 +620,12 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
               }}
             />
           )}
-          keyExtractor={item => `Po-${item?.id}`}
+          keyExtractor={item => `lagi-${item?.lagiId}`}
           renderItem={({item, index}) => (
             <View
               style={{
                 flexDirection: 'row',
-                backgroundColor: item?.checkPo
+                backgroundColor: item?.checkAwb
                   ? COLORS.transparentprimaryALS
                   : null,
               }}>
@@ -633,7 +635,7 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
                   paddingVertical: SIZES.radius,
                 }}>
                 <CheckComponent
-                  check={item?.checkPo}
+                  check={item?.checkAwb}
                   size={24}
                   color={COLORS.lightGray1}
                   onPress={e => {
@@ -645,20 +647,23 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
 
               <View
                 style={{
-                  flex: 3,
+                  flex: 5,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.gray,
                   justifyContent: 'center',
-                  alignItems: 'center',
+                  //alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
                 <Text h3 primaryALS>
-                  {item?.poNumber}
+                  {item?.mawb}/{item?.hawb}
+                </Text>
+                <Text h3 primaryALS>
+                  {item?.flightNo}
                 </Text>
               </View>
-              <View
+          {/*     <View
                 style={{
-                  flex: 3,
+                  flex: 2,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.gray,
                   justifyContent: 'center',
@@ -668,7 +673,7 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
                 <Text h3 primaryALS>
                   {FORMAT_TIME(item?.date)}
                 </Text>
-              </View>
+              </View> */}
               <View
                 style={{
                   flex: 2,
@@ -678,30 +683,12 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
+                  <Text></Text>
                 <Text h2 primaryALS>
-                  {item?.piecesLoaded}
+                  {item?.piecesLoaded}/{item.pieces}
                 </Text>
               </View>
-              <TouchableOpacity
-                style={{
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  //paddingHorizontal: SIZES.radius,
-                  // paddingVertical: SIZES.base,
-                  flex: 1,
-                  //backgroundColor:COLORS.lightGreen
-                }}
-                onPress={() => handleEditPO(item)}>
-                <Icon
-                  name="edit"
-                  size={24}
-                  style={{
-                    color: COLORS.green,
-                  }}
-                />
-              </TouchableOpacity>
+              
             </View>
           )}
         />
