@@ -26,7 +26,8 @@ import DataRenderResult from '../../../../components/DataRenderResult/DataRender
 import {
 getTruckDetail,
 getSumVehicleDetail,
-getTruckById
+getTruckById,
+removeManyHawb
 } from '../../../../api/InboundAPI';
 import {
   ADD_TRUCK_FORMAT_TIME,
@@ -128,14 +129,14 @@ const [totalPieces,setTotalPieces] = useState(0)
     var minutes = Now.getMinutes();
     return new Date(Date.UTC(year, month, day, hour, minutes));
   }
-  const removeSoFromTruck = () => {
-    let listLabId = '';
+  const removeAwbFromTruck = () => {
+    let listObjectIsn = '';
     filterListMawb.forEach((item, index) => {
       if (item.checkAwb) {
-        listLabId += item.id + ',';
+        listObjectIsn += item.id + ',';
       }
     });
-    removeAllGroupByMawb(listLabId.substring(0, listLabId.length - 1), truck.id)
+    removeManyHawb(listObjectIsn.substring(0, listObjectIsn.length - 1), truck.id)
       .then(data => {
         toast.show('Remove DO thành công! ', {
           type: 'success',
@@ -149,7 +150,7 @@ const [totalPieces,setTotalPieces] = useState(0)
           duration: 2000,
           animationType: 'slide-in',
         });
-        loadPoDoByVehicle();
+        loadTruckDetail();
       })
       .catch(e => Alert.alert('Lỗi', 'Liên hệ với quản trị viên', e));
   };
@@ -728,7 +729,7 @@ const [totalPieces,setTotalPieces] = useState(0)
               paddingHorizontal: SIZES.radius,
             }}
             disabled={disableButtonRemove}
-            onPress={removeSoFromTruck}
+            onPress={removeAwbFromTruck}
           />
           <TextButton
             label="Irregularity"
