@@ -2,40 +2,29 @@ import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import all the components we are going to use
 import {
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
   Platform,
   Image,
-  KeyboardAvoidingView,
   TextInput,
   Alert,
 } from 'react-native';
 import Text from '../../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../../constants/theme';
 import { DELIVER_FORMAT_DATE,DELIVER_FORMAT_TIME,ADD_TRUCK_FORMAT_TIME } from '../../../../utils/DateHelpers'
-/* import {
-  DELIVER_FORMAT_DATE,
-  ADD_TRUCK_FORMAT_TIME,
-  DELIVER_FORMAT_TIME,
-} from '../../../../utils/DateHelpers'; */
 import icons from '../../../../constants/icons';
 import Header from '../../../../components/Header';
 import moment from 'moment';
-import FormInputMik from '../../../../components/FormInputMik';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {
   getVehicles,
   getDrivers,
   getWarehouse,
-  getAgents,
   getCargoTerminalErtsCode,
   getDriversByVehicleId,
-  createVehicle,
   createTruck,
-  getWareHousePickUp,
 } from '../../../../api/InboundAPI';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Picker} from '@react-native-picker/picker';
@@ -58,12 +47,10 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
   const [trucks, setTrucks] = useState([]);
   const [driver, setDriver] = useState(null);
   const [filteredTrucks, setFilteredTrucks] = useState([]);
-  const [isVisible, setIsVisible] = useState(false);
   const today = moment();
   const [valueWareHouse, setValueWareHouse] = useState('');
   const [drivers, setDrivers] = useState([]);
   const [filteredDrivers, setFilteredDrivers] = useState([]);
-  const [agents, setAgents] = useState([]);
   const [cargoTSO, setCargoTSO] = useState([
     {id: 0, label: '--Choose--', value: 0},
   ]);
@@ -96,8 +83,6 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
     return null;
   };
   useEffect(() => {
-    /*     const wareSaved = loadWareHouse();
-    console.log('wareSaved=====================================',wareSaved) */
     getVehicles({maxResultCount: 1000, skipCount: 0})
       .then(({items, totalCount: total}) => {
         setTrucks(items);
@@ -125,7 +110,6 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                   skipCount: 0,
                 }).then(({items, totalCount: total}) => {
                   const loadCargo = [];
-                  console.log('danh sach Terminal', items);
                   items.forEach((item, index) => {
                     return loadCargo.push({
                       id: item.id,
@@ -141,11 +125,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
         );
       })
       .catch(e => {
-        if (e === 'AxiosError: Request failed with status code 401') {
-          alert('Hết phiên đăng nhập');
-        } else {
-          alert(e);
-        }
+        console.log(e)
       });
   }, []);
 
@@ -214,14 +194,13 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
       vhclMasterIsn: parseInt(values.vhclMasterIsn),
       vhclUnloadingWarehouse: values.vhclUnloadingWarehouse + '',
     };
-    console.log('Truck Data===============', truckData);
     startLoading({key: 'addTruck'});
     createTruck(truckData)
       .then(() => {
         navigation.goBack();
       })
       .catch(e => {
-        Alert.alert(e + '');
+       console.log(e)
       })
       .finally(() => stopLoading({key: 'addTruck'}));
   };

@@ -42,6 +42,9 @@ const FactoryPickupScreen = ({navigation}) => {
       screenParent: 'FactoryPickup',
     });
   };
+  const handleApplyFunc = (data) =>{
+
+  }
   function renderHeader() {
     return (
       <Header
@@ -91,10 +94,11 @@ const FactoryPickupScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
-          marginTop: SIZES.padding,
+          marginTop: SIZES.base,
           // marginHorizontal:SIZES.base
         }}>
         <DataRenderResult
+        applyFunc={handleApplyFunc}
           navigation={navigation}
           params={params}
           renderFooter={
@@ -130,7 +134,7 @@ const FactoryPickupScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  flex: 2,
+                  flex: 3,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
                   // paddingHorizontal: SIZES.radius,
@@ -184,11 +188,11 @@ const FactoryPickupScreen = ({navigation}) => {
               <View
                 style={{
                   flex: 1,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  //borderLeftWidth: 1,
+                  //borderLeftColor: COLORS.secondaryALS,
                   alignItems: 'center',
                   //  paddingHorizontal: SIZES.radius,
-                  justifyContent: 'center',
+                 justifyContent: 'center',
                 }}>
                 <Text>{index + 1}</Text>
               </View>
@@ -204,7 +208,7 @@ const FactoryPickupScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  flex: 2,
+                  flex: 3,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
                   alignItems: 'center',

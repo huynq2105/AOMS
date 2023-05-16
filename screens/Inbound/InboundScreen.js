@@ -51,10 +51,10 @@ const InboundScreen = ({navigation}) => {
         const renderItem = ({item, index}) => (
           <OutboundItem
           customContainerStyle={{
-            borderWidth:1,
             boderColor: COLORS.secondaryALS,
             marginLeft:SIZES.base
           }}
+          image={item.icon}
            title={item.description}
             onPress={() =>
               navigation.navigate(item.srceenNavigagor,{screen:item.screenName})
@@ -69,7 +69,7 @@ const InboundScreen = ({navigation}) => {
             >
               <FlatList
                 data={dummyData.featuresImpData}
-                numColumns={2}
+                numColumns={3}
                 keyExtractor={(item,index)=>item.id}
                 renderItem={renderItem}
                 style={{

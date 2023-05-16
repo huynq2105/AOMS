@@ -23,6 +23,7 @@ import Header from '../../../../components/Header';
 import moment from 'moment';
 import CheckComponent from '../../../../components/Checkbox';
 import DataRenderResult from '../../../../components/DataRenderResult/DataRenderResult';
+import { updateSeal,getSealByTruckId } from '../../../../api/MasterAPI';
 import {
   getPoDoByVehicle,
   getSumPoDoVehicleDetail,
@@ -30,6 +31,7 @@ import {
   closeTruck,
   removeAllGroupByMawb,
   UpdatePiecesLoaded,
+  getVihicleById,
 } from '../../../../api/OutboundAPI';
 import {
   ADD_TRUCK_FORMAT_TIME,
@@ -64,7 +66,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   const params = {VehicleIsn: truck.id};
   const [listPo, setListPo] = useState([]);
   const [filterListPo, setFilterListPo] = useState([]);
-
+  const [numberOfDoor,setNumberOfDoor] = useState(0)
   const loadPoDoByVehicle = () => {
     startLoading('Load data');
     getPoDoByVehicle({VehicleIsn: truck.id})
@@ -96,11 +98,18 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
       })
       .catch(e => {
         console.log(e);
-        Alert.alert('Lỗi', e.toString());
         stopLoading('Load data');
       });
   };
-  useEffect(() => {
+ const handleApplyFunc = data =>{
+  let pieces = 0;
+  data.forEach((item,index)=>{
+    pieces += item.piecesLoaded
+  })
+  setTotalPieces(pieces);
+ }
+ useFocusEffect(
+  useCallback(() => {
     getSumPoDoVehicleDetail({vehicleIsn: truck.id})
       .then(data => {
         if (!data) {
@@ -108,17 +117,39 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           return;
         }
         setTruckDetail(data);
-        getTruckById(truck.id).then(data => {
-          setSerialNo(data.vhclSealNumber);
-        });
-        loadPoDoByVehicle();
+        if((truck?.status != 'Loading' && truck?.status != 'Ready to load')){
+          getTruckById(truck.id).then(data => {
+            // setSerialNo(data.vhclSealNumber);
+             getVihicleById(truck.vehicleId).then(data=>{
+               if(data.numberOfDoor){
+                 setNumberOfDoor(data.numberOfDoors)
+               }else{
+                 setNumberOfDoor(1)
+               }
+               getSealByTruckId({VehicleRegId:truck.id}).then(({items,totalCount})=>{
+                   let sealNo = '';
+                   items.forEach((item,index)=>{
+                     sealNo += item.vhslSealNumber + "-";
+                   })
+                   if(sealNo){
+                     setSerialNo(sealNo.substring(0, sealNo.length - 1))
+                   }
+               })
+             })
+           });
+        }
+        
+        if((truck?.status === 'Loading' || truck?.status === 'Ready to load')){
+          loadPoDoByVehicle();
+        }
+        
       })
       .catch(e => {
         console.log('DLV73', e);
         Alert.alert('Lỗi', e.toString());
       });
-  }, []);
-
+  }, []),
+);
   function GetDateNowUCT() {
     var Now = new Date();
     var day = Now.getDate();
@@ -168,16 +199,31 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         }
         const truckPut = {
           ...data,
-          vhclSealNumber: value,
           vhclLoadingLeftDate: GetDateNowUCT(),
           vhclLoadingLeftTime: ADD_TRUCK_FORMAT_TIME(today),
         };
         closeTruck(truckPut, truck.id)
           .then(data => {
-            /*   if (!data || !data?.id) {
-            Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
-            return;
-          } */
+            const listSeal = [];
+            value.split('-').forEach((item,index)=>{
+              listSeal.push({'value':item})
+            })
+            const SealPut = {vhslVehicleRegIsn:truck.id,listSeal:listSeal}
+            updateSeal(SealPut).then((data)=>{
+              setSerialNo(value);
+              toast.show('Cập nhật Seal thành công! ', {
+                type: 'success',
+                placement: 'top',
+                swipeEnabled: true,
+                style: {
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: COLORS.green,
+                },
+                duration: 2000,
+                animationType: 'slide-in',
+              });
+            });
             closeModal();
           })
           .catch(e => {
@@ -198,7 +244,6 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
       .catch(e => console.log(e));
   };
   const onChangeTextHandle = text => {
-    console.log(text);
     setSearchText(text);
     if (text) {
       //making a case insensitive regular expression to get similar value from the film json
@@ -352,28 +397,13 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
       <View
         style={{
           flex: 1,
-          marginTop: 30,
+         // marginTop: 10,
           // backgroundColor:COLORS.green,
           // width:400
         }}>
-        <DataRenderResult
-          navigation={navigation}
-          params={params}
-          fetchFn={getPoDoByVehicle}
-          renderSeparator={() => (
-            <LineDivider
-              lineStyle={{
-                height: 1,
-                backgroundColor: COLORS.gray,
-                // marginTop:SIZES.base,
-                // marginBottom:SIZES.base
-              }}
-            />
-          )}
-          renderHeader={
-            <View
+          <View
               style={{
-                marginTop: SIZES.padding,
+                //marginTop: 5,
                 borderBottomWidth: 1,
                 borderBottomColor: COLORS.gray,
                 flexDirection: 'row',
@@ -381,7 +411,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 1,
-                }}></View>
+                  alignItems:'center',
+                //  borderRightWidth:1
+
+                }}><Text>STT</Text></View>
               <View
                 style={{
                   flex: 3,
@@ -407,13 +440,28 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 <Text> Loaded</Text>
               </View>
             </View>
-          }
+        <DataRenderResult
+        applyFunc={handleApplyFunc}
+          navigation={navigation}
+          params={params}
+          fetchFn={getPoDoByVehicle}
+          renderSeparator={() => (
+            <LineDivider
+              lineStyle={{
+                height: 1,
+                backgroundColor: COLORS.gray,
+                // marginTop:SIZES.base,
+                // marginBottom:SIZES.base
+              }}
+            />
+          )}
+          
           renderFooter={
             <LineDivider
               lineStyle={{backgroundColor: COLORS.secondaryALS, height: 2}}
             />
           }
-          render={truck => (
+          render={(truck,index) => (
             <View
               style={{
                 flexDirection: 'row',
@@ -422,16 +470,12 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 style={{
                   flex: 1,
                   paddingVertical: SIZES.radius,
+                  justifyContent:'center',
+                  alignItems:'center',
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                 }}>
-                <Image
-                  source={icons.awb}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    marginRight: SIZES.base,
-                    tintColor: COLORS.primaryALS,
-                  }}
-                />
+               <Text>{index + 1}</Text>
               </View>
 
               <View
@@ -482,15 +526,16 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
     return (
       <View
         style={{
-          marginTop: 40,
+          marginTop: 5,
           paddingHorizontal: SIZES.radius,
+          flexDirection:'row',
+          justifyContent:'space-around'
         }}>
-        <View>
-          <Text>Total PODO: {truckDetail?.countPO}</Text>
-          <Text>Total Pieces: {truckDetail?.countPcsLoaded}</Text>
-          <Text>Total GW Loaded: {truckDetail?.countWeight}</Text>
-          <Text>Serial No: {serialNo}</Text>
-        </View>
+       
+          <Text h3>W.H: <Text red h3>    {truck?.warehousePickup}</Text></Text>
+          {/* <Text h3>Pieces: <Text red h3>{truckDetail?.countPcsLoaded}</Text></Text> */}
+          <Text h3>Serial No: <Text red h3>{serialNo}</Text></Text>
+        
       </View>
     );
   }
@@ -505,7 +550,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         }}>
         <View
           style={{
-            marginTop: SIZES.base,
+            //marginTop: SIZES.base,
             marginHorizontal: SIZES.padding,
             flexDirection: 'row',
 
@@ -728,7 +773,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             }}
             onPress={() => navigation.navigate('ScanDO', {truck})}
           />
-          <TextButton
+          {/* <TextButton
             label="Add from SO"
             buttonContainerStyle={{
               // flex:1,
@@ -739,7 +784,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               paddingHorizontal: SIZES.radius,
             }}
             onPress={() => navigation.navigate('AddPoDo', {truck})}
-          />
+          /> */}
 
           <TextButton
             label="Remove"
@@ -777,7 +822,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          marginTop: 80,
+          marginTop: 60,
           //backgroundColor: COLORS.green,
         }}>
         <View
@@ -801,9 +846,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             Total:{totalPieces}pcs
           </Text>
-          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
-            {truck?.warehousePickup}
-          </Text>
+        
           <View
             style={{
               marginLeft: SIZES.base,
@@ -820,6 +863,12 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             <Text white>{truck.status}</Text>
           </View>
         </View>
+        <View>
+      {/*   <Text h3 primaryALS style={{marginLeft: SIZES.base}}>
+        
+          </Text> */}
+        </View>
+     
       </View>
 
       {(truck?.status === 'Completed' ||
@@ -844,7 +893,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             justifyContent: 'space-around',
             flexDirection: 'row',
           }}>
-          <TextButton
+          {!serialNo && <TextButton
             buttonContainerStyle={{
               height: 45,
               borderRadius: SIZES.base,
@@ -854,7 +903,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             onPress={() => {
               setModalVisible(true);
             }}
-          />
+          />}
           {screenParent !== 'AddSeal' && (
             <TextButton
               buttonContainerStyle={{
@@ -875,6 +924,8 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         modalVisible={modalVisible}
         applyFunc={applyFunc}
         handleOffModal={closeModal}
+        numberOfDoor={numberOfDoor}
+        truck={truck}
       />
       <EditPoModal
         modalVisible={modalVisibleEditPO}

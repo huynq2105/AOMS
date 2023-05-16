@@ -32,6 +32,7 @@ const AddAwbToTruckScreen = ({
 }) => {
   const truck = route?.params?.truck ?? {};
   const [awbs, setawbs] = useState([]);
+  const [filterAwbs,setFilterAwbs] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
   const textInputRef = useRef();
   const [searchText, setSearchText] = useState('');
@@ -66,9 +67,23 @@ const AddAwbToTruckScreen = ({
           result.push(awb);
         });
         setawbs(result);
+        setFilterAwbs(result)
       })
-      .catch(e => Alert.alert(e));
+      .catch(e => console.log(e));
   }, []);
+  const ToggleCheckSearch = e => {
+    setCheck(e);
+   /*  if (e) {
+      setDisablebuttonRemove(false);
+    } else {
+      setDisablebuttonRemove(true);
+    } */
+    const newState = filterAwbs.map(obj => {
+      // 👇️ if id equals 2, update country property
+      return {...obj, checkAwb: e};
+    });
+    setFilterAwbs(newState);
+  };
   const handleCheckItem = (e, item) => {
     const newState = awbs.map(obj => {
       // 👇️ if id equals 2, update country property
@@ -78,12 +93,25 @@ const AddAwbToTruckScreen = ({
       // 👇️ otherwise return the object as is
       return obj;
     });
-    setawbs(newState);
+    setFilterListPo(newState);
+    //setawbs(newState);
     if (newState.every(item => item.checkAwb === true)) {
       setCheck(true);
     }
     if (newState.some(item => item.checkAwb === false)) {
       setCheck(false);
+    }
+  };
+  const onChangeTextHandle = text => {
+    setSearchText(text);
+    if (text) {
+      //making a case insensitive regular expression to get similar value from the film json
+      const regex = new RegExp(`${text.trim()}`, 'i');
+      //setting the filtered film array according the query from the input
+      setFilterAwbs(awbs.filter(awb => awb.hawb.search(regex) >= 0));
+    } else {
+      //if the query is null then return blank
+      setFilterAwbs(awbs);
     }
   };
   const handleAddAwbs = () => {
@@ -98,19 +126,18 @@ const AddAwbToTruckScreen = ({
       vehicleIsn: truck ? truck.id : 0,
       listItem: listAwbToAdd,
     };
-    console.log('Data Add',dataToAdd)
     AddAwbToTruck(dataToAdd)
       .then(data => {
-        navigation.goBack();
+        navigation.navigate('TruckLoadingDetail',{truck: {...truck,status:'Loading'}})
       })
-      .catch(e => Alert.alert('Lỗi', 'Liên hệ với quản trị viên', e));
+      .catch(e => console.log(e));
   };
   const closeModal = () => {
     setModalVisible(false);
   };
   useEffect(() => {
     loadAwb();
-  }, [searchText]);
+  }, []);
   function renderHeader() {
     return (
       <Header
@@ -180,7 +207,7 @@ const AddAwbToTruckScreen = ({
         }}>
         <View
           style={{
-            marginTop: SIZES.base,
+            marginTop: 60,
             marginHorizontal: SIZES.padding,
             flexDirection: 'row',
           }}>
@@ -189,7 +216,7 @@ const AddAwbToTruckScreen = ({
             size={24}
             color={COLORS.lightGray1}
             onPress={e => {
-              //ToggleCheckSearch(e)
+              ToggleCheckSearch(e)
             }}
           />
           <View
@@ -217,7 +244,7 @@ const AddAwbToTruckScreen = ({
               }}
               ref={textInputRef}
               value={searchText}
-              placeholder={'Search'}
+              placeholder={'Tim theo mawb'}
               placeholderTextColor={COLORS.primaryALS}
               onChangeText={text => {
                 onChangeTextHandle(text);
@@ -227,14 +254,14 @@ const AddAwbToTruckScreen = ({
           </View>
         </View>
         <FlatList
-          data={awbs}
+          data={filterAwbs}
           ItemSeparatorComponent={() => (
             <LineDevider
               lineStyle={{
-                height: 2,
+                height: 1,
                 marginBottom: SIZES.base,
                 marginTop: SIZES.base,
-                //backgroundColor: COLORS.red,
+                backgroundColor: COLORS.gray,
               }}
             />
           )}
@@ -333,6 +360,7 @@ const AddAwbToTruckScreen = ({
                       style={{
                         width: 25,
                         height: 25,
+                        tintColor:COLORS.primaryALS
                       }}
                     />
                     <Text body3 style={{

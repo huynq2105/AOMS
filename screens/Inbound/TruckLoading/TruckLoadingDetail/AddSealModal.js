@@ -17,37 +17,20 @@ import {Formik} from 'formik';
 import Modal from 'react-native-modal';
 import Text from '../../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../../constants/theme';
-import icons from '../../../../constants/icons';
-import Header from '../../../../components/Header';
 import * as Yup from 'yup';
-import moment from 'moment';
-import CheckComponent from '../../../../components/Checkbox';
-import DataRenderResult from '../../../../components/DataRenderResult/DataRenderResult';
-import {
-  getPoDoByVehicle,
-  getSumPoDoVehicleDetail,
-  getListPoDo,
-  AddPoDoToTruck,
-  createPo,
-  closeTruck
-} from '../../../../api/OutboundAPI';
-import {createLoadingSelector} from '../../../../stores/selectors/LoadingSelectors';
-import {connectToRedux} from '../../../../utils/ReduxConnect';
-import LoadingActions from '../../../../stores/actions/LoadingActions';
 import TextButton from '../../../../components/TextButton';
-import {FlatList} from 'react-native-gesture-handler';
-import {interpolate} from 'react-native-reanimated';
 
 const validations = {
-  // vehicleRegNo: Yup.string().required('Required.'),
-  pieces : Yup.number().required('Required.'),
+  vhclSealNumber : Yup.string().required('Required.'),
+  qlaNumber : Yup.string().required('Required.'),
 };
-const EditPoModal = ({modalVisible, applyFunc, handleOffModal,pieces}) => {
+const AddSealModal = ({modalVisible, applyFunc, handleOffModal,truck,totalAwb}) => {
   const [visible, setVisible] = useState(modalVisible);
+  const sealRef =  React.useRef();
+  const olaRef =  React.useRef();
   const onSubmit = values => {
-    applyFunc(values.pieces)
+    applyFunc(values.vhclSealNumber,values.qlaNumber)
   };
-
   return (
     <Modal
       backdropOpacity={0.3}
@@ -71,15 +54,23 @@ const EditPoModal = ({modalVisible, applyFunc, handleOffModal,pieces}) => {
             style={{
               width: 300,
               marginBottom: SIZES.base,
-              height: 200,
+              height: 500,
             }}>
+                <View
+                    style={{
+                        flexDirection:'row'
+                    }}
+                >
+                    <Text>Truck Number: {truck.vehicRegNo}</Text>
+                </View>
+                <Text>Total Awb: {totalAwb}</Text>
             <Formik
-              validationSchema={Yup.object().shape({
-                ...validations,
-                //password: passwordValidation,
-              })}
+            validateOnMount={true}
+            enableReinitialize
+              validationSchema={Yup.object().shape(validations)}
               initialValues={{
-                pieces: pieces +'',
+                vhclSealNumber: '',
+                qlaNumber:''
               }}
               onSubmit={values => onSubmit(values)}>
               {({
@@ -108,7 +99,7 @@ const EditPoModal = ({modalVisible, applyFunc, handleOffModal,pieces}) => {
                               //marginTop: 60,
                             }
                           }>
-                          Pieces:
+                          Seal Number:
                         </Text>
                         <TextInput
                           style={{
@@ -119,10 +110,37 @@ const EditPoModal = ({modalVisible, applyFunc, handleOffModal,pieces}) => {
                             borderBottomWidth: 1,
                             borderBottomColor: COLORS.gray,
                           }}
-                          keyboardType='number-pad'
-                          placeholder="Pieces"
-                          value={values.pieces+''}
-                          onChangeText={handleChange('pieces')}
+                          ref={sealRef}
+                          placeholder="Seal Number"
+                          value={values.vhclSealNumber}
+                          onChangeText={handleChange('vhclSealNumber')}
+                        />
+                        
+                      </View>
+                      <View>
+                        <Text
+                          h3
+                          primaryALS
+                          style={
+                            {
+                              //marginTop: 60,
+                            }
+                          }>
+                          OLA Number:
+                        </Text>
+                        <TextInput
+                          style={{
+                            //flex:1,
+                            // borderWidth: 1,
+                            height: 45,
+                            marginBottom: SIZES.base,
+                            borderBottomWidth: 1,
+                            borderBottomColor: COLORS.gray,
+                          }}
+                          ref={olaRef}
+                          placeholder="Ola Number"
+                          value={values.qlaNumber}
+                          onChangeText={handleChange('qlaNumber')}
                         />
                         
                       </View>
@@ -162,7 +180,9 @@ const EditPoModal = ({modalVisible, applyFunc, handleOffModal,pieces}) => {
                         width: 120,
                         height: 40,
                         borderRadius: SIZES.base,
+                        backgroundColor:isValid? COLORS.primaryALS : COLORS.gray
                       }}
+                      disabled={!isValid}
                       onPress={() => {
                         handleSubmit();
                       }}
@@ -223,4 +243,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-export default EditPoModal;
+export default AddSealModal;

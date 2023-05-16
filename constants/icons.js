@@ -65,6 +65,12 @@ const scan = require('../assets/icons/scan.png');
 const send = require('../assets/icons/send.png');
 const user = require('../assets/icons/user.png');
 const truck = require('../assets/icons/truck.png');
+const TruckSeal = require('../assets/icons/TruckSeal.png');
+const truckTransit = require('../assets/icons/truckTransit.png');
+const unloading = require('../assets/icons/unloading.png');
+const truckLoading = require('../assets/icons/truckLoading.png');
+const moveShipment = require('../assets/icons/moveShipment.png');
+//const TruckSeal = require('../assets/icons/TruckSeal.png');
 const lighting = require('../assets/icons/lighting.png');
 const right_arrow = require('../assets/icons/right_arrow.png');
 const awb = require('../assets/icons/awb.png');
@@ -158,7 +164,11 @@ export default {
   send,
   user,
   //wallet,
-
+  TruckSeal,
+  truckTransit,
+  moveShipment,
+  unloading,
+  truckLoading,
   back_arrow,
   calendar,
   chart,

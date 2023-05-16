@@ -171,12 +171,11 @@ const NBAUnloadingDetailScreen = ({
         }
 
         setStatus(status);
-        setFilterDate({val: fltDate.toDate() || new Date()});
+        setFilterDate({val: fltDate || new Date()});
         setTruckDetail(data);
       })
       .catch(e => {
         console.log('DLVD84', e);
-        Alert.alert('Lỗi', e.toString());
       })
       .finally(function () {
         stopLoading({key: 'deliverDetail'});

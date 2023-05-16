@@ -38,6 +38,11 @@ export const getWarehouse = (params = {maxResultCount: 1000, skipCount: 0}) => {
     .get('/api/master-data-module/ware-houses', {params})
     .then(({data}) => data);
 };
+export const getFactory = (params = {maxResultCount: 1000, skipCount: 0,KundCustomerTypeCode:'FACTORY'}) => {
+  return api
+    .get('/api/master-data-module/kunds', {params})
+    .then(({data}) => data);
+};
 export const getAgents = (params = {type: 'OUTBOUND', page: 0}) => {
   return api
     .get('/api/master-data-module/kunds/get-paged-list-agent-for-select2', {
@@ -132,3 +137,5 @@ export const getDoByNumber = (params = {maxResultCount: 1000, skipCount: 0}) =>
     .then(({data}) => data);
 export const getTruckById = id =>
     api.get(`/api/master-data-module/vehicles-registrations/${id}`).then(({data}) => data);
+    export const getVihicleById = id =>
+    api.get(`/api/master-data-module/vehicles/${id}`).then(({data}) => data);

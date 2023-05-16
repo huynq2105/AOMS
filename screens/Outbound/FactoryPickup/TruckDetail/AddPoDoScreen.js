@@ -64,7 +64,7 @@ const AddPoDoScreen = ({navigation, startLoading, stopLoading, route}) => {
         });
         setPoDos(result);
       })
-      .catch(e => Alert.alert(e));
+      .catch(e => console.log(e));
   }, []);
   const handleCheckItem = (e, item) => {
     const newState = poDos.map(obj => {

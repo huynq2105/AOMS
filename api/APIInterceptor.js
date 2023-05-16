@@ -75,7 +75,6 @@ export function initAPIInterceptor(store) {
         if (errorRes.headers._abperrorformat && errorRes.status === 401) {
           store.dispatch(PersistentStorageActions.setToken({}));
           
-          //Alert.alert('Phiên làm việc của bạn đã hết hạn')
         }
         showError({ error: errorRes.data.error || {}, status: errorRes.status });
       } else {
@@ -99,7 +98,6 @@ function showError({ error = {}, status }) {
     } else if (error.message) {
       message = 'Code ' +status + ': ' + error.message;
     } else {
-      console.log('da chay vao 4',status)
       switch (status) {
         case 400:
           message = '400 Bad Request';

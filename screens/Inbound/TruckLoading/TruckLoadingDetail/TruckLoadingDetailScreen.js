@@ -27,7 +27,10 @@ import {
 getTruckDetail,
 getSumVehicleDetail,
 getTruckById,
-removeManyHawb
+removeManyHawb,
+closeTruck,
+getAwbList,
+getListHawbUnloading
 } from '../../../../api/InboundAPI';
 import {
   ADD_TRUCK_FORMAT_TIME,
@@ -37,16 +40,15 @@ import {createLoadingSelector} from '../../../../stores/selectors/LoadingSelecto
 import {connectToRedux} from '../../../../utils/ReduxConnect';
 import LoadingActions from '../../../../stores/actions/LoadingActions';
 import TextButton from '../../../../components/TextButton';
-//import AddSealModal from './AddSealModal';
 import LineDivider from '../../../../components/LineDivider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-//import EditPoModal from './EditPoModal';
 import {useToast} from 'react-native-toast-notifications';
-
+import AddSealModal from './AddSealModal';
 const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   const truck = route?.params?.truck ?? {};
   const screenParent = route?.params?.screenParent;
   const toast = useToast();
+  const [statusTruck,setStatusTruck] = useState(truck?.status)
   const today = moment();
   const [truckDetail, setTruckDetail] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -67,7 +69,6 @@ const [totalPieces,setTotalPieces] = useState(0)
     startLoading('Load data');
     getTruckDetail({VehicleIsn: truck.id})
       .then(({items, totalCount}) => {
-        console.log('Truck Detail',items)
         if (!items) {
           Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
           return;
@@ -96,18 +97,13 @@ const [totalPieces,setTotalPieces] = useState(0)
       })
       .catch(e => {
         console.log(e);
-        Alert.alert('Lỗi', e.toString());
         stopLoading('Load data');
       });
   };
-  console.log('List Filter',filterListMawb)
-  useEffect(() => {
-    getSumVehicleDetail({vehicleIsn: truck.id})
+  useFocusEffect(
+    useCallback(() => {
+      getSumVehicleDetail({vehicleIsn: truck.id})
       .then(data => {
-        if (!data) {
-          Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
-          return;
-        }
         setTruckDetail(data);
         getTruckById(truck.id).then(data => {
           setSerialNo(data.vhclSealNumber);
@@ -116,10 +112,9 @@ const [totalPieces,setTotalPieces] = useState(0)
       })
       .catch(e => {
         console.log('DLV73', e);
-        Alert.alert('Lỗi', e.toString());
       });
-  }, []);
-
+    }, []),
+  );
   function GetDateNowUCT() {
     var Now = new Date();
     var day = Now.getDate();
@@ -133,10 +128,11 @@ const [totalPieces,setTotalPieces] = useState(0)
     let listObjectIsn = '';
     filterListMawb.forEach((item, index) => {
       if (item.checkAwb) {
-        listObjectIsn += item.id + ',';
+        listObjectIsn += item.lagiId + ',';
       }
     });
-    removeManyHawb(listObjectIsn.substring(0, listObjectIsn.length - 1), truck.id)
+    listObjectIsn = listObjectIsn.substring(0, listObjectIsn.length - 1);
+    removeManyHawb(listObjectIsn, truck.id)
       .then(data => {
         toast.show('Remove DO thành công! ', {
           type: 'success',
@@ -160,7 +156,7 @@ const [totalPieces,setTotalPieces] = useState(0)
   const closeModalEditPO = () => {
     setModalVisibleEditPO(false);
   };
-  const applyFunc = value => {
+  const applyFunc = (vhclSealNumber,qlaNumber) => {
     getTruckById(truck.id)
       .then(data => {
         if (!data || !data?.id) {
@@ -169,9 +165,11 @@ const [totalPieces,setTotalPieces] = useState(0)
         }
         const truckPut = {
           ...data,
-          vhclSealNumber: value,
-          vhclLoadingLeftDate: GetDateNowUCT(),
-          vhclLoadingLeftTime: ADD_TRUCK_FORMAT_TIME(today),
+          vhclSealNumber: vhclSealNumber,
+          vhclRacNumber:qlaNumber,
+          vhclLoadingVehicleClosed:true,
+          vhclLoadingVehicleClosedDate: GetDateNowUCT(),
+          vhclLoadingVehicleClosedTime: ADD_TRUCK_FORMAT_TIME(today),
         };
         closeTruck(truckPut, truck.id)
           .then(data => {
@@ -179,15 +177,16 @@ const [totalPieces,setTotalPieces] = useState(0)
             Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
             return;
           } */
+         setStatusTruck('Closed')
             closeModal();
           })
           .catch(e => {
             closeModal();
-            Alert.alert('Lỗi', 'Liên hệ với quản trị viên', e);
+           console.log(e)
           });
       })
       .catch(e => {
-        Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
+        console.log(e)
       });
   };
   const applyFuncEditPO = value => {
@@ -199,7 +198,6 @@ const [totalPieces,setTotalPieces] = useState(0)
       .catch(e => console.log(e));
   };
   const onChangeTextHandle = text => {
-    console.log(text);
     setSearchText(text);
     if (text) {
       //making a case insensitive regular expression to get similar value from the film json
@@ -212,19 +210,19 @@ const [totalPieces,setTotalPieces] = useState(0)
     }
   };
   const handleConfirm = () => {
-    Alert.alert('Đóng xe', 'Bạn có chắc chắn đóng xe ' + truck.vehicRegNo, [
+    Alert.alert('Đóng xe', 'Bạn có chắc chắn? ' + truck.vehicRegNo, [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => handleCloseTruck()},
+      {text: 'OK', onPress: () => handleTransitTruck()},
     ]);
   };
   const handleCheckItem = (e, item) => {
     const newState = filterListMawb.map(obj => {
       // 👇️ if id equals 2, update country property
-      if (obj.id === item.id) {
+      if (obj.lagiId === item.lagiId) {
         return {...obj, checkAwb: e};
       }
       // 👇️ otherwise return the object as is
@@ -262,7 +260,7 @@ const [totalPieces,setTotalPieces] = useState(0)
     setpiecesPO(item.piecesLoaded);
     setVehicleEditing(item.vehicleDetailId);
   };
-  const handleCloseTruck = () => {
+  const handleTransitTruck = () => {
     getTruckById(truck.id)
       .then(data => {
         if (!data || !data?.id) {
@@ -271,16 +269,15 @@ const [totalPieces,setTotalPieces] = useState(0)
         }
         const truckPut = {
           ...data,
-          vhclLoadingVehicleClosed: true,
-          vhclLoadingVehicleClosedDate: GetDateNowUCT(),
-          vhclLoadingVehicleClosedTime: ADD_TRUCK_FORMAT_TIME(today),
+          vhclLoadingLeftDate: GetDateNowUCT(),
+          vhclLoadingLeftTime: ADD_TRUCK_FORMAT_TIME(today),
         };
         closeTruck(truckPut, truck.id).then(() => {
           navigation.goBack();
         });
       })
       .catch(e => {
-        Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
+        console.log(e)
       });
   };
   const handleUncloseTruck = () => {
@@ -299,7 +296,7 @@ const [totalPieces,setTotalPieces] = useState(0)
         });
       })
       .catch(e => {
-        Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
+        console.log(e)
       });
   };
   function renderHeader() {
@@ -348,7 +345,7 @@ const [totalPieces,setTotalPieces] = useState(0)
       />
     );
   }
-  function renderPoDo() {
+  function renderAwb() {
     return (
       <View
         style={{
@@ -360,7 +357,7 @@ const [totalPieces,setTotalPieces] = useState(0)
         <DataRenderResult
           navigation={navigation}
           params={params}
-          fetchFn={getPoDoByVehicle}
+          fetchFn={getListHawbUnloading}
           renderSeparator={() => (
             <LineDivider
               lineStyle={{
@@ -385,20 +382,20 @@ const [totalPieces,setTotalPieces] = useState(0)
                 }}></View>
               <View
                 style={{
-                  flex: 3,
+                  flex: 5,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text>DO No</Text>
+                <Text>Awb</Text>
               </View>
-              <View
+           {/*    <View
                 style={{
                   flex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
                 <Text>Time PDA</Text>
-              </View>
+              </View> */}
               <View
                 style={{
                   flex: 2,
@@ -418,6 +415,7 @@ const [totalPieces,setTotalPieces] = useState(0)
             <View
               style={{
                 flexDirection: 'row',
+                marginVertical:SIZES.base
               }}>
               <View
                 style={{
@@ -437,17 +435,35 @@ const [totalPieces,setTotalPieces] = useState(0)
 
               <View
                 style={{
-                  flex: 3,
+                  flex: 5,
 
                   justifyContent: 'center',
                   alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
-                <Text h3 primaryALS>
-                  {truck.poNumber}
+                <Text h2 primaryALS>
+                  {truck.mawb}/{truck.hawb}
                 </Text>
+                <View
+                style={{
+                  flexDirection:'row',
+                  justifyContent:'center',
+                  alignItems:'center'
+                }}
+                  >
+                    <Image
+                      source={icons.flightDepart}
+                      style={{
+                        width:25,
+                        height:25,
+                        marginRight:SIZES.base
+                      }}
+                      
+                    />
+                    <Text h2>{truck.flightNo}</Text>
+                  </View>
               </View>
-              <View
+             {/*  <View
                 style={{
                   flex: 3,
                   borderLeftWidth: 1,
@@ -459,7 +475,7 @@ const [totalPieces,setTotalPieces] = useState(0)
                 <Text h3 primaryALS>
                   {FORMAT_TIME(truck.date)}
                 </Text>
-              </View>
+              </View> */}
               <View
                 style={{
                   flex: 2,
@@ -470,7 +486,7 @@ const [totalPieces,setTotalPieces] = useState(0)
                   // backgroundColor:COLORS.lightGreen
                 }}>
                 <Text h2 primaryALS>
-                  {truck.piecesLoaded}
+                  {truck.piecesLoaded}/{truck.pieces}
                 </Text>
               </View>
             </View>
@@ -487,10 +503,10 @@ const [totalPieces,setTotalPieces] = useState(0)
           paddingHorizontal: SIZES.radius,
         }}>
         <View>
-          <Text>Total PODO: {truckDetail?.countPO}</Text>
-          <Text>Total Pieces: {truckDetail?.countPcsLoaded}</Text>
-          <Text>Total GW Loaded: {truckDetail?.countWeight}</Text>
-          <Text>Serial No: {serialNo}</Text>
+          <Text h3>Total Awb: {truckDetail?.awb}</Text>
+          <Text h3>Total Pieces: {truckDetail?.piciesLoaded}</Text>
+          <Text h3>Total GW Loaded: {truckDetail?.weightLoaded}</Text>
+          <Text h3>Serial No: {serialNo}</Text>
         </View>
       </View>
     );
@@ -575,16 +591,16 @@ const [totalPieces,setTotalPieces] = useState(0)
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text>DO No</Text>
+                <Text>AWB</Text>
               </View>
-              <View
+             {/*  <View
                 style={{
                   flex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
                 <Text>Time PDA</Text>
-              </View>
+              </View> */}
               <View
                 style={{
                   flex: 2,
@@ -593,12 +609,12 @@ const [totalPieces,setTotalPieces] = useState(0)
                 }}>
                 <Text> Loaded</Text>
               </View>
-              <View
+             {/*  <View
                 style={{
                   flex: 1,
                 }}>
                 <Text>Edit</Text>
-              </View>
+              </View> */}
             </View>
           }
           ListFooterComponent={
@@ -655,12 +671,27 @@ const [totalPieces,setTotalPieces] = useState(0)
                   //alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
-                <Text h3 primaryALS>
+                <Text h2 primaryALS>
                   {item?.mawb}/{item?.hawb}
                 </Text>
-                <Text h3 primaryALS>
+                <View
+                  style={{
+                    flexDirection:'row'
+                  }}
+                >
+                  <Image
+                    source={icons.flightDepart}
+                    style={{
+                      width:30,
+                      height:30,
+                      tintColor:COLORS.primaryALS,
+                      marginRight:SIZES.base
+                    }}
+                  />
+                <Text h2 primaryALS>
                   {item?.flightNo}
                 </Text>
+                </View>
               </View>
           {/*     <View
                 style={{
@@ -689,6 +720,21 @@ const [totalPieces,setTotalPieces] = useState(0)
                   {item?.piecesLoaded}/{item.pieces}
                 </Text>
               </View>
+              <TouchableOpacity
+                style={{
+                  flexDirection:'row',
+                  justifyContent:'center',
+                  alignItems:'center'
+                }}
+                onPress={()=>navigation.navigate('Irregularity',{awb:item})}
+              >
+                <Image source={icons.right_arrow}
+                  style={{
+                    width:25,
+                    height:25
+                  }}
+                />
+              </TouchableOpacity>
               
             </View>
           )}
@@ -741,7 +787,8 @@ const [totalPieces,setTotalPieces] = useState(0)
               backgroundColor: COLORS.primaryALS,
               paddingHorizontal: SIZES.radius,
             }}
-            onPress={() => navigation.navigate('AddAwbToTruck', {truck})}
+            disabled={true}
+            onPress={() => navigation.navigate('Irregularity', {})}
           />
           <TextButton
             label="Close"
@@ -752,7 +799,7 @@ const [totalPieces,setTotalPieces] = useState(0)
               borderRadius: SIZES.base,
               paddingHorizontal: SIZES.radius,
             }}
-            onPress={handleConfirm}
+            onPress={()=>{setModalVisible(true)}}
           />
         </View>
       </View>
@@ -795,33 +842,33 @@ const [totalPieces,setTotalPieces] = useState(0)
             style={{
               marginLeft: SIZES.base,
               backgroundColor:
-                truck?.status === 'Ready to load'
+              statusTruck === 'Ready to load'
                   ? COLORS.orange
-                  : truck?.status === 'Closed'
+                  : statusTruck === 'Closed'
                   ? COLORS.red
                   : COLORS.green,
               padding: SIZES.base,
               //padding: 3,pa
               borderRadius: 5,
             }}>
-            <Text white>{truck.status}</Text>
+            <Text white>{statusTruck}</Text>
           </View>
         </View>
       </View>
 
- {/*      {(truck?.status === 'Completed' ||
-        truck?.status === 'Closed' ||
-        truck?.status === 'In Transit' ||
-        truck?.status === 'Unloading') &&
-        renderDetail()}
-      {(truck?.status === 'Completed' ||
-        truck?.status === 'Closed' ||
-        truck?.status === 'In Transit' ||
-        truck?.status === 'Unloading') &&
-        renderPoDo()} */}
-      {(truck?.status === 'Loading' || truck?.status === 'Ready to load') &&
+      {(statusTruck === 'Completed' ||
+        statusTruck === 'Closed' ||
+        statusTruck === 'In Transit' ||
+        statusTruck === 'Unloading') &&
+        renderDetail()} 
+      {(statusTruck === 'Completed' ||
+        statusTruck === 'Closed' ||
+        statusTruck === 'In Transit' ||
+        statusTruck === 'Unloading') &&
+        renderAwb()}
+      {(statusTruck === 'Loading' || statusTruck === 'Ready to load') &&
         renderLoad()}
-      {truck?.status === 'Closed' && (
+      {statusTruck === 'Closed' && (
         <View
           style={{
             position: 'absolute',
@@ -837,32 +884,21 @@ const [totalPieces,setTotalPieces] = useState(0)
               borderRadius: SIZES.base,
               paddingHorizontal: SIZES.radius,
             }}
-            label="Add Seal"
+            label="Transit To Warehouse"
             onPress={() => {
-              setModalVisible(true);
+              handleConfirm()
             }}
           />
-          {screenParent !== 'AddSeal' && (
-            <TextButton
-              buttonContainerStyle={{
-                height: 45,
-                backgroundColor: COLORS.red,
-                borderRadius: SIZES.radius,
-                paddingHorizontal: SIZES.radius,
-              }}
-              label="Unclosed"
-              onPress={() => {
-                handleUncloseTruck(true);
-              }}
-            />
-          )}
+       
         </View>
       )}
-     {/*  <AddSealModal
+      <AddSealModal
         modalVisible={modalVisible}
         applyFunc={applyFunc}
         handleOffModal={closeModal}
-      /> */}
+        truck={truck}
+        totalAwb={filterListMawb.length}
+      />
      {/*  <EditPoModal
         modalVisible={modalVisibleEditPO}
         applyFunc={applyFuncEditPO}

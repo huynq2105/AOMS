@@ -92,8 +92,6 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
     return null;
   };
   useEffect(() => {
-    /*     const wareSaved = loadWareHouse();
-    console.log('wareSaved=====================================',wareSaved) */
     getVehicles({maxResultCount: 1000, skipCount: 0})
       .then(({items, totalCount: total}) => {
         setTrucks(items);
@@ -210,7 +208,6 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
       vhclMasterIsn: parseInt(values.vhclMasterIsn),
       vhclWareHousePickupIsn: parseInt(values.vhclWareHousePickupIsn),
     };
-    console.log('Truck Data===============', truckData);
     startLoading({key: 'addTruck'});
     createTruck(truckData)
       .then(() => {

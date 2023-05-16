@@ -34,6 +34,7 @@ function DataRenderResult({
   params,
   renderFooter,
   renderHeader,
+  applyFunc = ()=>{},
   renderSeparator,
   maxResultCount = 15,
   debounceTime = 350,
@@ -56,12 +57,12 @@ function DataRenderResult({
           return;
         }
         setTotalCount(total);
+        applyFunc(items)
         setRecords(skip ? [...records, ...items] : items);
         setSkipCount(skip);
       })
       .catch(e => {
-        console.log('DLV73', e);
-        Alert.alert('Lỗi', e.toString());
+        console.log('DLV73=========', e);
       })
       .finally(() => {
         if (isRefreshingActive) setLoading(false);
@@ -87,12 +88,12 @@ function DataRenderResult({
   return (
     <>
       <View style={styles.container}>
-        <Text
+        {/* <Text
           style={{
             marginBottom: SIZES.base,
           }}>
           Total: {totalCount}
-        </Text>
+        </Text> */}
         <FlatList
           ListHeaderComponent={renderHeader}
           ListFooterComponent={renderFooter}

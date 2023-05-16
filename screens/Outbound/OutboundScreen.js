@@ -58,7 +58,7 @@ const OutboundScreen = ({navigation}) => {
     const renderItem = ({item, index}) => (
       <OutboundItem
         customContainerStyle={{
-          borderWidth: 1,
+         // borderWidth: 1,
           boderColor: COLORS.secondaryALS,
           marginLeft: SIZES.base,
         }}
@@ -75,8 +75,9 @@ const OutboundScreen = ({navigation}) => {
           flex: 1,
         }}>
         <FlatList
+          columnWrapperStyle={{justifyContent:'space-around'}}
           data={dummyData.featuresExpData}
-          numColumns={2}
+          numColumns={3}
           keyExtractor={(item, index) => item.id}
           renderItem={renderItem}
           style={{

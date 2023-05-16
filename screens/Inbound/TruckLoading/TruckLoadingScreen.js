@@ -81,7 +81,7 @@ const TruckLoadingScreen = ({navigation}) => {
             }}
           />
         }
-        title="Truck Pickup"
+        title="Truck Loading"
         /*  rightComponent={<CartQuantityButton quantity={cartLagiQuantity} onPress={()=>navigation.navigate("CartLagi")} />} */
       />
     );
@@ -105,7 +105,7 @@ const TruckLoadingScreen = ({navigation}) => {
               }}
             />
           }
-          renderHeader={
+          /* renderHeader={
             <View
               style={{
                 flexDirection: 'row',
@@ -167,7 +167,7 @@ const TruckLoadingScreen = ({navigation}) => {
                 </Text>
               </View>
             </View>
-          }
+          } */
           fetchFn={getTruckLoading}
           render={(truck, index) => (
             <TouchableOpacity
@@ -184,8 +184,8 @@ const TruckLoadingScreen = ({navigation}) => {
               <View
                 style={{
                   flex: 1,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  //borderLeftWidth: 1,
+                  //borderLeftColor: COLORS.secondaryALS,
                   alignItems: 'center',
                   //  paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -213,7 +213,7 @@ const TruckLoadingScreen = ({navigation}) => {
                 }}>
                 <Text> {truck.warehousePickup}</Text>
               </View>
-              <View
+              {/* <View
                 style={{
                   flex: 2,
                   borderLeftWidth: 1,
@@ -222,14 +222,14 @@ const TruckLoadingScreen = ({navigation}) => {
                   justifyContent: 'center',
                 }}>
                 <Text> {FORMAT_TIME(truck.loadingArrivalDate)}</Text>
-              </View>
+              </View> */}
 
               <View
                 style={{
                   flexDirection: 'row',
                   flex: 5,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                 // borderLeftWidth: 1,
+                 // borderLeftColor: COLORS.secondaryALS,
                 }}>
                 <View
                   style={{
@@ -248,8 +248,12 @@ const TruckLoadingScreen = ({navigation}) => {
                       color:
                         truck?.status === 'Ready to load'
                           ? COLORS.gray
-                          : truck?.status === 'Transit To Warehouse'
+                          : truck?.status === 'Loading'
                           ? COLORS.red
+                          : truck?.status === 'Transit To WareHouse'
+                          ? COLORS.yellow
+                          : truck?.status === 'Closed'
+                          ? COLORS.gray
                           : COLORS.green,
                     }}>
                     {truck.status}
@@ -287,7 +291,7 @@ const TruckLoadingScreen = ({navigation}) => {
           flexDirection: 'row',
         }}>
         <Text h3 primaryALS>
-          Pickup Date
+          Transit Date
         </Text>
         <View
           style={{

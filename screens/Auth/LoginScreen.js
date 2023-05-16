@@ -110,14 +110,6 @@ const LoginScreen = ({
       });
     //action = authActions.login(email, password);
   };
-  /*   useEffect(() => {
-    getData();
-  }, []); */
-  /*   useEffect(() => {
-    if (error) {
-      Alert.alert('An Error Occurred!', error, [{text: 'Okay'}]);
-    }
-  }, [error]); */
   const setSaveMeHandler = async value => {
     if (value) {
       await AsyncStorage.setItem('saveMe', 'true');

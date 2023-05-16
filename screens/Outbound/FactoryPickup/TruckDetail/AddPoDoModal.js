@@ -54,7 +54,7 @@ const AddPoDoModal = ({modalVisible, applyFunc, handleOffModal}) => {
       handleOffModal()
       applyFunc()
       //loadPo();
-    }).catch(e=>Alert.alert('Lỗi', 'Liên hệ với quản trị viên',e));
+    }).catch(e=>console.log(e));
   };
 
   return (
@@ -70,7 +70,6 @@ const AddPoDoModal = ({modalVisible, applyFunc, handleOffModal}) => {
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
         setVisible(!visible);
       }}>
       <View style={styles.centeredView}>

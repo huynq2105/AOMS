@@ -24,7 +24,6 @@ const TruckSealScreen = ({navigation}) => {
     Status:'Closed'
   });
   const changeFilterDate = date => {
-    console.log(date);
     setFilterDate({show: false, val: date ? date : filterDate.val});
     setParams({...params, LoadingArrivalDate: DMY_FORMAT(date)});
   };
@@ -80,7 +79,7 @@ const TruckSealScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
-          marginTop: SIZES.padding,
+          marginTop: SIZES.base,
         }}>
         <DataRenderResult
           navigation={navigation}
@@ -117,7 +116,7 @@ const TruckSealScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  flex: 1,
+                  flex: 3,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
                   paddingHorizontal:SIZES.radius,
@@ -139,7 +138,7 @@ const TruckSealScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  flex: 5,
+                  flex: 4,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
                   justifyContent:"center",
@@ -195,7 +194,7 @@ const TruckSealScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  flex: 1,
+                  flex: 3,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
                   paddingHorizontal:SIZES.radius,
@@ -217,7 +216,7 @@ const TruckSealScreen = ({navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  flex: 5,
+                  flex: 4,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
                 

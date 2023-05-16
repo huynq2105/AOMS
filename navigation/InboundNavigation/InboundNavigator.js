@@ -9,6 +9,8 @@ import TruckLoadingScreen from '../../screens/Inbound/TruckLoading/TruckLoadingS
 import AddTruckLoadingAndScreen from '../../screens/Inbound/TruckLoading/AddTruckLoading/AddTruckLoadingAndScreen';
 import TruckLoadingDetailScreen from '../../screens/Inbound/TruckLoading/TruckLoadingDetail/TruckLoadingDetailScreen';
 import AddAwbToTruckScreen from '../../screens/Inbound/TruckLoading/TruckLoadingDetail/AddAwbToTruckScreen';
+import IrregularityScreen from '../../screens/Inbound/TruckLoading/Irregularity/IrregularityScreen';
+import AddIrregularityScreen from '../../screens/Inbound/TruckLoading/Irregularity/AddIrregularityScreen';
 const Stack = createNativeStackNavigator();
 const InboundNavigator = () => {
   return (
@@ -39,6 +41,8 @@ const InboundNavigator = () => {
       <Stack.Screen name="AddTruckLoading" component={AddTruckLoadingAndScreen} />
       <Stack.Screen name="TruckLoadingDetail" component={TruckLoadingDetailScreen} />
       <Stack.Screen name="AddAwbToTruck" component={AddAwbToTruckScreen} />
+      <Stack.Screen name="Irregularity" component={IrregularityScreen} />
+      <Stack.Screen name="AddIrregularity" component={AddIrregularityScreen} />
     </Stack.Navigator>
   );
 };

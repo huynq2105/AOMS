@@ -2,7 +2,7 @@
  * @format
  */
 
-import {AppRegistry} from 'react-native';
+import {Alert, AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import CodePush from 'react-native-code-push';
@@ -16,9 +16,41 @@ function HeadlessCheck({isHeadless}) {
     return <App />;
   }
   function codePushDownloadDidProgress(progress) {
-    console.log(
+    Alert.alert(
       progress.receivedBytes + ' of ' + progress.totalBytes + ' received.',
     );
+  }
+  function codePushStatusDidChange(syncStatus) {
+    switch (syncStatus) {
+      case CodePush.SyncStatus.CHECKING_FOR_UPDATE:
+        console.log("Checking for update.")
+        break;
+      case CodePush.SyncStatus.DOWNLOADING_PACKAGE:
+        console.log("Download packaging....")
+        break;
+      case CodePush.SyncStatus.AWAITING_USER_ACTION:
+        console.log("Awaiting user action....")
+        break;
+      case CodePush.SyncStatus.INSTALLING_UPDATE:
+        console.log("Installing update")
+        setProgress(false)
+        break;
+      case CodePush.SyncStatus.UP_TO_DATE:
+        console.log("codepush status up to date")
+        break;
+      case CodePush.SyncStatus.UPDATE_IGNORED:
+        console.log("update cancel by user")
+        setProgress(false)
+        break;
+      case CodePush.SyncStatus.UPDATE_INSTALLED:
+        console.log("Update installed and will be applied on restart.")
+        setProgress(false)
+        break;
+      case CodePush.SyncStatus.UNKNOWN_ERROR:
+        console.log("An unknown error occurred")
+        setProgress(false)
+        break;
+    }
   }
   AppRegistry.registerComponent(appName, () =>
     CodePush({

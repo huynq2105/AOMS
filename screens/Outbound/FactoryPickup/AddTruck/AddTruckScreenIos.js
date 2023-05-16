@@ -35,6 +35,7 @@ import {
   createVehicle,
   createTruck,
   getWareHousePickUp,
+  getFactory
 } from '../../../../api/OutboundAPI';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Picker} from '@react-native-picker/picker';
@@ -59,16 +60,15 @@ const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
   const [filteredTrucks, setFilteredTrucks] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const today = moment();
-  const [valueWareHouse, setValueWareHouse] = useState('');
+  const [valueWareHouse,setValueWareHouse] = useState('')
   const [drivers, setDrivers] = useState([]);
   const [filteredDrivers, setFilteredDrivers] = useState([]);
   const [agents, setAgents] = useState([]);
-  const [wareHouse, setWareHouse] = useState([
-    {id: 0, label: '--Choose--', value: 0},
-  ]);
-  const [wareHousePickUp, setWareHousePickUp] = useState([
-    {id: 0, label: '--Choose--', value: 0},
-  ]);
+  const [agentId,setAgentId] = useState(0)
+  const [wareHouse, setWareHouse] = useState([{id: 0, label: '--Choose--', value: 0}]);
+  const [factory, setFactory] = useState([{id: 0, label: '--Choose--', value: 0}]);
+  const [wareHousePickUpFirst, setWareHousePickUpFirst] = useState([{id: 0, label: '--Choose--', value: 0}]);
+  const [wareHousePickUp, setWareHousePickUp] = useState([{id: 0, label: '--Choose--', value: 0}]);
   const [vihicle, setVihicle] = useState();
   const handleAddTruck = () => {
     setIsVisible(true);
@@ -92,8 +92,6 @@ const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
     return null;
   };
   useEffect(() => {
-    /*     const wareSaved = loadWareHouse();
-    console.log('wareSaved=====================================',wareSaved) */
     getVehicles({maxResultCount: 1000, skipCount: 0})
       .then(({items, totalCount: total}) => {
         setTrucks(items);
@@ -103,32 +101,45 @@ const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
             getWarehouse({maxResultCount: 1000, skipCount: 0}).then(
               ({items, totalCount: total}) => {
                 const loadWareHouse = [];
-                let valueWareHouseInit = '';
+                let valueWareHouseInit = ''
                 items.forEach((item, index) => {
-                  valueWareHouseInit = item.id + '';
+                  valueWareHouseInit = item.id +'';
                   return loadWareHouse.push({
                     id: item.id,
                     label: item.warehouseShortCode,
                     value: item.id,
                   });
                 });
-                setValueWareHouse(valueWareHouseInit);
-                setWareHouse(loadWareHouse);
-
-                getWareHousePickUp({maxResultCount: 1000, skipCount: 0}).then(
+                setValueWareHouse(valueWareHouseInit)
+                setWareHouse(loadWareHouse)
+              
+                getFactory({maxResultCount: 1000, skipCount: 0,KundCustomerTypeCode:'FACTORY'}).then(
                   ({items, totalCount: total}) => {
-                    const loadWarehousePickup = [];
+                    const loadFactory = [];
                     items.forEach((item, index) => {
-                      return loadWarehousePickup.push({
+                      return loadFactory.push({
                         id: item.id,
-                        label: item.code,
+                        label: item.kund3letterCode,
                         value: item.id,
                       });
                     });
-                    setWareHousePickUp([
-                      ...wareHousePickUp,
-                      ...loadWarehousePickup,
-                    ]);
+                    setFactory([...factory,...loadFactory]);
+                    getWareHousePickUp({maxResultCount: 1000, skipCount: 0}).then(
+                      ({items, totalCount: total}) => {
+                        const loadWarehousePickup = [];
+                        items.forEach((item, index) => {
+                          return loadWarehousePickup.push({
+                            id: item.id,
+                            label: item.code,
+                            value: item.id,
+                          });
+                        });
+                        setWareHousePickUp([
+                          ...wareHousePickUp,
+                          ...loadWarehousePickup,
+                        ]);
+                      },
+                    );
                   },
                 );
               },
@@ -208,9 +219,9 @@ const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
       vhclTruckType: 'PICK UP',
       vhclRemarks: values.vhclRemarks + ' Mobile',
       vhclMasterIsn: parseInt(values.vhclMasterIsn),
+      vhclProviderCustomerIsn: parseInt(values.vhclProviderCustomerIsn),
       vhclWareHousePickupIsn: parseInt(values.vhclWareHousePickupIsn),
     };
-    console.log('Truck Data===============', truckData);
     startLoading({key: 'addTruck'});
     createTruck(truckData)
       .then(() => {
@@ -271,11 +282,10 @@ const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
           vehicleRegNo: vihicle ? vihicle.vehicleRegNo : '',
           vhclMasterIsn: vihicle ? vihicle.id + '' : '',
           vehicleLoadWeight: vihicle
-            ? vihicle.vehicleLoadWeight
-              ? vihicle.vehicleLoadWeight.toString()
-              : ''
+            ? vihicle.vehicleLoadWeight ? vihicle.vehicleLoadWeight.toString() : ''
             : '',
-          vhclLoadingWarehouse: valueWareHouse + '',
+          vhclLoadingWarehouse: valueWareHouse+'',
+          vhclProviderCustomerIsn:'',
           vhclWareHousePickupIsn: '',
           vhclDriverName: driver
             ? driver.firstName + '-' + driver.phoneNumber
@@ -499,16 +509,19 @@ const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
                   //  flex: 1,
                   backgroundColor:COLORS.green
                 }}>
-                <Picker
+               <Picker
                   mode="dropdown"
                   style={{
                     zIndex:-2
                   }}
-                  selectedValue={values.vhclWareHousePickupIsn}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setFieldValue('vhclWareHousePickupIsn', itemValue)
+                  selectedValue={values.vhclProviderCustomerIsn}
+                  onValueChange={(itemValue, itemIndex) =>{
+                    setFieldValue('vhclProviderCustomerIsn', itemValue),
+                    setAgentId(itemValue)
+                  }
+                   
                   }>
-                  {wareHousePickUp.map(it => (
+                  {factory.map(it => (
                     <Picker.Item
                       key={it.id.toString()}
                       label={it.label}
@@ -530,6 +543,7 @@ const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
                   style={{
                     //borderWidth: 2,
                     //flex: 1,
+                    zIndex:-2,
                     borderColor: COLORS.black,
                   }}
                   mode="dropdown"
@@ -562,17 +576,22 @@ const AddTruckScreenIos = ({startLoading, stopLoading, navigation}) => {
                 }}>
                 W.H <Text style={{color: COLORS.red}}>(*)</Text>
               </Text>
-              <TextInput
-                style={{
-                  padding: 0,
-                  zIndex: -2,
-                  // flex: 1,
-                  borderBottomWidth: 1,
-                  borderBottomColor: COLORS.gray,
-                }}
-                value={values.vhclRemarks}
-                onChangeText={handleChange('vhclRemarks')}
-              />
+
+              <Picker
+                  mode="dropdown"
+                  style={{}}
+                  selectedValue={values.vhclWareHousePickupIsn}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setFieldValue('vhclWareHousePickupIsn', itemValue)
+                  }>
+                  {wareHousePickUp.map(it => (
+                    <Picker.Item
+                      key={it.id.toString()}
+                      label={it.label}
+                      value={it.value}
+                    />
+                  ))}
+                </Picker>
             </View>
             <View
               style={{

@@ -74,7 +74,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken}) => 
         const renderItem = ({item, index}) => (
           <OutboundItem
           customContainerStyle={{
-            borderWidth:1,
+           // borderWidth:1,
             boderColor: COLORS.secondaryALS,
             marginLeft:SIZES.base
           }}
@@ -98,7 +98,8 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken}) => 
             >
               <FlatList
                 data={dummyData.featuresHomeData}
-                numColumns={2}
+                numColumns={3}
+                columnWrapperStyle={{justifyContent:'space-around'}}
                 keyExtractor={(item,index)=>item.id}
                 renderItem={renderItem}
 

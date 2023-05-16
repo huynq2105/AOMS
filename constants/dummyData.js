@@ -49,7 +49,7 @@ const featuresExpData = [
     },
     {
       id: 202,
-      icon: icons.flightDepart,
+      icon: icons.unloading,
       color: COLORS.purple,
       description: 'ALSX Unloading',
       bgColor:['#fcaba8', '#fe6bba'],
@@ -60,7 +60,7 @@ const featuresExpData = [
   
     {
       id: 203,
-      icon: icons.awb,
+      icon: icons.TruckSeal,
       color: COLORS.yellow,
       description: 'Truck Seal',
       bgColor:['#7cf1fb', '#4ebefd'],
@@ -70,7 +70,7 @@ const featuresExpData = [
     },
     {
         id: 204,
-        icon: icons.awb,
+        icon: icons.moveShipment,
         color: COLORS.yellow,
         description: 'Move Shipment',
         bgColor:['#7cf1fb', '#4ebefd'],
@@ -80,7 +80,7 @@ const featuresExpData = [
       },
       {
         id: 205,
-        icon: icons.awb,
+        icon: icons.truckTransit,
         color: COLORS.yellow,
         description: 'Truck Transit',
         bgColor:['#7cf1fb', '#4ebefd'],
@@ -90,7 +90,7 @@ const featuresExpData = [
       },
       {
         id: 206,
-        icon: icons.awb,
+        icon: icons.awb_truck_location,
         color: COLORS.yellow,
         description: 'NBA Unloading',
         bgColor:['#7cf1fb', '#4ebefd'],
@@ -112,7 +112,7 @@ const featuresExpData = [
     },
     {
       id: 302,
-      icon: icons.flightDepart,
+      icon: icons.truckLoading,
       color: COLORS.purple,
       description: 'Truck Loading',
       bgColor:['#fcaba8', '#fe6bba'],
@@ -123,7 +123,7 @@ const featuresExpData = [
   
     {
       id: 303,
-      icon: icons.bill,
+      icon: icons.unloading,
       color: COLORS.yellow,
       description: 'Truck Unloading',
       bgColor:['#7cf1fb', '#4ebefd'],
@@ -132,9 +132,84 @@ const featuresExpData = [
       srceenNavigagor: 'TruckUnloading',
     },
   ]
+  const irrData = [
+    {
+      id: 1,
+      name: 'irrMsca',
+      check:false,
+      des:'Thiếu hàng/ MSCA'
+    },
+    {
+      id: 2,
+      name: 'irrCrushed',
+      check:false,
+      des:'Bẹp/ Crushed'
+    },
+    {
+      id: 3,
+      name: 'irrTorn',
+      check:false,
+      des:'Rách/ Torn'
+    },
+    {
+      id: 4,
+      name: 'irrBroken',
+      check:false,
+      des:'Vỡ/ Broken'
+    },
+    {
+      id: 5,
+      name: 'irrWithoutLabel',
+      check:false,
+      des:'Thiếu/ Không có nhãn'
+    },
+    {
+      id: 6,
+      name: 'irrMissSeal',
+      check:false,
+      des:'Rách/ Mất niêm phong'
+    },
+    {
+      id: 7,
+      name: 'irrFdca',
+      check:false,
+      des:'Thừa hàng/ FDCA'
+    },
+    {
+      id: 8,
+      name: 'irrHoled',
+      check:false,
+      des:'Thủng/ Holed'
+    },
+    {
+      id: 9,
+      name: 'irrWet',
+      check:false,
+      des:'Ướt/ Wet'
+    },
+    {
+      id: 10,
+      name: 'irrOpen',
+      check:false,
+      des:'Mở/ Open'
+    },
+    {
+      id: 11,
+      name: 'irrMissStrap',
+      check:false,
+      des:'Mất/ Đứt dây đai'
+    },
+    {
+      id: 12,
+      name: 'irrOther',
+      check:false,
+      des:'Lý do khác/ Other'
+    },
+  ]
   export default {
     featuresHomeData,
     featuresExpData,
-    featuresImpData
+    featuresImpData,
+    irrData
   };
   

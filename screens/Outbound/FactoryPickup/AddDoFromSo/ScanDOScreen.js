@@ -56,7 +56,6 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
       .then(({items, totalCount}) => {
         items.forEach((item, index) => {
           const result = [];
-          console.log('Danh sach PO', items);
           let piece = 0;
           items.forEach((item, index) => {
             piece += item.piecesLoaded;
@@ -78,8 +77,13 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
       .catch(e => console.log(e));
   };
   const handleAddSo = () => {
-    startLoading('AddDo');
+ 
+    if(searchText.length===0){
+      Alert.alert('DO ko được rỗng')
+      return;
+    }
     const DoValue = searchText.length > 10 ? searchText.substring(0,10) : searchText
+    startLoading('AddDo');
     //get DO
     getDoByNumber({DomgrDono: DoValue})
       .then(({items, totalCount}) => {
@@ -216,7 +220,6 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   };
   const [modalVisibleEditPO, setModalVisibleEditPO] = useState(false);
   const handleCloseTruck = () => {
-    console.log('CLose Truck!!!',truck.id)
     getTruckById(truck.id)
       .then(data => {
         const truckPut = {
@@ -225,7 +228,6 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           vhclLoadingVehicleClosedDate: GetDateNowUCT(),
           vhclLoadingVehicleClosedTime: ADD_TRUCK_FORMAT_TIME(today),
         };
-        console.log('Truck Put.................',truckPut)
         closeTruck(truckPut, truck.id).then(() => {
           navigation.navigate('TruckDetail',{truck:{...truck,status:'Closed'}})
         });
@@ -267,7 +269,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
         stopLoading('ScanDO')
       })
       .catch(e => {
-        Alert.alert('System error, please contact the developer.');
+        console.log(e)
       }).finally(()=>{
         stopLoading('ScanDO')
       });
@@ -293,7 +295,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
         }}>
         <View
           style={{
-            marginTop: SIZES.base,
+           // marginTop: SIZES.base,
             marginHorizontal: SIZES.padding,
             flexDirection: 'row',
             // backgroundColor: COLORS.red,
@@ -342,18 +344,9 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
             {/*  {appendComponent} */}
           </View>
         </View>
-        <FlatList
-          data={listPo}
-          ListFooterComponent={()=><View
-            style={{
-              height:1,
-              backgroundColor:COLORS.gray
-            }}
-            ></View>}
-            ListHeaderComponent={
-              <View
+        <View
                 style={{
-                  marginTop: SIZES.padding,
+                  marginTop: SIZES.radius,
                   borderBottomWidth: 1,
                   borderBottomColor: COLORS.gray,
                   flexDirection: 'row',
@@ -391,7 +384,15 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
                     flex: 1,
                   }}><Text>Edit</Text></View>
               </View>
-            }
+        <FlatList
+          data={listPo}
+          ListFooterComponent={()=><View
+            style={{
+              height:1,
+              backgroundColor:COLORS.gray
+            }}
+            ></View>}
+           // ListHeaderComponent=null
           ItemSeparatorComponent={() => (
             <LineDivider
               lineStyle={{
@@ -533,7 +534,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
       {renderHeader()}
       <View
         style={{
-          marginTop: 90,
+          marginTop: 60,
           flex: 1,
           //backgroundColor: COLORS.green,
         }}>
@@ -558,9 +559,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             Total:{totalPieces}pcs
           </Text>
-          <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
-            {truck?.warehousePickup}
-          </Text>
+       
           <View
             style={{
               marginLeft: SIZES.base,
@@ -577,6 +576,9 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
             <Text white>{truck.status}</Text>
           </View>
         </View>
+        <Text h3 primaryALS style={{marginLeft: SIZES.base}}>
+            {truck?.warehousePickup}
+          </Text>
         {renderLoad()}
       </View>
       <EditPoModal

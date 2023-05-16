@@ -65,7 +65,6 @@ const TruckUnloadingDetailScreen = ({
 }) => {
     const truck = route?.params?.truck ?? {};
     const today = moment(); 
-    console.log('Truck ID========================',truck)
     const [listHawb,setListHawb] = useState([]);
     const [searchText, setSearchText] = useState('');
     const [check, setCheck] = useState(false);
@@ -156,7 +155,6 @@ const TruckUnloadingDetailScreen = ({
           })
           .catch(e => {
             console.log('DLVD84', e);
-            Alert.alert('Lỗi', e.toString());
           })
           .finally(function () {
             stopLoading({key: 'deliverDetail'});

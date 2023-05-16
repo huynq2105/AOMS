@@ -179,5 +179,31 @@ export const getDelivers = (params = {maxResultCount: 20, skipCount: 0}) =>
   api
     .post('/api/inbound-module/truck-loadings/add-hawb-to-truck', body)
     .then(({data}) => data);
+    export const removeManyHawb = (listObjectIsn, vehicleRegId) => {
+      return api
+        .post(
+          `/api/inbound-module/truck-loadings/remove-many-hawb?vehicleRegId=${vehicleRegId}&listObjectIsn=${listObjectIsn}`,
+        )
+        .then(({data}) => data);
+    };
+    export const closeTruck = (body, id) =>
+  api
+    .put(`/api/master-data-module/vehicles-registrations/${id}`, body)
+    .then(({data}) => data);
+    export const getIrregulars = (params = {maxResultCount: 1000, skipCount: 0}) => {
+      return api
+        .get('/api/master-data-module/hawb-irrs/get-list-irrs-by-hawb-id', {params})
+        .then(({data}) => data);
+    };
+    export const getAwbInfo = id =>
+    api.get(`/api/inbound-module/lagis/${id}`).then(({data}) => data);
+    export const postIrregular = body =>
+    api
+      .post('/api/master-data-module/hawb-irrs', body)
+      .then(({data}) => data);
+
+
+      export const createIrr = body =>
+      api.post('/api/master-data-module/hawb-irrs', body).then(({data}) => data);
      
     

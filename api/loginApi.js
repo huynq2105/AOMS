@@ -39,7 +39,6 @@ export const register = body =>
 //     baseURL: oAuthConfig.issuer,
 //   }).then(({ data }) => data);
 export const logout = () => {
-  console.log('da chay vao logout');
   if (Platform.OS === 'ios') {
     try {
       api.get('/abp/Swashbuckle/SetCsrfCookie');
