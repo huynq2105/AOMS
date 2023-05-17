@@ -107,7 +107,7 @@ const TruckSealScreen = ({navigation}) => {
                   flex: 3,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
-                  paddingHorizontal:SIZES.radius,
+                  paddingHorizontal:5,
                   paddingVertical:SIZES.base,
                   justifyContent:"center",
                   alignItems:'center',
@@ -119,7 +119,7 @@ const TruckSealScreen = ({navigation}) => {
                   flex: 3,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
-                  paddingHorizontal:SIZES.radius,
+                 // paddingHorizontal:SIZES.radius,
                   justifyContent:"center",
                   alignItems:'center',
                 }}>
@@ -130,7 +130,7 @@ const TruckSealScreen = ({navigation}) => {
                   flex: 2,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
-                  paddingHorizontal:SIZES.radius,
+                 // paddingHorizontal:SIZES.radius,
                   justifyContent:"center",
                   alignItems:'center',
                 }}>
@@ -187,7 +187,7 @@ const TruckSealScreen = ({navigation}) => {
                   flex: 3,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
-                  paddingHorizontal:SIZES.radius,
+                  paddingHorizontal:5,
                   paddingVertical:SIZES.radius
                 }}>
                 <Text primaryALS>{truck.vehicRegNo}</Text>
@@ -197,7 +197,7 @@ const TruckSealScreen = ({navigation}) => {
                   flex: 3,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
-                  paddingHorizontal:SIZES.radius,
+                  //paddingHorizontal:SIZES.radius,
                   justifyContent:'center'
                 }}>
                 <Text> {truck.warehousePickup}</Text>
@@ -207,7 +207,7 @@ const TruckSealScreen = ({navigation}) => {
                   flex: 2,
                   borderLeftWidth:1,
                   borderLeftColor:COLORS.secondaryALS,
-                  paddingHorizontal:SIZES.radius,
+                  //paddingHorizontal:SIZES.radius,
                   justifyContent:'center'
                 }}>
                 <Text> {FORMAT_TIME(truck.date)}</Text>

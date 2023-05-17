@@ -165,7 +165,7 @@ const AddPoDoScreen = ({navigation, startLoading, stopLoading, route}) => {
     );
   }
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
       }}>
@@ -335,7 +335,7 @@ const AddPoDoScreen = ({navigation, startLoading, stopLoading, route}) => {
         </View>
       </View>
      <AddPoDoModal modalVisible={modalVisible} applyFunc={applyFunc} handleOffModal={closeModal} />
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

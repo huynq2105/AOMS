@@ -527,14 +527,14 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
     );
   }
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
       }}>
       {renderHeader()}
       <View
         style={{
-          marginTop: 60,
+          marginTop: 50,
           flex: 1,
           //backgroundColor: COLORS.green,
         }}>
@@ -587,7 +587,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
         handleOffModal={closeModalEditPO}
         pieces={piecesPO}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -152,7 +152,7 @@ const AddTruckScreenAnd = ({startLoading, stopLoading, navigation}) => {
                           ...loadWarehousePickup,
                         ]);
                       },
-                    );
+                    ).catch(e=>console.log('loi get wh=====',e));
                   },
                 );
               },
@@ -161,7 +161,7 @@ const AddTruckScreenAnd = ({startLoading, stopLoading, navigation}) => {
         );
       })
       .catch(e => {
-       console.log(e)
+       console.log('loi getdata=====',e)
       });
   }, []);
 

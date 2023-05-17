@@ -35,7 +35,8 @@ const OutboundItem = ({customContainerStyle, onPress, title, image}) => {
           marginTop:SIZES.radius
         }}>
         <Text body4 black style={{
-            fontWeight:'600'
+            fontWeight:'600',
+            fontSize:12
         }}>
           {title}
         </Text>

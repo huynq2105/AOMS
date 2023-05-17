@@ -817,12 +817,12 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
     );
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {renderHeader()}
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          marginTop: 60,
+          marginTop: Platform.OS === 'android' ? 80 : 40,
           //backgroundColor: COLORS.green,
         }}>
         <View
@@ -933,7 +933,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         handleOffModal={closeModalEditPO}
         pieces={piecesPO}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
