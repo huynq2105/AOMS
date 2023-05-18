@@ -69,7 +69,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   const [numberOfDoor,setNumberOfDoor] = useState(0)
   const loadPoDoByVehicle = () => {
     startLoading('Load data');
-    getPoDoByVehicle({VehicleIsn: truck.id})
+    getPoDoByVehicle({maxResultCount:1000,skipCount:0, VehicleIsn: truck.id})
       .then(({items, totalCount}) => {
         if (!items) {
           Alert.alert('Lỗi', 'Liên hệ với quản trị viên');

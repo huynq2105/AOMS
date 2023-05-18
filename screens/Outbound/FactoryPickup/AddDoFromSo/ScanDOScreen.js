@@ -42,6 +42,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import EditPoModal from '../TruckDetail/EditPoModal';
 const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   const truck = route?.params?.truck ?? {};
+  
   const today = moment();
   const [truckDetail, setTruckDetail] = useState(null);
   const [piecesPO, setpiecesPO] = useState(0);
@@ -52,7 +53,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   const textInputRef = useRef();
   const [searchText, setSearchText] = useState('');
   const loadPoDoByVehicle = () => {
-    getPoDoByVehicle({VehicleIsn: truck.id})
+    getPoDoByVehicle({maxResultCount:1000, VehicleIsn: truck.id})
       .then(({items, totalCount}) => {
         items.forEach((item, index) => {
           const result = [];
@@ -389,6 +390,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           ListFooterComponent={()=><View
             style={{
               height:1,
+              marginBottom:40,
               backgroundColor:COLORS.gray
             }}
             ></View>}

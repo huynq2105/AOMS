@@ -36,7 +36,7 @@ const PickupAwbScreen = ({navigation}) => {
     setParams({...params, FlightDateTo: DMY_FORMAT(date)});
   };
   const handleNavigate = truck => {
-    navigation.navigate('PickupAwbDetail', {awb: {...truck,filterDateFrom:filterDateFrom.val,filterDateTo:filterDateTo.val}});
+    navigation.navigate('PickupAwbDetail', {awb: truck,filterDateFrom:DMY_FORMAT(filterDateFrom.val),filterDateTo:DMY_FORMAT(filterDateTo.val)});
   };
   function renderHeader() {
     return (

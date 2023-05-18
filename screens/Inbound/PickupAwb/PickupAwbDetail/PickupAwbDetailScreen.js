@@ -45,9 +45,9 @@ const PickupAwbDetailScreen = ({
   startLoading,
   stopLoading,
 }) => {
-const {awb} = route?.params;
+const {awb,filterDateFrom,filterDateTo} = route?.params;
     const today = moment(); 
-    const fligtDate = DMY_FORMAT(awb.filterDateFrom) + "-" + DMY_FORMAT(awb.filterDateTo);
+    const fligtDate = filterDateFrom + "-" + filterDateTo;
     const [listHawb,setListHawb] = useState([]);
     const [searchText, setSearchText] = useState('');
     const [check, setCheck] = useState(false);
@@ -313,7 +313,10 @@ const {awb} = route?.params;
             right: 10,
             bottom: 0,
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            //backgroundColor:COLORS.green,
+            alignItems:'center',
+            justifyContent:'center'
+            //justifyContent: 'space-between',
           }}>
              <TextButton
             label="Update Status"
