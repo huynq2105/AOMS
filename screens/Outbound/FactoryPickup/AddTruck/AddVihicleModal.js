@@ -134,7 +134,7 @@ const AddVihicleModal = ({
   };
   const onSubmit = values => {
     const newVehicle = {
-      vehicleRegNo: values.vehicleRegNo,
+      vehicleRegNo: values.vehicleRegNo.replaceAll(/[&\/\\#,+()$~%.'":*?<>{}_-]/g, '').trim().toUpperCase(),
       vehicleLoadWeight: parseInt(values.vehicleLoadWeight),
       numberOfDoors: parseInt(values.numberOfDoors),
       vehicleType: values.vehicleType,

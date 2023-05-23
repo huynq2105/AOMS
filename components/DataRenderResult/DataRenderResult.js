@@ -36,7 +36,7 @@ function DataRenderResult({
   renderHeader,
   applyFunc = ()=>{},
   renderSeparator,
-  maxResultCount = 15,
+  maxResultCount = 50,
   debounceTime = 350,
   ...props
 }) {
@@ -57,7 +57,7 @@ function DataRenderResult({
           return;
         }
         setTotalCount(total);
-        applyFunc(items)
+        applyFunc(items,total)
         setRecords(skip ? [...records, ...items] : items);
         setSkipCount(skip);
       })

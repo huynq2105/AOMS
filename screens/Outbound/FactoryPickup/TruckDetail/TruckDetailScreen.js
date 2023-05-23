@@ -101,12 +101,13 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         stopLoading('Load data');
       });
   };
- const handleApplyFunc = data =>{
+  console.log('truck======================================',truck)
+ const handleApplyFunc = (data,total) =>{
   let pieces = 0;
   data.forEach((item,index)=>{
     pieces += item.piecesLoaded
   })
-  setTotalPieces(pieces);
+  setTotalPieces(total);
  }
  useFocusEffect(
   useCallback(() => {
@@ -121,7 +122,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           getTruckById(truck.id).then(data => {
             // setSerialNo(data.vhclSealNumber);
              getVihicleById(truck.vehicleId).then(data=>{
-               if(data.numberOfDoor){
+               if(data.numberOfDoors){
                  setNumberOfDoor(data.numberOfDoors)
                }else{
                  setNumberOfDoor(1)

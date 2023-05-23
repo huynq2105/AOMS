@@ -11,6 +11,9 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Alert,
+  Modal,
+  TouchableWithoutFeedback,
+  FlatList
 } from 'react-native';
 import Text from '../../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../../constants/theme';
@@ -26,6 +29,7 @@ import FormInputMik from '../../../../components/FormInputMik';
 import {Formik} from 'formik';
 import AddVihicleModal from './AddVihicleModal';
 import * as Yup from 'yup';
+
 import {
   getVehicles,
   getDrivers,
@@ -42,6 +46,8 @@ import TextButton from '../../../../components/TextButton';
 import {createLoadingSelector} from '../../../../stores/selectors/LoadingSelectors';
 import {connectToRedux} from '../../../../utils/ReduxConnect';
 import LoadingActions from '../../../../stores/actions/LoadingActions';
+import DropDownPicker from '../../../../components/DropDownPicker';
+import LineDivider from '../../../../components/LineDivider';
 
 const validations = {
   vehicleRegNo: Yup.string().required('Required.'),
@@ -62,6 +68,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
   const [valueWareHouse, setValueWareHouse] = useState('');
   const [drivers, setDrivers] = useState([]);
   const [filteredDrivers, setFilteredDrivers] = useState([]);
+  const [showWHModal,setShowWhModal] = useState(false);
   const [agents, setAgents] = useState([]);
   const [wareHouse, setWareHouse] = useState([
     {id: 0, label: '--Choose--', value: 0},
@@ -69,6 +76,9 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
   const [wareHousePickUp, setWareHousePickUp] = useState([
     {id: 0, label: '--Choose--', value: 0},
   ]);
+  console.log('wareHousePickUp=====================',wareHousePickUp)
+  const [wareHousePickupName,setWareHousePickupName] = useState('')
+  const [wareHousePickupId,setWareHousePickuId] = useState(0)
   const [vihicle, setVihicle] = useState();
   const handleAddTruck = () => {
     setIsVisible(true);
@@ -115,6 +125,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
 
                 getWareHousePickUp({maxResultCount: 1000, skipCount: 0}).then(
                   ({items, totalCount: total}) => {
+                    console.log('danh sach WH pickup',items);
                     const loadWarehousePickup = [];
                     items.forEach((item, index) => {
                       return loadWarehousePickup.push({
@@ -123,10 +134,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                         value: item.id,
                       });
                     });
-                    setWareHousePickUp([
-                      ...wareHousePickUp,
-                      ...loadWarehousePickup,
-                    ]);
+                    setWareHousePickUp(loadWarehousePickup);
                   },
                 );
               },
@@ -255,7 +263,76 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
       />
     );
   }
-
+  function renderWhModal(){
+    return(
+      <Modal
+      animationType='slide'
+      transparent={true}
+      visible={showWHModal}
+      >
+        <TouchableWithoutFeedback
+          onPress={()=>setShowWhModal(false)}
+        >
+          <View
+            style={{
+              flex:1,
+              alignItems:'center',
+              justifyContent:'center',
+              backgroundColor:COLORS.transparentBlack7
+            }}
+          >
+            <View
+              style={{
+                height:400,
+                width:SIZES.width*0.8,
+                backgroundColor:COLORS.white2,
+                borderRadius:SIZES.radius
+              }}
+            >
+              <FlatList
+                data={wareHousePickUp}
+                keyExtractor={item => `Po-${item.value}`}
+                contentContainerStyle={{
+                  paddingHorizontal:SIZES.radius,
+                  paddingBottom:SIZES.radius
+                }}
+                ItemSeparatorComponent={()=><View
+                  style={{
+                    backgroundColor:COLORS.lightGray1,
+                    height:1,
+                    marginTop:SIZES.base
+                  }}
+                  ></View>}
+                renderItem={({item,index})=>{
+                  return(
+                    <TouchableOpacity
+                      style={{
+                        alignItems:'center',
+                        marginTop:SIZES.base,
+                        flexDirection:'row'
+                      }}
+                      onPress={()=>{
+                        console.log('Item Select=========',item)
+                        setShowWhModal(false);
+                      }}
+                    >
+                      <Image source={icons.location} style={{
+                        width:25,height:25,
+                        tintColor:COLORS.orange
+                      }} />
+                      <Text style={{
+                        marginLeft:SIZES.padding
+                      }} h3>{item.label}</Text>
+                    </TouchableOpacity>
+                  )
+                }}
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    )
+  }
   function renderForm() {
     return (
       <Formik
@@ -495,7 +572,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                   //  flex: 1,
                   backgroundColor:COLORS.green
                 }}>
-                <Picker
+                {/* <Picker
                   mode="dropdown"
                   style={{
                     zIndex:-2
@@ -511,7 +588,11 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                       value={it.value}
                     />
                   ))}
-                </Picker>
+                </Picker> */}
+                <DropDownPicker
+                selectedItem={values.vhclWareHousePickupIsn}
+                onPress={()=>setShowWhModal(true)}
+                />
               </View>
               <View
                 style={{
@@ -620,6 +701,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
         handleOffModal={closeModal}
         isVisible={isVisible}
       />
+      {renderWhModal()}
     </View>
   );
 };

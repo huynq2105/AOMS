@@ -210,7 +210,7 @@ const TruckSealScreen = ({navigation}) => {
                   //paddingHorizontal:SIZES.radius,
                   justifyContent:'center'
                 }}>
-                <Text> {FORMAT_TIME(truck.date)}</Text>
+                   <Text> {FORMAT_TIME(truck.loadingArrivalDate)}</Text>
               </View>
 
               <View

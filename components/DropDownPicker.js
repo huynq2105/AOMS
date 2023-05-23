@@ -8,7 +8,7 @@ import {COLORS, SIZES} from '../constants/theme';
 import icons from '../constants/icons';
 import Text from '../constants/Text';
 
-const DropDownPicker = ({containerStyle,selectedCountry,onPress}) =>{
+const DropDownPicker = ({containerStyle,selectedItem,onPress}) =>{
     return(
         <TouchableOpacity
             style={{
@@ -29,8 +29,8 @@ const DropDownPicker = ({containerStyle,selectedCountry,onPress}) =>{
                     alignItems:'center'
                 }}
             >
-                {!selectedCountry && <Text body3 gray>Select an Item</Text>}
-                {!selectedCountry && <Text body3 gray>{selectedCountry}</Text>}
+                {!selectedItem && <Text body3 gray>Select an Item</Text>}
+                {!selectedItem && <Text body3 gray>{selectedItem}</Text>}
             </View>
             <Image source={icons.down} style={{
                 width:20,
