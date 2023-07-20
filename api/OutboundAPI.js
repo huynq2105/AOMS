@@ -38,7 +38,13 @@ export const getWarehouse = (params = {maxResultCount: 1000, skipCount: 0}) => {
     .get('/api/master-data-module/ware-houses', {params})
     .then(({data}) => data);
 };
-export const getFactory = (params = {maxResultCount: 1000, skipCount: 0,KundCustomerTypeCode:'FACTORY'}) => {
+export const getFactory = (
+  params = {
+    maxResultCount: 1000,
+    skipCount: 0,
+    KundCustomerTypeCode: 'FACTORY',
+  },
+) => {
   return api
     .get('/api/master-data-module/kunds', {params})
     .then(({data}) => data);
@@ -50,7 +56,9 @@ export const getAgents = (params = {type: 'OUTBOUND', page: 0}) => {
     })
     .then(({data}) => data);
 };
-export const getWareHousePickUp = (params = {maxResultCount: 1000, skipCount: 0}) => {
+export const getWareHousePickUp = (
+  params = {maxResultCount: 1000, skipCount: 0},
+) => {
   return api
     .get('/api/master-data-module/ware-house-pickup', {
       params,
@@ -136,6 +144,39 @@ export const getDoByNumber = (params = {maxResultCount: 1000, skipCount: 0}) =>
     .get(`/api/outbound-module/do-po-manages`, {params})
     .then(({data}) => data);
 export const getTruckById = id =>
-    api.get(`/api/master-data-module/vehicles-registrations/${id}`).then(({data}) => data);
-    export const getVihicleById = id =>
-    api.get(`/api/master-data-module/vehicles/${id}`).then(({data}) => data);
+  api
+    .get(`/api/master-data-module/vehicles-registrations/${id}`)
+    .then(({data}) => data);
+export const getVihicleById = id =>
+  api.get(`/api/master-data-module/vehicles/${id}`).then(({data}) => data);
+export const getTruckLoading = (
+  params = {maxResultCount: 1000, skipCount: 0},
+) => {
+  return api
+    .get('/api/outbound-module/truck-loading-plan/get-list-truck', {
+      params,
+    })
+    .then(({data}) => data);
+};
+export const getListDetailTruck = (
+  params = {maxResultCount: 1000, skipCount: 0},
+) => {
+  return api
+    .get('/api/outbound-module/truck-loading-plan/get-list-detail-truck', {
+      params,
+    })
+    .then(({data}) => data);
+};
+export const updatePalletLocation = body =>
+  api
+    .post('/api/outbound-module/do-dnn-pallet-mgr/update-pallet-location', body)
+    .then(({data}) => data);
+    export const getListPalletByMawbInTruck = (
+      params = {maxResultCount: 1000, skipCount: 0},
+    ) => {
+      return api
+        .get('/api/outbound-module/do-dnn-pallet-mgr/get-list-pallet-by-mawb-in-truck', {
+          params,
+        })
+        .then(({data}) => data);
+    };

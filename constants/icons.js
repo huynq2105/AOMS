@@ -66,9 +66,11 @@ const send = require('../assets/icons/send.png');
 const user = require('../assets/icons/user.png');
 const truck = require('../assets/icons/truck.png');
 const TruckSeal = require('../assets/icons/TruckSeal.png');
+const security = require('../assets/icons/security.png');
 const truckTransit = require('../assets/icons/truckTransit.png');
 const unloading = require('../assets/icons/unloading.png');
 const truckLoading = require('../assets/icons/truckLoading.png');
+///const awb_loading =  require('../assets/icons/Awb_loading.png');
 const moveShipment = require('../assets/icons/moveShipment.png');
 //const TruckSeal = require('../assets/icons/TruckSeal.png');
 const lighting = require('../assets/icons/lighting.png');
@@ -98,6 +100,7 @@ export default {
   awb_truck_location,
   awb_unload,
   awb_weight,
+ // awb_loading,
   coupon,
   cross,
   cart,
@@ -162,6 +165,7 @@ export default {
   reload,
   scan,
   send,
+  security,
   user,
   //wallet,
   TruckSeal,

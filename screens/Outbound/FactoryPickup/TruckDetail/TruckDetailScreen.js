@@ -68,7 +68,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   const [filterListPo, setFilterListPo] = useState([]);
   const [numberOfDoor,setNumberOfDoor] = useState(0)
   const loadPoDoByVehicle = () => {
-    startLoading('Load data');
+    startLoading('Load data zzzzzzzzzz');
     getPoDoByVehicle({maxResultCount:1000,skipCount:0, VehicleIsn: truck.id})
       .then(({items, totalCount}) => {
         if (!items) {
@@ -107,7 +107,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   data.forEach((item,index)=>{
     pieces += item.piecesLoaded
   })
-  setTotalPieces(total);
+  setTotalPieces(pieces);
  }
  useFocusEffect(
   useCallback(() => {
@@ -210,6 +210,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               listSeal.push({'value':item})
             })
             const SealPut = {vhslVehicleRegIsn:truck.id,listSeal:listSeal}
+            console.log('SealPut================',SealPut)
             updateSeal(SealPut).then((data)=>{
               setSerialNo(value);
               toast.show('Cập nhật Seal thành công! ', {

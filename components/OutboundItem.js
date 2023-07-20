@@ -32,7 +32,7 @@ const OutboundItem = ({customContainerStyle, onPress, title, image}) => {
         style={{
           justifyContent:'center',
           alignItems:'center',
-          marginTop:SIZES.radius
+          marginTop:SIZES.radius + 2
         }}>
         <Text body4 black style={{
             fontWeight:'600',

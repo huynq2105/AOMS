@@ -13,7 +13,12 @@ import {SIZES, COLORS} from '../../constants/theme';
 import dummyData from '../../constants/dummyData';
 import OutboundItem from '../../components/OutboundItem';
 import icons from '../../constants/icons';
-const OutboundScreen = ({navigation}) => {
+import { withPermission } from '../../hocs/PermissionHOC';
+import { createAppConfigSelector } from '../../stores/selectors/AppSelectors';
+import AppActions from '../../stores/actions/AppActions';
+import { connectToRedux } from '../../utils/ReduxConnect';
+const OutboundScreen = ({navigation,appConfig}) => {
+  const OutboundItemWithPermission = withPermission(OutboundItem,null,appConfig?.auth);
   function renderHeader() {
     return (
       <Header
@@ -56,12 +61,13 @@ const OutboundScreen = ({navigation}) => {
   }
   function renderContent() {
     const renderItem = ({item, index}) => (
-      <OutboundItem
+      <OutboundItemWithPermission
         customContainerStyle={{
          // borderWidth: 1,
           boderColor: COLORS.secondaryALS,
           marginLeft: SIZES.base,
         }}
+        policyKey = {item.requiredPolicy}
         image={item.icon}
         title={item.description}
         onPress={() =>
@@ -105,5 +111,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+export default connectToRedux({
+  component: OutboundScreen,
+  stateProps: state => ({
+    appConfig: createAppConfigSelector()(state),
+  }),
+  dispatchProps: {
+    fetchAppConfig: AppActions.fetchAppConfigAsync,
+  },
+});
 
-export default OutboundScreen;

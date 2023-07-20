@@ -15,7 +15,7 @@ import {
   FlatList,
   Modal,
 } from 'react-native';
-import { FORMAT_TIME } from '../../../../utils/DateHelpers';
+import {FORMAT_TIME} from '../../../../utils/DateHelpers';
 import Text from '../../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../../constants/theme';
 import icons from '../../../../constants/icons';
@@ -42,18 +42,19 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import EditPoModal from '../TruckDetail/EditPoModal';
 const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   const truck = route?.params?.truck ?? {};
-  
+
   const today = moment();
   const [truckDetail, setTruckDetail] = useState(null);
   const [piecesPO, setpiecesPO] = useState(0);
-  const [disableButton,setDisablebutton] = useState(true);
+  const [disableButton, setDisablebutton] = useState(true);
   const [listPo, setListPo] = useState([]);
   const [totalPieces, setTotalPieces] = useState(0);
+  const [vedhicleEditing, setVehicleEditing] = useState(0);
   const [check, setCheck] = useState(false);
   const textInputRef = useRef();
   const [searchText, setSearchText] = useState('');
   const loadPoDoByVehicle = () => {
-    getPoDoByVehicle({maxResultCount:1000, VehicleIsn: truck.id})
+    getPoDoByVehicle({maxResultCount: 1000, VehicleIsn: truck.id})
       .then(({items, totalCount}) => {
         items.forEach((item, index) => {
           const result = [];
@@ -78,12 +79,12 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
       .catch(e => console.log(e));
   };
   const handleAddSo = () => {
- 
-    if(searchText.length===0){
-      Alert.alert('DO ko được rỗng')
+    if (searchText.length === 0) {
+      Alert.alert('DO ko được rỗng');
       return;
     }
-    const DoValue = searchText.length > 10 ? searchText.substring(0,10) : searchText
+    const DoValue =
+      searchText.length > 10 ? searchText.substring(0, 10) : searchText;
     startLoading('AddDo');
     //get DO
     getDoByNumber({DomgrDono: DoValue})
@@ -103,7 +104,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
         }
       })
       .catch(e => {
-       console.log(e)
+        console.log(e);
       })
       .finally(() => {
         stopLoading('AddDo');
@@ -208,10 +209,10 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   }
   const ToggleCheckSearch = e => {
     setCheck(e);
-    if(e){
-      setDisablebutton(false)
-    }else {
-      setDisablebutton(true)
+    if (e) {
+      setDisablebutton(false);
+    } else {
+      setDisablebutton(true);
     }
     const newState = listPo.map(obj => {
       // 👇️ if id equals 2, update country property
@@ -230,11 +231,13 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           vhclLoadingVehicleClosedTime: ADD_TRUCK_FORMAT_TIME(today),
         };
         closeTruck(truckPut, truck.id).then(() => {
-          navigation.navigate('TruckDetail',{truck:{...truck,status:'Closed'}})
+          navigation.navigate('TruckDetail', {
+            truck: {...truck, status: 'Closed'},
+          });
         });
       })
       .catch(e => {
-        console.log(e)
+        console.log(e);
       });
   };
   const handleConfirm = () => {
@@ -263,16 +266,17 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
     AddPoDoToTruck(dataToAdd)
       .then(() => {
         loadPoDoByVehicle();
-        setSearchText('')
+        setSearchText('');
         setTimeout(() => {
           textInputRef.current.focus();
         }, 100);
-        stopLoading('ScanDO')
+        stopLoading('ScanDO');
       })
       .catch(e => {
-        console.log(e)
-      }).finally(()=>{
-        stopLoading('ScanDO')
+        console.log(e);
+      })
+      .finally(() => {
+        stopLoading('ScanDO');
       });
   }
   const closeModalEditPO = () => {
@@ -281,9 +285,15 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   const applyFuncEditPO = value => {
     UpdatePiecesLoaded(vedhicleEditing, value)
       .then(() => {
+        loadPoDoByVehicle();
         closeModalEditPO();
       })
       .catch(e => console.log(e));
+  };
+  const handleEditPO = item => {
+    setModalVisibleEditPO(true);
+    setpiecesPO(item.piecesLoaded);
+    setVehicleEditing(item.vehicleDetailId);
   };
   function renderLoad() {
     return (
@@ -296,7 +306,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
         }}>
         <View
           style={{
-           // marginTop: SIZES.base,
+            // marginTop: SIZES.base,
             marginHorizontal: SIZES.padding,
             flexDirection: 'row',
             // backgroundColor: COLORS.red,
@@ -346,62 +356,65 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           </View>
         </View>
         <View
-                style={{
-                  marginTop: SIZES.radius,
-                  borderBottomWidth: 1,
-                  borderBottomColor: COLORS.gray,
-                  flexDirection: 'row',
-                }}>
-                <View
-                  style={{
-                    flex: 1,
-                  }}></View>
-                <View
-                  style={{
-                    flex: 3,
-                    justifyContent:'center',
-                    alignItems:'center'
-                  }}>
-                  <Text>DO No</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 3,
-                    justifyContent:'center',
-                    alignItems:'center'
-                  }}>
-                  <Text>Time PDA</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 2,
-                    justifyContent:'center',
-                    alignItems:'center'
-                  }}>
-                  <Text> Loaded</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                  }}><Text>Edit</Text></View>
-              </View>
+          style={{
+            marginTop: SIZES.radius,
+            borderBottomWidth: 1,
+            borderBottomColor: COLORS.gray,
+            flexDirection: 'row',
+          }}>
+          <View
+            style={{
+              flex: 1,
+            }}></View>
+          <View
+            style={{
+              flex: 3,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text>DO No</Text>
+          </View>
+          <View
+            style={{
+              flex: 3,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text>Time PDA</Text>
+          </View>
+          <View
+            style={{
+              flex: 2,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text> Loaded</Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+            }}>
+            <Text>Edit</Text>
+          </View>
+        </View>
         <FlatList
           data={listPo}
-          ListFooterComponent={()=><View
-            style={{
-              height:1,
-              marginBottom:40,
-              backgroundColor:COLORS.gray
-            }}
-            ></View>}
-           // ListHeaderComponent=null
+          ListFooterComponent={() => (
+            <View
+              style={{
+                height: 1,
+                marginBottom: 40,
+                backgroundColor: COLORS.gray,
+              }}></View>
+          )}
+          // ListHeaderComponent=null
           ItemSeparatorComponent={() => (
             <LineDivider
               lineStyle={{
                 height: 1,
                 backgroundColor: COLORS.gray,
-               // marginTop: SIZES.base,
-               // marginBottom: SIZES.base,
+                // marginTop: SIZES.base,
+                // marginBottom: SIZES.base,
               }}
             />
           )}
@@ -417,7 +430,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 1,
-                  paddingVertical:SIZES.radius
+                  paddingVertical: SIZES.radius,
                 }}>
                 <CheckComponent
                   check={item?.checkPo}
@@ -433,10 +446,10 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth:1,
-                  borderLeftColor:COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
                 <Text h3 primaryALS>
@@ -446,10 +459,10 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth:1,
-                  borderLeftColor:COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
                 <Text h3 primaryALS>
@@ -459,10 +472,10 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth:1,
-                  borderLeftColor:COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center'
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
                 <Text h2 primaryALS>
@@ -473,10 +486,10 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
                 style={{
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.gray,
-                  justifyContent:'center',
-                  alignItems:'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
-                 // paddingVertical: SIZES.base,
+                  // paddingVertical: SIZES.base,
                   flex: 1,
                   //backgroundColor:COLORS.lightGreen
                 }}
@@ -509,7 +522,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               width: 120,
               height: 40,
               borderRadius: SIZES.base,
-              backgroundColor:disableButton? COLORS.lightGray1: COLORS.gray,
+              backgroundColor: disableButton ? COLORS.lightGray1 : COLORS.gray,
             }}
             disabled={disableButton}
             onPress={removeSoFromTruck}
@@ -540,7 +553,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           flex: 1,
           //backgroundColor: COLORS.green,
         }}>
-       <View
+        <View
           style={{
             flexDirection: 'row',
             paddingHorizontal: SIZES.base,
@@ -561,7 +574,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             Total:{totalPieces}pcs
           </Text>
-       
+
           <View
             style={{
               marginLeft: SIZES.base,
@@ -579,8 +592,8 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           </View>
         </View>
         <Text h3 primaryALS style={{marginLeft: SIZES.base}}>
-            {truck?.warehousePickup}
-          </Text>
+          {truck?.warehousePickup}
+        </Text>
         {renderLoad()}
       </View>
       <EditPoModal

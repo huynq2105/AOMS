@@ -9,3 +9,16 @@ export const getSealByTruckId = (
   api
     .get('/api/master-data-module/vhsl-vehicle-seal-infos', {params})
     .then(({data}) => data);
+export const getVehicleSecurity = (params = {}) =>
+  api
+    .get(
+      `/api/master-data-module/vehicles-registrations/get-vehicle-security-check`,
+      {
+        params,
+      },
+    )
+    .then(({data}) => data);
+export const checkSeal = body =>
+  api
+  .post('/api/master-data-module/vehicles-registrations/check-seal', body)
+  .then(({data}) => data);

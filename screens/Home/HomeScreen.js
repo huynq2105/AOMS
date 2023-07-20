@@ -9,8 +9,8 @@ import AppActions from '../../stores/actions/AppActions';
 import { connectToRedux } from '../../utils/ReduxConnect';
 import PersistentStorageActions from '../../stores/actions/PersistentStorageActions';
 import icons from '../../constants/icons';
-const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken}) => {
-
+import { createAppConfigSelector } from '../../stores/selectors/AppSelectors';
+const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken,appConfig}) => {
     function renderLogout(){
     return(
   <TextButton
@@ -141,6 +141,9 @@ const styles = StyleSheet.create({
 
 export default connectToRedux({
   component: HomeScreen,
+  stateProps: state => ({
+    appConfig: createAppConfigSelector()(state),
+  }),
   dispatchProps: {
     logoutAsync: AppActions.logoutAsync,
     setTokenExpired: PersistentStorageActions.setTokenExpired,

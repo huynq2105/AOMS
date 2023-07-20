@@ -68,6 +68,7 @@ const AppContainer = ({language,token,setToken,logoutAsync,fetchAppConfig,appCon
       [language],
     );
     const toast = useToast()
+    console.log('App Config===========',appConfig?.auth?.grantedPolicies['OutboundModule.TruckPickupMobile'])
     useEffect(() => {
       //setTokenDevice(tokenDevice)
       if (!isValid && token) {

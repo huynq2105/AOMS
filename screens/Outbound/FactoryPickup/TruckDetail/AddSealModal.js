@@ -35,7 +35,6 @@ const AddSealModal = ({
     });
     if (numberOfDoor != countSeal) {
       Alert.alert('Số lượng cửa của xe và seal không khớp nhau !');
-      $('#txtSeal').focus();
       return false;
     }
 

@@ -84,7 +84,7 @@ function DataRenderResult({
       fetch(0, false);
     }, [params]),
   );
-
+console.log('danh sach ============',records)
   return (
     <>
       <View style={styles.container}>

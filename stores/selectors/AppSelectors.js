@@ -14,6 +14,8 @@ export function createLanguagesSelector() {
   return createSelector([getApp], state => state?.appConfig?.localization?.languages);
 }
 export function createGrantedPolicySelector(key) {
+  //console.log('createGrantedPolicySelector==========================',key)
+  //console.log('createGrantedPolicySelector grantedPolicies==========================',key)
   return createSelector([getApp], state => state?.appConfig?.auth?.grantedPolicies[key] ?? false);
 }
 

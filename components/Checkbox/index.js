@@ -12,7 +12,7 @@ const CheckComponent = ({
     style,
     size = 25,
     type = 'checkbox',
-    color,
+    color = null,
     check = false,
     fontFamily,
     onPress,
@@ -49,7 +49,7 @@ const CheckComponent = ({
             style={{
               width: scale(size),
               height: scale(size),
-              tintColor: COLORS.black,
+              tintColor: color? color: COLORS.black,
             }}
             source={
               type === 'checkbox'

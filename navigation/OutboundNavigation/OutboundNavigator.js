@@ -16,6 +16,11 @@ import ScanDOScreen from '../../screens/Outbound/FactoryPickup/AddDoFromSo/ScanD
 import TruckSealScreen from '../../screens/Outbound/TruckSeal/TruckSealScreen';
 import AddTruckScreenAnd from '../../screens/Outbound/FactoryPickup/AddTruck/AddTruckScreenAnd';
 import AddTruckScreenIos from '../../screens/Outbound/FactoryPickup/AddTruck/AddTruckScreenIos';
+import SecurityScreen from '../../screens/Outbound/Security/SecurityScreen';
+import MoveShipmentScreen from '../../screens/Outbound/MoveShipment/MoveShipmentScreen';
+import TruckLoadingScreen from '../../screens/Outbound/TruckLoading/TruckLoadingScreen';
+import AwbByTruckLoadingScreen from '../../screens/Outbound/TruckLoading/AwbByTruckLoading/AwbByTruckLoadingScreen';
+import MawbCheckOutScreen from '../../screens/Outbound/TruckLoading/MawbCheckOut/MawbCheckOutScreen';
 import {truncate} from 'lodash';
 const Stack = createNativeStackNavigator();
 const OutboundNavigator = () => {
@@ -69,6 +74,11 @@ const OutboundNavigator = () => {
       <Stack.Screen name="AddPoDo" component={AddPoDoScreen} />
       <Stack.Screen name="ScanDO" component={ScanDOScreen} />
       <Stack.Screen name="TruckSeal" component={TruckSealScreen} />
+      <Stack.Screen name="Security" component={SecurityScreen} />
+      <Stack.Screen name="MoveShipment" component={MoveShipmentScreen} />
+      <Stack.Screen name="TruckLoading" component={TruckLoadingScreen} />
+      <Stack.Screen name="AwbByTruckLoading" component={AwbByTruckLoadingScreen} />
+      <Stack.Screen name="MawbCheckOut" component={MawbCheckOutScreen} />
     </Stack.Navigator>
   );
 };
