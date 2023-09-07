@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect,useCallback, useRef} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -8,7 +8,7 @@ import {
   Alert,
   Platform,
   FlatList,
-  TextInput
+  TextInput,
 } from 'react-native';
 import Text from '../../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../../constants/theme';
@@ -16,35 +16,39 @@ import Header from '../../../../components/Header';
 import DatePicker from 'react-native-date-picker';
 import icons from '../../../../constants/icons';
 import moment from 'moment';
-import {getListDetailTruck,getListPalletByMawbInTruck,updatePalletLocation} from '../../../../api/OutboundAPI';
+import {
+  getListDetailTruck,
+  getListPalletByMawbInTruck,
+  updatePalletLocation,
+  getListPalletToMove,
+} from '../../../../api/OutboundAPI';
 import DataRenderResult from '../../../../components/DataRenderResult/DataRenderResult';
 import IconButton from '../../../../components/IconButton';
 import {DMY_FORMAT, DMY_TIME, FORMAT_TIME} from '../../../../utils/DateHelpers';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useToast} from 'react-native-toast-notifications';
-import { connectToRedux } from '../../../../utils/ReduxConnect';
+import {connectToRedux} from '../../../../utils/ReduxConnect';
 import LoadingActions from '../../../../stores/actions/LoadingActions';
-import { createLoadingSelector } from '../../../../stores/selectors/LoadingSelectors';
-const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
-  const {awb,truck} = route.params;
-  const toast = useToast()
-  console.log('Van don============',awb)
-  console.log('Truck============',truck)
-  const [pallets,setPallets] = useState([])
-  const [totalPallets,setTotalPallets] = useState(0);
-  const [totalCheckout,setTotalCheckout]= useState(0);
-  const [pltText,setPltText] = useState()
+import {createLoadingSelector} from '../../../../stores/selectors/LoadingSelectors';
+const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
+  const {awb, truck} = route.params;
+  const toast = useToast();
+  console.log('Van don============', awb);
+  const [pallets, setPallets] = useState([]);
+  const [totalPallets, setTotalPallets] = useState(0);
+  const [totalCheckout, setTotalCheckout] = useState(0);
+  const [pltText, setPltText] = useState();
   const textPltRef = useRef();
   const today = moment();
   const [params, setParams] = useState({
-    VehicleIsn: truck.id,
-    MawbId: awb.mawbId
+    MawbId: awb.mawbId,
   });
 
   const loadData = useCallback(() => {
-    startLoading('Loading')
-    getListPalletByMawbInTruck(params)
+    startLoading('Load data');
+    getListPalletToMove(params)
       .then(({items, totalCount: total}) => {
+        stopLoading('Load data');
         if (!items) {
           Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
           return;
@@ -52,21 +56,22 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
         const result = [];
         setTotalPallets(total);
         items.forEach((item, index) => {
-           if(item.location != ''){
-            result.push(item)
-           }
-          });
-        setPallets(result)
-        setTotalCheckout(total-result.length)
+          if (item.location != '') {
+            result.push(item);
+          }
+        });
+        setPallets(result);
+        setTotalCheckout(total - result.length);
       })
-      .catch(e => console.log(e)).finally(()=>{
-        stopLoading('Loading')
+      .catch(e => {
+        console.log(e);
+        stopLoading('Load data');
       });
   }, []);
-  useEffect(()=>{
-    loadData()
-  },[])
-  console.log('danh sach Data',pallets)
+  useEffect(() => {
+    loadData();
+  }, []);
+  console.log('danh sach Data', pallets);
   const handleNavigate = truck => {
     navigation.navigate('TruckDetail', {
       truck: truck,
@@ -74,27 +79,28 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
     });
   };
   const handleApplyFunc = data => {};
-  const handleCheckout = () =>{
+  const handleCheckout = () => {
     const scanHistory = [];
-    const payLoad = {pallet:pltText,location:''}
-    updatePalletLocation(payLoad).then((data)=>{
-      toast.show('Move Pallet thành công! ', {
-        type: 'success',
-        placement: 'top',
-        swipeEnabled: true,
-        style: {
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: COLORS.green,
-        },
-        duration: 2000,
-        animationType: 'slide-in',
-      });
-      setPltText('')
-      loadData();
-      
-    }).catch((e)=>console.log(e))
-  }
+    const payLoad = {pallet: pltText, location: ''};
+    updatePalletLocation(payLoad)
+      .then(data => {
+        toast.show('Move Pallet thành công! ', {
+          type: 'success',
+          placement: 'top',
+          swipeEnabled: true,
+          style: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.green,
+          },
+          duration: 2000,
+          animationType: 'slide-in',
+        });
+        setPltText('');
+        loadData();
+      })
+      .catch(e => console.log(e));
+  };
   function renderHeader() {
     return (
       <Header
@@ -139,42 +145,42 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
       />
     );
   }
-  function renderCheckOut(){
-    return(
+  function renderCheckOut() {
+    return (
+      <View
+        style={{
+          marginTop: 70,
+          backgroundColor: COLORS.lightGray1,
+        }}>
+        {/* AWB and Quantity */}
         <View
+          style={{
+            flexDirection: 'row',
+          }}>
+          <View
             style={{
-                marginTop:70,
-                backgroundColor:COLORS.lightGray1
-            }}
-        >
-            {/* AWB and Quantity */}
-            <View
-                style={{
-                    flexDirection:'row'
-                }}
-            >
-                <View
-                    style={{
-                        flex:1,
-                        justifyContent:'center',
-                        alignItems:'center',
-                        backgroundColor:COLORS.green
-                    }}
-                >
-                    <Text h2 white>{awb.mawbNo}</Text>
-                </View>
-                <View
-                    style={{
-                        flex:1,
-                        justifyContent:'center',
-                        alignItems:'center',
-                        backgroundColor:COLORS.secondaryALS
-                    }}
-                >
-                     <Text h2>{totalPallets} {'>>'} {totalCheckout}</Text>
-                </View>
-            </View>
-            <View
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: COLORS.green,
+            }}>
+            <Text h2 white>
+              {awb.mawbNo}
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: COLORS.secondaryALS,
+            }}>
+            <Text h2>
+              {totalPallets} {'>>'} {totalCheckout}
+            </Text>
+          </View>
+        </View>
+        <View
           style={{
             marginTop: SIZES.base,
             marginHorizontal: SIZES.padding,
@@ -224,8 +230,8 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
             {/*  {appendComponent} */}
           </View>
         </View>
-        </View>
-    )
+      </View>
+    );
   }
   function renderContent() {
     return (
@@ -245,7 +251,7 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
             />
           }
           data={pallets}
-          keyExtractor={item=>item.palletNo}
+          keyExtractor={item => item.palletNo}
           ListHeaderComponent={
             <View
               style={{
@@ -280,7 +286,7 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
                 }}>
                 <Text body3>Plt No</Text>
               </View>
-              
+
               <View
                 style={{
                   flex: 5,
@@ -299,7 +305,7 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
               </View>
             </View>
           }
-          renderItem={({item:awb, index}) => (
+          renderItem={({item: awb, index}) => (
             <TouchableOpacity
               style={{
                 // paddingVertical: SIZES.radius,
@@ -343,7 +349,6 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
                 }}>
                 <Text> {awb.palletNo}</Text>
               </View>
-              
 
               <View
                 style={{
@@ -376,7 +381,6 @@ const MawbCheckOutScreen = ({navigation, route,startLoading,stopLoading}) => {
                     {awb.location}
                   </Text>
                 </View>
-               
               </View>
             </TouchableOpacity>
           )}
@@ -446,11 +450,10 @@ const styles = StyleSheet.create({
   },
 });
 export default connectToRedux({
-  component: MawbCheckOutScreen,
+  component: AwbCheckoutScreen,
   stateProps: state => ({loading: createLoadingSelector()(state)}),
   dispatchProps: {
     startLoading: LoadingActions.start,
     stopLoading: LoadingActions.stop,
   },
 });
-

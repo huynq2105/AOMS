@@ -263,7 +263,7 @@ const NBAUnloadingDetailScreen = ({
           uri: firstAssets?.uri,
           name: firstAssets?.fileName?.replace(
             'rn_image_picker_lib_temp',
-            'deliver_dt',
+            'deliver_dt_alsc',
           ),
           type: firstAssets?.type,
         };

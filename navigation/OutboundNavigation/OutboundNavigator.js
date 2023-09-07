@@ -21,6 +21,9 @@ import MoveShipmentScreen from '../../screens/Outbound/MoveShipment/MoveShipment
 import TruckLoadingScreen from '../../screens/Outbound/TruckLoading/TruckLoadingScreen';
 import AwbByTruckLoadingScreen from '../../screens/Outbound/TruckLoading/AwbByTruckLoading/AwbByTruckLoadingScreen';
 import MawbCheckOutScreen from '../../screens/Outbound/TruckLoading/MawbCheckOut/MawbCheckOutScreen';
+import AwbLoadingScreen from '../../screens/Outbound/AwbLoading/AwbLoadingScreen';
+import AwbCheckoutScreen from '../../screens/Outbound/AwbLoading/AwbCheckout/AwbCheckoutSceen';
+import InventoryScreen from '../../screens/Outbound/Inventory/InventoryScreen';
 import {truncate} from 'lodash';
 const Stack = createNativeStackNavigator();
 const OutboundNavigator = () => {
@@ -79,6 +82,9 @@ const OutboundNavigator = () => {
       <Stack.Screen name="TruckLoading" component={TruckLoadingScreen} />
       <Stack.Screen name="AwbByTruckLoading" component={AwbByTruckLoadingScreen} />
       <Stack.Screen name="MawbCheckOut" component={MawbCheckOutScreen} />
+      <Stack.Screen name="AwbLoading" component={AwbLoadingScreen} />
+      <Stack.Screen name="AwbCheckout" component={AwbCheckoutScreen} />
+      <Stack.Screen name="Inventory" component={InventoryScreen} />
     </Stack.Navigator>
   );
 };

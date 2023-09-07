@@ -158,11 +158,29 @@ export const getTruckLoading = (
     })
     .then(({data}) => data);
 };
+export const getAwbLoading = (
+  params = {maxResultCount: 1000, skipCount: 0},
+) => {
+  return api
+    .get('/api/outbound-module/do-dnn-pallet-mgr/get-list-mawb-to-move', {
+      params,
+    })
+    .then(({data}) => data);
+};
 export const getListDetailTruck = (
   params = {maxResultCount: 1000, skipCount: 0},
 ) => {
   return api
     .get('/api/outbound-module/truck-loading-plan/get-list-detail-truck', {
+      params,
+    })
+    .then(({data}) => data);
+};
+export const getListPalletToMove = (
+  params = {maxResultCount: 1000, skipCount: 0},
+) => {
+  return api
+    .get('/api/outbound-module/do-dnn-pallet-mgr/get-list-pallet-to-move', {
       params,
     })
     .then(({data}) => data);

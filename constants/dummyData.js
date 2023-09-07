@@ -111,8 +111,8 @@ const featuresExpData = [
         description: 'AWB Loading',
         bgColor:['#7cf1fb', '#4ebefd'],
         backgroundColor: COLORS.lightyellow,
-        screenName: 'AWBLoadingScreen',
-        srceenNavigagor: 'AWBLoading',
+        screenName: 'AwbLoadingScreen',
+        srceenNavigagor: 'AwbLoading',
         requiredPolicy: 'OutboundModule.TruckPickupMobile',
       },
       {
@@ -124,6 +124,17 @@ const featuresExpData = [
         backgroundColor: COLORS.lightyellow,
         screenName: 'TruckLoadingScreen',
         srceenNavigagor: 'TruckLoading',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 209,
+        icon: icons.awb_inventory,
+        color: COLORS.yellow,
+        description: 'Inventory',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'InventoryScreen',
+        srceenNavigagor: 'Inventory',
         requiredPolicy: 'OutboundModule.TruckPickupMobile',
       },
   ];

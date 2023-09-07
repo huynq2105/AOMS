@@ -3,11 +3,11 @@ const ENV = {
       version: 'v1.3.5 - v1.1.1b6',
     },
     dev: {
-      apiUrl: 'https://aoms-alsb.alssys.vn',
+      apiUrl: 'https://aoms.alssys.vn',
       oAuthConfig: {
-        issuer: 'https://aoms-alsb.alssys.vn',
-        issuerDev: 'https://aoms-alsb.alssys.vn',
-        issuerUat: 'https://aoms-alsb.alssys.vn',
+        issuer: 'https://aoms.alssys.vn',
+        issuerDev: 'https://aoms.alssys.vn',
+        issuerUat: 'https://aoms.alssys.vn',
         clientId: 'AOMS_App',
         clientSecret: '1q2w3E*',
         scope: 'offline_access AOMS',
@@ -17,9 +17,9 @@ const ENV = {
       },
     },
     prod: {
-      apiUrl: 'https://aoms-alsb.alssys.vn',
+      apiUrl: 'https://aoms.alssys.vn',
       oAuthConfig: {
-        issuer: 'https://aoms-alsb.alssys.vn',
+        issuer: 'https://aoms.alssys.vn',
         clientId: 'AOMS_App',
         clientSecret: '1q2w3E*',
         scope: 'offline_access AOMS',
@@ -30,9 +30,9 @@ const ENV = {
     },
   };
   const EnvironmentList = [
-    {id:0,value:'https://aoms-alsb.alssys.vn',label:'uat PRODUCT'},
+    {id:0,value:'https://aoms.alssys.vn',label:'uat PRODUCT'},
     {id:0,value:'https://aoms.alssys.vn',label:'ALSW PRODUCT'},
-    {id:0,value:'https://aoms-alsb.alssys.vn',label:'ALSW UAT'},
+    {id:0,value:'https://aoms.alssys.vn',label:'ALSW UAT'},
   ]
   export const getEnvVars = () => {
     // eslint-disable-next-line no-undef

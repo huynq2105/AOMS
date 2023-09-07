@@ -14,35 +14,24 @@ import Header from '../../../components/Header';
 import DatePicker from 'react-native-date-picker';
 import icons from '../../../constants/icons';
 import moment from 'moment';
-import {getTruckLoading} from '../../../api/OutboundAPI';
+import {getAwbLoading} from '../../../api/OutboundAPI';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
 import IconButton from '../../../components/IconButton';
 import {DMY_FORMAT, DMY_TIME, FORMAT_TIME} from '../../../utils/DateHelpers';
 import {SafeAreaView} from 'react-native-safe-area-context';
-const TruckLoadingScreen = ({navigation}) => {
-  const [filterDate, setFilterDate] = useState({
-    show: false,
-    val: new Date(),
-  });
+const AwbLoadingScreen = ({navigation, route}) => {
+  const {truck} = route.params;
+
   const today = moment();
   const [params, setParams] = useState({
-    status: 'Loading',  
   });
-  const changeFilterDate = date => {
-    console.log(date);
-    setFilterDate({show: false, val: date ? date : filterDate.val});
-    setParams({...params, LoadingArrivalDate: DMY_FORMAT(date)});
-  };
-  
-  const handleNavigate = truck => {
-    navigation.navigate('AwbByTruckLoading', {
-      truck: truck,
-      screenParent: 'FactoryPickup',
+
+  const handleNavigate = awb => {
+    navigation.navigate('AwbCheckout', {
+      awb: awb,
     });
   };
-  const handleApplyFunc = (data) =>{
-
-  }
+  const handleApplyFunc = data => {};
   function renderHeader() {
     return (
       <Header
@@ -82,7 +71,7 @@ const TruckLoadingScreen = ({navigation}) => {
             }}
           />
         }
-        title="Truck Loading"
+        title="Awbs Loading"
         /*  rightComponent={<CartQuantityButton quantity={cartLagiQuantity} onPress={()=>navigation.navigate("CartLagi")} />} */
       />
     );
@@ -92,11 +81,11 @@ const TruckLoadingScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
-          marginTop: SIZES.base,
+          marginTop: SIZES.base + 60,
           // marginHorizontal:SIZES.base
         }}>
         <DataRenderResult
-        applyFunc={handleApplyFunc}
+          applyFunc={handleApplyFunc}
           navigation={navigation}
           params={params}
           renderFooter={
@@ -120,7 +109,7 @@ const TruckLoadingScreen = ({navigation}) => {
                 }}></View>
               <View
                 style={{
-                  flex: 3,
+                  flex: 4,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
                   paddingHorizontal: 5,
@@ -128,18 +117,18 @@ const TruckLoadingScreen = ({navigation}) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text>Truck No</Text>
+                <Text>Mawb</Text>
               </View>
               <View
                 style={{
-                  flex: 3,
+                  flex: 2,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
-                   //paddingHorizontal: SIZES.base,
+                  //paddingHorizontal: SIZES.base,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text body3>W.H</Text>
+                <Text body3>Pieces</Text>
               </View>
               <View
                 style={{
@@ -150,11 +139,11 @@ const TruckLoadingScreen = ({navigation}) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text>Time</Text>
+                <Text>Dest</Text>
               </View>
               <View
                 style={{
-                  flex: 5,
+                  flex: 2,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
                   justifyContent: 'center',
@@ -165,13 +154,13 @@ const TruckLoadingScreen = ({navigation}) => {
                   style={{
                     marginRight: SIZES.padding,
                   }}>
-                  Status
+                  FWD
                 </Text>
               </View>
             </View>
           }
-          fetchFn={getTruckLoading}
-          render={(truck, index) => (
+          fetchFn={getAwbLoading}
+          render={(awb, index) => (
             <TouchableOpacity
               style={{
                 // paddingVertical: SIZES.radius,
@@ -182,7 +171,7 @@ const TruckLoadingScreen = ({navigation}) => {
                 justifyContent: 'center',
                 // alignItems: 'center',
               }}
-              onPress={() => handleNavigate(truck)}>
+              onPress={() => handleNavigate(awb)}>
               <View
                 style={{
                   flex: 1,
@@ -190,54 +179,63 @@ const TruckLoadingScreen = ({navigation}) => {
                   //borderLeftColor: COLORS.secondaryALS,
                   alignItems: 'center',
                   //  paddingHorizontal: SIZES.radius,
-                 justifyContent: 'center',
+                  justifyContent: 'center',
                 }}>
                 <Text>{index + 1}</Text>
               </View>
               <View
                 style={{
-                  flex: 3,
+                  flex: 4,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
                   paddingHorizontal: 5,
                   paddingVertical: SIZES.radius,
+                  alignItems:'center'
                 }}>
-                <Text primaryALS>{truck.truckNo}</Text>
-              </View>
-              <View
-                style={{
-                  flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  alignItems: 'center',
-                  //paddingHorizontal: SIZES.radius,
-                  justifyContent: 'center',
-                }}>
-                <Text> {truck.unloadingWarehouse}</Text>
+                <Text primaryALS>{awb.mawbNo}</Text>
               </View>
               <View
                 style={{
                   flex: 2,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
+                  alignItems: 'center',
+                  //paddingHorizontal: SIZES.radius,
+                  justifyContent: 'center',
+                
+                }}>
+                <Text> {awb.pieces}</Text>
+              </View>
+              <View
+                style={{
+                  flex: 2,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.secondaryALS,
+                  alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
                 }}>
-                <Text> {FORMAT_TIME(truck.loadingArrivalDate)}</Text>
+                <Text> {awb.dest}</Text>
               </View>
 
               <View
                 style={{
                   flexDirection: 'row',
-                  flex: 5,
+                  flex: 2,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.secondaryALS,
+                  justifyContent: 'center',
                 }}>
                 <View
                   style={{
+                    // marginLeft: SIZES.base,
                     flex: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
+                    // padding: 5,
+                    //  borderRadius: 5,
+                    //justifyContent: 'center',
+                    //alignItems: 'center',
                   }}>
                   <Text
                     style={{
@@ -249,7 +247,7 @@ const TruckLoadingScreen = ({navigation}) => {
                           ? COLORS.red
                           : COLORS.green,
                     }}>
-                    {truck.status}
+                    {awb.remarks}
                   </Text>
                 </View>
                 <View
@@ -276,56 +274,7 @@ const TruckLoadingScreen = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       {renderHeader()}
-      <View
-        style={{
-          marginTop: Platform.OS === 'android' ? 80 : 60,
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'row',
-        }}>
-        {/* <Text h3 primaryALS>
-          Pickup Date
-        </Text>
-        <View
-          style={{
-            height: 40,
-            width: 100,
-            borderWidth: 1,
-            borderColor: COLORS.gray,
-            marginLeft: SIZES.base,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text>{DMY_FORMAT(filterDate.val)}</Text>
-        </View>
-        <TouchableOpacity
-          style={{
-            marginLeft: SIZES.base,
-          }}
-          onPress={() => setFilterDate({...filterDate, show: true})}>
-          <Image
-            source={icons.calendar}
-            style={{
-              width: 20,
-              height: 20,
-              tintColor: COLORS.green,
-            }}
-          />
-        </TouchableOpacity> */}
-      </View>
-      {filterDate.show && (
-        <DatePicker
-          modal
-          mode="date"
-          open={filterDate.show}
-          date={filterDate.val}
-          onConfirm={changeFilterDate}
-          onCancel={() => setFilterDate({...filterDate, show: false})}
-          minimumDate={new Date(2000, 1, 1)}
-          maximumDate={new Date()}
-          locale={'vi'}
-        />
-      )}
+
       {renderContent()}
     </SafeAreaView>
   );
@@ -357,4 +306,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TruckLoadingScreen;
+export default AwbLoadingScreen;

@@ -68,7 +68,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   const [filterListPo, setFilterListPo] = useState([]);
   const [numberOfDoor,setNumberOfDoor] = useState(0)
   const loadPoDoByVehicle = () => {
-    startLoading('Load data zzzzzzzzzz');
+    startLoading('Load data');
     getPoDoByVehicle({maxResultCount:1000,skipCount:0, VehicleIsn: truck.id})
       .then(({items, totalCount}) => {
         if (!items) {
@@ -101,7 +101,6 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         stopLoading('Load data');
       });
   };
-  console.log('truck======================================',truck)
  const handleApplyFunc = (data,total) =>{
   let pieces = 0;
   data.forEach((item,index)=>{

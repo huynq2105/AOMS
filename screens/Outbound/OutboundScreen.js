@@ -64,7 +64,7 @@ const OutboundScreen = ({navigation,appConfig}) => {
       <OutboundItemWithPermission
         customContainerStyle={{
          // borderWidth: 1,
-          boderColor: COLORS.secondaryALS,
+          //boderColor: COLORS.secondaryALS,
           marginLeft: SIZES.base,
         }}
         policyKey = {item.requiredPolicy}
