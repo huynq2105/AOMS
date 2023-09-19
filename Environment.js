@@ -8,24 +8,24 @@ const ENV = {
         issuer: 'https://aoms.alssys.vn',
         issuerDev: 'https://aoms.alssys.vn',
         issuerUat: 'https://aoms.alssys.vn',
-        clientId: 'AOMS_App',
+        clientId: 'aoms_App',
         clientSecret: '1q2w3E*',
-        scope: 'offline_access AOMS',
+        scope: 'offline_access aoms',
       },
       localization: {
-        defaultResourceName: 'AOMS',
+        defaultResourceName: 'aoms',
       },
     },
     prod: {
       apiUrl: 'https://aoms.alssys.vn',
       oAuthConfig: {
         issuer: 'https://aoms.alssys.vn',
-        clientId: 'AOMS_App',
+        clientId: 'aoms_App',
         clientSecret: '1q2w3E*',
-        scope: 'offline_access AOMS',
+        scope: 'offline_access aoms',      
       },
       localization: {
-        defaultResourceName: 'AOMS',
+        defaultResourceName: 'aoms',
       },
     },
   };

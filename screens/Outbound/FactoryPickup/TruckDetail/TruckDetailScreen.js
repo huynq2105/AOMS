@@ -121,6 +121,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           getTruckById(truck.id).then(data => {
             // setSerialNo(data.vhclSealNumber);
              getVihicleById(truck.vehicleId).then(data=>{
+              console.log('Danh sach Seal của xe===================================================',data.numberOfDoors)
                if(data.numberOfDoors){
                  setNumberOfDoor(data.numberOfDoors)
                }else{

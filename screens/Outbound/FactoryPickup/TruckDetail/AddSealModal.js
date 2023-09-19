@@ -25,6 +25,7 @@ const AddSealModal = ({
       applyFunc(values.vhclSealNumber);
     }
   };
+  console.log('So luong cua xe================================',numberOfDoor)
   function ValidateForm(seal) {
     const listSeal = seal.split('-');
     let countSeal = 0;

@@ -441,7 +441,7 @@ const [totalPieces,setTotalPieces] = useState(0)
                   alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
-                <Text h2 primaryALS>
+                <Text body3 primaryALS>
                   {truck.mawb}/{truck.hawb}
                 </Text>
                 <View
@@ -454,13 +454,13 @@ const [totalPieces,setTotalPieces] = useState(0)
                     <Image
                       source={icons.flightDepart}
                       style={{
-                        width:25,
-                        height:25,
+                        width:20,
+                        height:20,
                         marginRight:SIZES.base
                       }}
                       
                     />
-                    <Text h2>{truck.flightNo}</Text>
+                    <Text body3>{truck.flightNo}</Text>
                   </View>
               </View>
              {/*  <View
@@ -664,14 +664,14 @@ const [totalPieces,setTotalPieces] = useState(0)
 
               <View
                 style={{
-                  flex: 5,
+                  flex: 7,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.gray,
                   justifyContent: 'center',
-                  //alignItems: 'center',
+                  alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
-                <Text h2 primaryALS>
+                <Text body2 primaryALS>
                   {item?.mawb}/{item?.hawb}
                 </Text>
                 <View
@@ -688,7 +688,7 @@ const [totalPieces,setTotalPieces] = useState(0)
                       marginRight:SIZES.base
                     }}
                   />
-                <Text h2 primaryALS>
+                <Text body2 primaryALS>
                   {item?.flightNo}
                 </Text>
                 </View>
@@ -715,7 +715,7 @@ const [totalPieces,setTotalPieces] = useState(0)
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
-                  <Text></Text>
+                {/*   <Text></Text> */}
                 <Text h2 primaryALS>
                   {item?.piecesLoaded}/{item.pieces}
                 </Text>

@@ -190,7 +190,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
           <CheckComponent
             check={check}
             size={24}
-            color={COLORS.lightGray1}
+            color={COLORS.black}
             onPress={e => {
               ToggleCheckSearch(e);
             }}
@@ -252,7 +252,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
               <CheckComponent
                 check={item?.checkHawb}
                 size={24}
-                color={COLORS.lightGray1}
+                color={COLORS.black}
                 onPress={e => {
                   handleCheckItem(e, item);
                   //handleSeachByHawb(e)
