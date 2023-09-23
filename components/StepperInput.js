@@ -16,7 +16,7 @@ const StepperInput = ({
             style={{
                 flexDirection:'row',
                 height:60,
-                width:130,
+                width:100,
                 backgroundColor:COLORS.lightGray2,
                 ...containerStyle
             }}
@@ -29,9 +29,9 @@ const StepperInput = ({
                 }}
                 icons={icons.minus}
                 iconStyle={{
-                    height:25,
-                    width:25,
-                    tintColor: value > 1? COLORS.primary: COLORS.gray
+                    height:20,
+                    width:20,
+                    tintColor: COLORS.gray
                 }}
                 onPress={onMinus}
             />
@@ -42,7 +42,7 @@ const StepperInput = ({
                     justifyContent:'center'
                 }}
             >
-                <Text h2>{value}</Text>
+                <Text body3>{value}</Text>
             </View>
               <IconButton 
             
@@ -53,9 +53,9 @@ const StepperInput = ({
                 }}
                 icons={icons.plus}
                 iconStyle={{
-                    height:25,
-                    width:25,
-                    tintColor: COLORS.primary
+                    height:20,
+                    width:20,
+                    tintColor: COLORS.gray
                 }}
                 onPress={onAdd}
             />

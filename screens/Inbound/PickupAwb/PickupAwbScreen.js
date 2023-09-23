@@ -87,7 +87,7 @@ const PickupAwbScreen = ({navigation}) => {
           margin: SIZES.padding,
           //justifyContent:'center',
           marginTop: 70,
-          //backgroundColor:COLORS.green,
+          //backgroundColor:COLORS.yellow,
           // alignItems:"center"
         }}>
         <View
@@ -106,7 +106,7 @@ const PickupAwbScreen = ({navigation}) => {
             alignItems: 'center',
          //   borderBottomWidth: 1,
            // borderBottomColor: COLORS.secondaryALS,
-            paddingBottom: SIZES.radius,
+            //paddingBottom: SIZES.radius,
             //backgroundColor:COLORS.green,
             marginTop: SIZES.radius,
           }}>
@@ -168,7 +168,8 @@ const PickupAwbScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
-         // marginTop: SIZES.padding,
+          //backgroundColor:COLORS.green,
+          marginTop: -SIZES.base,
         }}>
         <DataRenderResult
           navigation={navigation}
@@ -213,9 +214,9 @@ const PickupAwbScreen = ({navigation}) => {
                   // justifyContent:'center',
                   // alignItems:'center'
                 }}>
-                <Text style={{}}>{truck.agentName}</Text>
-                <Text style={{}}>
-                  HAWB Pickup/Plan:{truck.hawbPickup}/{truck.hawbPlan}
+                <Text body3 primaryALS>{truck.agentName}</Text>
+                <Text body3 primaryALS>
+                  HAWB Pickup/Plan:{truck.hawbPickup} / {truck.hawbPlan}
                 </Text>
               </View>
               <View

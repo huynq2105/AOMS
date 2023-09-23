@@ -98,7 +98,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken,appCo
             >
               <FlatList
                 data={dummyData.featuresHomeData}
-                numColumns={3}
+                numColumns={2}
                 columnWrapperStyle={{justifyContent:'space-around'}}
                 keyExtractor={(item,index)=>item.id}
                 renderItem={renderItem}

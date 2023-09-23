@@ -399,6 +399,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
       <View
         style={{
           flex: 1,
+          marginHorizontal:SIZES.base
          // marginTop: 10,
           // backgroundColor:COLORS.green,
           // width:400
@@ -406,6 +407,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           <View
               style={{
                 //marginTop: 5,
+                borderTopColor:COLORS.gray,
+                borderTopWidth:1,
+               
                 borderBottomWidth: 1,
                 borderBottomColor: COLORS.gray,
                 flexDirection: 'row',
@@ -414,6 +418,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 style={{
                   flex: 1,
                   alignItems:'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1,
+                  paddingVertical:SIZES.base,
                 //  borderRightWidth:1
 
                 }}><Text>STT</Text></View>
@@ -422,6 +430,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>DO No</Text>
               </View>
@@ -430,6 +441,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>Time PDA</Text>
               </View>
@@ -438,6 +452,11 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 2,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1,
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                 }}>
                 <Text> Loaded</Text>
               </View>
@@ -460,13 +479,14 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           
           renderFooter={
             <LineDivider
-              lineStyle={{backgroundColor: COLORS.secondaryALS, height: 2}}
+              lineStyle={{backgroundColor: COLORS.gray, height: 2}}
             />
           }
           render={(truck,index) => (
             <View
               style={{
                 flexDirection: 'row',
+                backgroundColor: index%2===1? COLORS.lightGray1: null
               }}>
               <View
                 style={{
@@ -474,10 +494,12 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   paddingVertical: SIZES.radius,
                   justifyContent:'center',
                   alignItems:'center',
-                  borderRightWidth: 1,
-                  borderRightColor: COLORS.gray,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  
+                 
                 }}>
-               <Text>{index + 1}</Text>
+               <Text body3>{index + 1}</Text>
               </View>
 
               <View
@@ -488,33 +510,32 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
-                <Text h3 primaryALS>
+                <Text body3 primaryALS>
                   {truck.poNumber}
                 </Text>
               </View>
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                 
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
-                <Text h3 primaryALS>
+                <Text body3 primaryALS>
                   {FORMAT_TIME(truck.date)}
                 </Text>
               </View>
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
-                <Text h2 primaryALS>
+                <Text body3 primaryALS>
                   {truck.piecesLoaded}
                 </Text>
               </View>
@@ -523,6 +544,78 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         />
       </View>
     );
+  }
+  function renderStatus(status) {
+    console.log('da chay vao status', status);
+    if (
+      status === 'Ready to load' ||
+      status === 'Loading' ||
+      status === 'Closed'
+    ) {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.gray,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.black,
+            // flex:1
+          }}>
+          <Text body3 white>
+            {status}
+          </Text>
+        </View>
+      );
+    }
+    if (
+      status === 'Transit To Warehose' ||
+      status === 'Arrived To WareHouse' ||
+      status === 'Arrived Warehouse' ||
+      status === 'Unloading' ||
+      status === 'Arrived Terminal' ||
+      status === 'TRANSIT TO FACTORY' ||
+      status === 'ARRIVED FACTORY' ||
+      status === 'In Transit'
+    ) {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.secondaryALS,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            // flex:1
+          }}>
+          <Text body3 white>
+            {status}
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.green,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            //  flex:1
+          }}>
+          <Text body3 white>
+            Completed
+          </Text>
+        </View>
+      );
+    }
   }
   function renderDetail() {
     return (
@@ -534,9 +627,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           justifyContent:'space-around'
         }}>
        
-          <Text h3>W.H: <Text red h3>    {truck?.warehousePickup}</Text></Text>
+          <Text h3>W.H: <Text body3>    {truck?.warehousePickup}</Text></Text>
           {/* <Text h3>Pieces: <Text red h3>{truckDetail?.countPcsLoaded}</Text></Text> */}
-          <Text h3>Serial No: <Text red h3>{serialNo}</Text></Text>
+          <Text h3>Seal Number: <Text body3>{serialNo}</Text></Text>
         
       </View>
     );
@@ -824,7 +917,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          marginTop: Platform.OS === 'android' ? 80 : 40,
+          marginTop: Platform.OS === 'android' ? 60 : 40,
           //backgroundColor: COLORS.green,
         }}>
         <View
@@ -835,35 +928,21 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             alignItems: 'center',
           }}>
           <Image
-            source={icons.truck}
+            source={icons.truckLeft}
             style={{
               width: 40,
               height: 40,
-              tintColor: COLORS.primaryALS,
+              //tintColor: COLORS.primaryALS,
             }}
           />
           <Text h3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             {truck?.vehicRegNo}
           </Text>
           <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
-            Total:{totalPieces}pcs
+            Total: {totalPieces} Pcs
           </Text>
         
-          <View
-            style={{
-              marginLeft: SIZES.base,
-              backgroundColor:
-                truck?.status === 'Ready to load'
-                  ? COLORS.orange
-                  : truck?.status === 'Closed'
-                  ? COLORS.red
-                  : COLORS.green,
-              padding: SIZES.base,
-              //padding: 3,pa
-              borderRadius: 5,
-            }}>
-            <Text white>{truck.status}</Text>
-          </View>
+          {renderStatus(truck.status)}
         </View>
         <View>
       {/*   <Text h3 primaryALS style={{marginLeft: SIZES.base}}>

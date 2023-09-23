@@ -21,7 +21,7 @@ const screens = {
     OutboundNav: {label: 'Outbound', requiredPolicy:'', iconName: 'flight', o: true},
     InboundNav: {label: 'Inbound', requiredPolicy:'CCC', iconName: 'star', o: true},
     QuickScan: {label: 'Quick Scan', requiredPolicy:'CCC', iconName: 'search', o: true},
-    Inventory: {label: 'Inventory', requiredPolicy:'CCC', iconName: 'boxes', o: true},
+    InventoryNav: {label: 'Inventory', requiredPolicy:'CCC', iconName: 'home', o: true},
     Report: {label: 'Reports', requiredPolicy:'CCC', iconName: 'chart-bar', o: true},
     Track: {label: 'Track & Trace', requiredPolicy:'', iconName: 'search', o: true},
     // Users: {

@@ -42,6 +42,57 @@ const TruckLoadingScreen = ({navigation}) => {
       screenParent: 'TruckLoading',
     });
   };
+  function renderStatus(status){
+    console.log('da chay vao status',status)
+    if(status==='Ready to load'|| status==='Loading' || status ==='Closed'){
+      return(
+        <View
+          style={{
+            justifyContent:'center',
+            alignItems:'center',
+            backgroundColor:COLORS.gray,
+            marginVertical:13,
+            flex:1
+          }}
+        >
+          <Text body3 white>{status}</Text>
+        </View>
+      )
+    }
+    if(status==='Transit To Warehose' || status==='Arrived To WareHouse' 
+    || status ==='Arrived Warehouse' || status==='Unloading' || status==='Arrived Terminal' 
+    || status==='TRANSIT TO FACTORY' || status==='ARRIVED FACTORY' || status === 'In Transit'){
+      return(
+        <View
+          style={{
+            justifyContent:'center',
+            alignItems:'center',
+            backgroundColor:COLORS.secondaryALS,
+            marginVertical:13,
+            flex:1
+          }}
+        >
+          <Text body3 white>{status}</Text>
+        </View>
+      )
+    }
+    else{
+      return(
+        <View
+        style={{
+          justifyContent:'center',
+          alignItems:'center',
+          backgroundColor:COLORS.green,
+          marginVertical:13,
+          flex:1
+        }}
+      >
+        <Text body3 white>Completed</Text>
+      </View>
+      )
+    
+    }
+  }
   function renderHeader() {
     return (
       <Header
@@ -105,69 +156,7 @@ const TruckLoadingScreen = ({navigation}) => {
               }}
             />
           }
-          /* renderHeader={
-            <View
-              style={{
-                flexDirection: 'row',
-                borderTopColor: COLORS.secondaryALS,
-                borderTopWidth: 1,
-              }}>
-              <View
-                style={{
-                  flex: 1,
-                }}></View>
-              <View
-                style={{
-                  flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  paddingHorizontal: SIZES.radius,
-                  paddingVertical: SIZES.base,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>Truck No</Text>
-              </View>
-              <View
-                style={{
-                  flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  // paddingHorizontal: SIZES.radius,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text body3>W.H</Text>
-              </View>
-              <View
-                style={{
-                  flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  paddingHorizontal: SIZES.radius,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>Time</Text>
-              </View>
-              <View
-                style={{
-                  flex: 5,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  // marginRight
-                }}>
-                <Text
-                  style={{
-                    marginRight: SIZES.padding,
-                  }}>
-                  Status
-                </Text>
-              </View>
-            </View>
-          } */
+         
           fetchFn={getTruckLoading}
           render={(truck, index) => (
             <TouchableOpacity
@@ -190,39 +179,28 @@ const TruckLoadingScreen = ({navigation}) => {
                   //  paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
                 }}>
-                <Text>{index + 1}</Text>
+                <Text primaryALS body3>{index + 1}</Text>
               </View>
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  paddingHorizontal: SIZES.radius,
+                
                   paddingVertical: SIZES.radius,
+                
+                  flexDirection:'row',
+               
+                  alignItems:'center'
                 }}>
-                <Text primaryALS>{truck.vehicRegNo}</Text>
+                <Image source={icons.truckLeft} style={{
+                  width:30,
+                  height:30,  
+                  marginRight:4
+                  //tintColor:COLORS.primaryALS
+                }} />
+                <Text primaryALS body3>{truck.vehicRegNo}</Text>
               </View>
-              <View
-                style={{
-                  flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  alignItems: 'center',
-                  //paddingHorizontal: SIZES.radius,
-                  justifyContent: 'center',
-                }}>
-                <Text> {truck.warehousePickup}</Text>
-              </View>
-              {/* <View
-                style={{
-                  flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  paddingHorizontal: SIZES.radius,
-                  justifyContent: 'center',
-                }}>
-                <Text> {FORMAT_TIME(truck.loadingArrivalDate)}</Text>
-              </View> */}
+             
+             
 
               <View
                 style={{
@@ -231,34 +209,7 @@ const TruckLoadingScreen = ({navigation}) => {
                  // borderLeftWidth: 1,
                  // borderLeftColor: COLORS.secondaryALS,
                 }}>
-                <View
-                  style={{
-                    // marginLeft: SIZES.base,
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    // padding: 5,
-                    //  borderRadius: 5,
-                    //justifyContent: 'center',
-                    //alignItems: 'center',
-                  }}>
-                  <Text
-                    style={{
-                      //flex: 1,
-                      color:
-                        truck?.status === 'Ready to load'
-                          ? COLORS.gray
-                          : truck?.status === 'Loading'
-                          ? COLORS.red
-                          : truck?.status === 'Transit To WareHouse'
-                          ? COLORS.yellow
-                          : truck?.status === 'Closed'
-                          ? COLORS.gray
-                          : COLORS.green,
-                    }}>
-                    {truck.status}
-                  </Text>
-                </View>
+                 {renderStatus(truck?.status)}
                 <View
                   style={{
                     justifyContent: 'center',
@@ -290,20 +241,24 @@ const TruckLoadingScreen = ({navigation}) => {
           alignItems: 'center',
           flexDirection: 'row',
         }}>
-        <Text h3 primaryALS>
+        <Text body2 primaryALS style={{
+            fontSize:19
+          }}>
           Transit Date
         </Text>
         <View
           style={{
             height: 40,
-            width: 100,
+            width: 140,
             borderWidth: 1,
-            borderColor: COLORS.gray,
+            borderColor: COLORS.green,
             marginLeft: SIZES.base,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text>{DMY_FORMAT(filterDate.val)}</Text>
+          <Text body2 style={{
+            fontSize:19
+          }}>{DMY_FORMAT(filterDate.val)}</Text>
         </View>
         <TouchableOpacity
           style={{

@@ -221,7 +221,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
 
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Add Truck And"
+        title="Add Truck"
         rightComponent={
           <View
             style={{
@@ -345,7 +345,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                   }}
                 />
               </View>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   position: 'absolute',
                   right: 70,
@@ -360,7 +360,7 @@ const AddTruckLoadingAndScreen = ({startLoading, stopLoading, navigation}) => {
                     tintColor: COLORS.primaryALS,
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <Text

@@ -25,6 +25,7 @@ const AuthLayout = ({title, subTitle, titleContailner, children}) => {
       <SafeAreaView
         style={{
           flex: 1,
+          backgroundColor: COLORS.white,
           //backgroundColor:COLORS.red
           //paddingTop: SIZES.padding,
         }}>
@@ -35,50 +36,29 @@ const AuthLayout = ({title, subTitle, titleContailner, children}) => {
             flex: 1,
             //paddingHorizontal: SIZES.padding,
           }}>
-          <ImageBackground
-        source={images.bg_login}
-        resizeMode="cover"
-        style={{
-          flex: 1,
-          paddingHorizontal:SIZES.padding
-          //justifyContent: 'center',
-        }}>
-            <View
-            style={{
-                flex:1,
-                //backgroundColor:COLORS.green,
-                justifyContent:'center',
-                alignItems:'center'
-            }}
-            >
-   {/* Logo */}
-             <Image
-              source={images.bg_img}
+          <View
+          style={{      
+            alignItems:'center'
+          }}
+           >
+            {/* Logo */}
+            <Image
+              source={images.logoALS_full}
               resizeMode="contain"
               style={{
-                width: 50,
-                height: 50, 
-                marginTop:SIZES.padding
+                width: 150,
+                height: 100,
                  //backgroundColor:COLORS.green
               }}
             />
             {/* Title */}
-            <Text h2 white style={{
-              marginTop:10
-            }}>{title}</Text>
-             <Text white body3>{subTitle}</Text> 
+          {/*   <Text h2 style={{
+              marginTop:-20
+            }}>{title}</Text> */}
+            {/* <Text body3>{subTitle}</Text> */}
             {/* Subtitle */}
-            </View>
-         
-            <View
-            style={{
-                flex:3,
-               // backgroundColor:COLORS.lightOrange
-            }}
-          >
-             {children}
           </View>
-          </ImageBackground>
+          {children}
        
          
         </KeyboardAwareScrollView>

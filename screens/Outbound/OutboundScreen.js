@@ -1,13 +1,14 @@
 import React from 'react';
 import {
   View,
-  Text,
+ 
   StyleSheet,
   Platform,
   FlatList,
   TouchableOpacity,
   Image,
 } from 'react-native';
+import Text from '../../constants/Text'
 import Header from '../../components/Header';
 import {SIZES, COLORS} from '../../constants/theme';
 import dummyData from '../../constants/dummyData';
@@ -19,6 +20,21 @@ import AppActions from '../../stores/actions/AppActions';
 import { connectToRedux } from '../../utils/ReduxConnect';
 const OutboundScreen = ({navigation,appConfig}) => {
   const OutboundItemWithPermission = withPermission(OutboundItem,null,appConfig?.auth);
+  const renderItem = ({item, index}) => (
+    <OutboundItemWithPermission
+      customContainerStyle={{
+       // borderWidth: 1,
+        //boderColor: COLORS.secondaryALS,
+        marginLeft: SIZES.base,
+      }}
+      policyKey = {item.requiredPolicy}
+      image={item.icon}
+      title={item.description}
+      onPress={() =>
+        navigation.navigate(item.srceenNavigagor, {screen: item.screenName})
+      }
+    />
+  );
   function renderHeader() {
     return (
       <Header
@@ -59,37 +75,76 @@ const OutboundScreen = ({navigation,appConfig}) => {
       />
     );
   }
-  function renderContent() {
-    const renderItem = ({item, index}) => (
-      <OutboundItemWithPermission
-        customContainerStyle={{
-         // borderWidth: 1,
-          //boderColor: COLORS.secondaryALS,
-          marginLeft: SIZES.base,
+  function renderOffAirportTerminal(){
+    return(
+      <FlatList
+        data={dummyData.featuresExpData_OffAirport}
+        numColumns={2}
+        keyExtractor={(item, index) => item.id}
+        listKey={(item, index) => 'D' + index.toString()}
+        renderItem={renderItem}
+        style={{
+          marginTop: SIZES.base,
+          //padding: SIZES.base,
+          // backgroundColor:COLORS.green,
+          marginBottom: SIZES.base,
         }}
-        policyKey = {item.requiredPolicy}
-        image={item.icon}
-        title={item.description}
-        onPress={() =>
-          navigation.navigate(item.srceenNavigagor, {screen: item.screenName})
-        }
       />
-    );
+    )
+  }
+  function renderAirportTerminal(){
+    return(
+      <FlatList
+      data={dummyData.featuresExpData_Airport}
+      numColumns={2}
+      keyExtractor={(item, index) => item.id}
+      listKey={(item, index) => 'D' + index.toString()}
+      renderItem={renderItem}
+      style={{
+        marginTop: SIZES.base,
+        //padding: SIZES.base,
+        // backgroundColor:COLORS.green,
+        marginBottom: SIZES.base,
+      }}
+    />
+    )
+  }
+  function renderContent() {
+   
     return (
       <View
         style={{
           flex: 1,
         }}>
         <FlatList
-          columnWrapperStyle={{justifyContent:'space-around'}}
-          data={dummyData.featuresExpData}
-          numColumns={3}
+        ListHeaderComponent={
+          <View
+          style={{
+           // marginTop: SIZES.padding,
+           marginBottom:SIZES.base,
+            paddingHorizontal: SIZES.base,
+          }}>
+          <Text h3>Factory:</Text>
+        </View>
+        }
+       /*    columnWrapperStyle={{justifyContent:'space-around'}} */
+          data={dummyData.featuresExpData_Factory}
+          numColumns={2}
           keyExtractor={(item, index) => item.id}
           renderItem={renderItem}
           style={{
-            marginTop: SIZES.padding,
+            marginTop: SIZES.base,
             padding: SIZES.base,
           }}
+          ListFooterComponent={
+            <View>
+              <Text h3>Off-Airport Terminal:</Text>
+              {renderOffAirportTerminal()}
+              <Text h3>Airport Terminal:</Text>
+              {renderAirportTerminal()}
+            </View>
+         
+          }
         />
       </View>
     );

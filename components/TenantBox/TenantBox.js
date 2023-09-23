@@ -49,7 +49,7 @@ const TenantBox = ({
             flexDirection:'row'
           }}
         >
-          <Text  style={styles.title}>Agent</Text>
+          <Text  style={styles.title}>Company</Text>
           <Text style={styles.tenant}>
             {tenant.name
               ? tenant.name
@@ -122,11 +122,11 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center'
   },
-  tenant: {color: 'white',   fontWeight: '800',},
+  tenant: {color: COLORS.primaryALS,fontSize:16,   fontWeight: '800',},
   title: {
     marginRight: 10,
-    color: 'white',
-    fontSize: 13,
+    color: COLORS.primaryALS,
+    fontSize: 14,
     fontWeight: '600',
     //textTransform: 'uppercase',
   },

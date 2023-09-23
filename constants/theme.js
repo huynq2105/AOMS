@@ -65,17 +65,17 @@ export const SIZES = {
   height,
 };
 export const FONTS = {
-  largeTitle: {fontFamily: 'OpenSans-Black', fontSize: SIZES.largeTitle},
-  h1: {fontFamily: 'OpenSans-Bold', fontSize: SIZES.h1, lineHeight: 36},
-  h2: {fontFamily: 'OpenSans-Bold', fontSize: SIZES.h2, lineHeight: 30},
-  h3: {fontFamily: 'OpenSans-Bold', fontSize: SIZES.h3, lineHeight: 22},
-  h4: {fontFamily: 'OpenSans-Bold', fontSize: SIZES.h4, lineHeight: 22},
-  h5: {fontFamily: 'OpenSans-Bold', fontSize: SIZES.h5, lineHeight: 22},
-  body1: {fontFamily: 'OpenSans-Regular', fontSize: SIZES.body1, lineHeight: 36},
-  body2: {fontFamily: 'OpenSans-Regular', fontSize: SIZES.body2, lineHeight: 30},
-  body3: {fontFamily: 'OpenSans-Regular', fontSize: SIZES.body3, lineHeight: 22},
-  body4: {fontFamily: 'OpenSans-Regular', fontSize: SIZES.body4, lineHeight: 22},
-  body5: {fontFamily: 'OpenSans-Regular', fontSize: SIZES.body5, lineHeight: 22},
+  largeTitle: {fontFamily: 'OpenSans-Bold', fontSize: SIZES.largeTitle},
+  h1: {fontFamily: 'montserrat_bold', fontSize: SIZES.h1, lineHeight: 36},
+  h2: {fontFamily: 'montserrat_bold', fontSize: SIZES.h2, lineHeight: 30},
+  h3: {fontFamily: 'montserrat_bold', fontSize: SIZES.h3, lineHeight: 22},
+  h4: {fontFamily: 'montserrat_bold', fontSize: SIZES.h4, lineHeight: 22},
+  h5: {fontFamily: 'montserrat_bold', fontSize: SIZES.h5, lineHeight: 22},
+  body1: {fontFamily: 'montserrat_regular', fontSize: SIZES.body1, lineHeight: 36},
+  body2: {fontFamily: 'montserrat_regular', fontSize: SIZES.body2, lineHeight: 30},
+  body3: {fontFamily: 'montserrat_regular', fontSize: SIZES.body3, lineHeight: 22},
+  body4: {fontFamily: 'montserrat_regular', fontSize: SIZES.body4, lineHeight: 22},
+  body5: {fontFamily: 'montserrat_regular', fontSize: SIZES.body5, lineHeight: 22},
 };
 
 const appTheme = {COLORS, SIZES, FONTS};
