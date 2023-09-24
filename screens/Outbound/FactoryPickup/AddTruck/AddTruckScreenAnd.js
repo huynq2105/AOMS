@@ -128,6 +128,7 @@ const AddTruckScreenAnd = ({startLoading, stopLoading, navigation}) => {
               
                 getFactory({maxResultCount: 1000, skipCount: 0,KundCustomerTypeCode:'FACTORY'}).then(
                   ({items, totalCount: total}) => {
+                    console.log('danh sach Factory',items)
                     const loadFactory = [];
                     items.forEach((item, index) => {
                       return loadFactory.push({

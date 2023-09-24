@@ -84,6 +84,7 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
         style={{
           flex: 1,
           marginTop: SIZES.base + 60,
+          marginHorizontal:SIZES.base
           // marginHorizontal:SIZES.base
         }}>
         <DataRenderResult
@@ -94,7 +95,7 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
             <View
               style={{
                 borderBottomWidth: 1,
-                borderBottomColor: COLORS.secondaryALS,
+                borderBottomColor: COLORS.gray,
               }}
             />
           }
@@ -102,22 +103,26 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
             <View
               style={{
                 flexDirection: 'row',
-                borderTopColor: COLORS.secondaryALS,
+                borderTopColor: COLORS.gray,
                 borderTopWidth: 1,
               }}>
               <View
                 style={{
                   flex: 1,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}></View>
               <View
                 style={{
                   flex: 4,
                   borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                   paddingHorizontal: 5,
                   paddingVertical: SIZES.base,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>Mawb</Text>
               </View>
@@ -125,10 +130,11 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
                 style={{
                   flex: 2,
                   borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
-                  //paddingHorizontal: SIZES.base,
+                  borderLeftColor: COLORS.gray,
+                  //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text body3>Pieces</Text>
               </View>
@@ -136,10 +142,11 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
                 style={{
                   flex: 2,
                   borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                   //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>Dest</Text>
               </View>
@@ -147,9 +154,12 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
                 style={{
                   flex: 2,
                   borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  backgroundColor:COLORS.lightGray1
                   // marginRight
                 }}>
                 <Text
@@ -165,10 +175,11 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
           render={(awb, index) => (
             <TouchableOpacity
               style={{
+                backgroundColor:index%2 == 1? COLORS.lightGray1 : null,
                 // paddingVertical: SIZES.radius,
                 // paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 flexDirection: 'row',
                 justifyContent: 'center',
                 // alignItems: 'center',
@@ -177,8 +188,8 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
               <View
                 style={{
                   flex: 1,
-                  //borderLeftWidth: 1,
-                  //borderLeftColor: COLORS.secondaryALS,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
                   alignItems: 'center',
                   //  paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -188,19 +199,17 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
               <View
                 style={{
                   flex: 4,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                
                   paddingHorizontal: 5,
                   paddingVertical: SIZES.radius,
                   alignItems:'center'
                 }}>
-                <Text primaryALS>{awb.mawbNo}</Text>
+                <Text body3 primaryALS>{awb.mawbNo}</Text>
               </View>
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+               
                   alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -211,8 +220,7 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                
                   alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -224,8 +232,9 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
                 style={{
                   flexDirection: 'row',
                   flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderRightWidth: 1,
+                  alignItems:'center',
+                  borderRightColor: COLORS.gray,
                   justifyContent: 'center',
                 }}>
                 <View

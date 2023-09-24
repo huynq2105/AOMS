@@ -654,7 +654,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           <CheckComponent
             check={check}
             size={24}
-            color={COLORS.lightGray1}
+            color={COLORS.gray}
             onPress={e => {
               ToggleCheckSearch(e);
             }}
@@ -699,20 +699,29 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           ListHeaderComponent={
             <View
               style={{
-                marginTop: SIZES.padding,
-                borderBottomWidth: 1,
-                borderBottomColor: COLORS.gray,
-                flexDirection: 'row',
+                marginTop: SIZES.radius,
+            borderBottomWidth: 1,
+            borderBottomColor: COLORS.gray,
+            flexDirection: 'row',
+            borderTopColor: COLORS.gray,
+            borderTopWidth: 1,
               }}>
               <View
                 style={{
                   flex: 1,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1,
+                  paddingVertical:SIZES.base * 2
                 }}></View>
               <View
                 style={{
                   flex: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderLeftWidth: 1,
+              borderLeftColor: COLORS.gray,
+              backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>DO No</Text>
               </View>
@@ -721,6 +730,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>Time PDA</Text>
               </View>
@@ -729,12 +741,22 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 2,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text> Loaded</Text>
               </View>
               <View
                 style={{
                   flex: 1,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                 }}>
                 <Text>Edit</Text>
               </View>
@@ -767,17 +789,19 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 flexDirection: 'row',
                 backgroundColor: item?.checkPo
                   ? COLORS.transparentprimaryALS
-                  : null,
+                  :index%2 == 1? COLORS.lightGray1 : null,
               }}>
               <View
                 style={{
                   flex: 1,
                   paddingVertical: SIZES.radius,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
                 }}>
                 <CheckComponent
                   check={item?.checkPo}
                   size={24}
-                  color={COLORS.lightGray1}
+                  color={COLORS.gray}
                   onPress={e => {
                     handleCheckItem(e, item);
                     //handleSeachByHawb(e)
@@ -788,8 +812,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                 
                   justifyContent: 'center',
                   alignItems: 'center',
                   //backgroundColor:COLORS.green,
@@ -801,8 +824,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                 
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
@@ -814,8 +836,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+               
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
@@ -826,8 +847,8 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               </View>
               <TouchableOpacity
                 style={{
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,

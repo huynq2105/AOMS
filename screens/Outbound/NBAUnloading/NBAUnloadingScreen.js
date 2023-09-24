@@ -171,12 +171,12 @@ const NBAUnloadingScreen = ({navigation}) => {
       {renderHeader()}
       <View
         style={{
-          marginTop: Platform.OS === 'android' ? 80 : 60,
+          marginTop: 70,
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
         }}>
-        <Text h3 primaryALS>
+        <Text body3 primaryALS>
           Pickup Date
         </Text>
         <View
@@ -184,7 +184,7 @@ const NBAUnloadingScreen = ({navigation}) => {
             height: 40,
             width: 100,
             borderWidth: 1,
-            borderColor: COLORS.gray,
+            borderColor: COLORS.green,
             marginLeft: SIZES.base,
             justifyContent: 'center',
             alignItems: 'center',

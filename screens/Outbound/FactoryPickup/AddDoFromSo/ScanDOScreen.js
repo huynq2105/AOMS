@@ -40,6 +40,7 @@ import TextButton from '../../../../components/TextButton';
 import LineDivider from '../../../../components/LineDivider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import EditPoModal from '../TruckDetail/EditPoModal';
+import TruckStatus from '../../../../components/TruckStatus';
 const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   const truck = route?.params?.truck ?? {};
 
@@ -56,15 +57,17 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
   const loadPoDoByVehicle = () => {
     getPoDoByVehicle({maxResultCount: 1000, VehicleIsn: truck.id})
       .then(({items, totalCount}) => {
+        console.log('Items======================',items)
         items.forEach((item, index) => {
           const result = [];
           let piece = 0;
+         
           items.forEach((item, index) => {
             piece += item.piecesLoaded;
             const po = {
               vehicleDetailId: item.vehicleDetailId,
               id: item.doId,
-              time: item.time,
+              time: item.date,
               checkPo: false,
               poNumber: item.poNumber,
               piecesLoaded: item.piecesLoaded,
@@ -78,6 +81,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
       })
       .catch(e => console.log(e));
   };
+  console.log('List Po======================',listPo)
   const handleAddSo = () => {
     if (searchText.length === 0) {
       Alert.alert('DO ko được rỗng');
@@ -314,7 +318,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
           <CheckComponent
             check={check}
             size={24}
-            color={COLORS.lightGray1}
+            color={COLORS.gray}
             onPress={e => {
               ToggleCheckSearch(e);
             }}
@@ -361,16 +365,26 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
             borderBottomWidth: 1,
             borderBottomColor: COLORS.gray,
             flexDirection: 'row',
+            borderTopColor: COLORS.gray,
+            borderTopWidth: 1,
+           
           }}>
           <View
             style={{
               flex: 1,
+              borderLeftWidth: 1,
+              borderLeftColor: COLORS.gray,
+              backgroundColor:COLORS.lightGray1,
+              paddingVertical:SIZES.base * 2
             }}></View>
           <View
             style={{
               flex: 3,
               justifyContent: 'center',
               alignItems: 'center',
+              borderLeftWidth: 1,
+              borderLeftColor: COLORS.gray,
+              backgroundColor:COLORS.lightGray1
             }}>
             <Text>DO No</Text>
           </View>
@@ -379,6 +393,9 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               flex: 3,
               justifyContent: 'center',
               alignItems: 'center',
+              borderLeftWidth: 1,
+              borderLeftColor: COLORS.gray,
+              backgroundColor:COLORS.lightGray1
             }}>
             <Text>Time PDA</Text>
           </View>
@@ -387,12 +404,22 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               flex: 2,
               justifyContent: 'center',
               alignItems: 'center',
+              borderLeftWidth: 1,
+              borderLeftColor: COLORS.gray,
+              backgroundColor:COLORS.lightGray1
             }}>
             <Text> Loaded</Text>
           </View>
           <View
             style={{
               flex: 1,
+              borderLeftWidth: 1,
+              borderLeftColor: COLORS.gray,
+              backgroundColor:COLORS.lightGray1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRightWidth: 1,
+              borderRightColor: COLORS.gray,
             }}>
             <Text>Edit</Text>
           </View>
@@ -423,19 +450,23 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
             <View
               style={{
                 flexDirection: 'row',
-                backgroundColor: item?.checkPo
+                backgroundColor:item?.checkPo
+                   ? COLORS.transparentprimaryALS:index%2 == 1? COLORS.lightGray1 : null,
+          /*       backgroundColor: item?.checkPo
                   ? COLORS.transparentprimaryALS
-                  : null,
+                  : null, */
               }}>
               <View
                 style={{
                   flex: 1,
                   paddingVertical: SIZES.radius,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
                 }}>
                 <CheckComponent
                   check={item?.checkPo}
                   size={24}
-                  color={COLORS.lightGray1}
+                  color={COLORS.gray}
                   onPress={e => {
                     handleCheckItem(e, item);
                     //handleSeachByHawb(e)
@@ -446,8 +477,6 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
                   //backgroundColor:COLORS.green,
@@ -459,21 +488,17 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
                 <Text h3 primaryALS>
-                  {FORMAT_TIME(item?.date)}
+                  {FORMAT_TIME(item?.time)}
                 </Text>
               </View>
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
@@ -484,8 +509,8 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
               </View>
               <TouchableOpacity
                 style={{
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
@@ -549,7 +574,7 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
       {renderHeader()}
       <View
         style={{
-          marginTop: 50,
+          marginTop: 60,
           flex: 1,
           //backgroundColor: COLORS.green,
         }}>
@@ -569,31 +594,37 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
             }}
           />
           <Text h3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
-            {truck?.vehicRegNo}
+            {truck?.vehicRegNo} 
+              
+            
           </Text>
+          {/* <Text h3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
+           {truck?.warehousePickup}
+              
+            
+          </Text> */}
           <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
-            Total:{totalPieces}pcs
+            Total:
+            <Text h3 primaryALS>
+              {totalPieces}
+            </Text>{' '}
+            Pcs
           </Text>
-
           <View
             style={{
-              marginLeft: SIZES.base,
-              backgroundColor:
-                truck?.status === 'Ready to load'
-                  ? COLORS.orange
-                  : truck?.status === 'Closed'
-                  ? COLORS.red
-                  : COLORS.green,
-              padding: SIZES.base,
-              //padding: 3,pa
-              borderRadius: 5,
+              flex: 3,
             }}>
-            <Text white>{truck.status}</Text>
+            <TruckStatus
+              status={truck?.status}
+              customContainerStyle={
+                {
+                  //marginHorizontal:SIZES.radius
+                }
+              }
+            />
           </View>
         </View>
-        <Text h3 primaryALS style={{marginLeft: SIZES.base}}>
-          {truck?.warehousePickup}
-        </Text>
+
         {renderLoad()}
       </View>
       <EditPoModal

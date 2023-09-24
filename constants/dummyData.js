@@ -373,16 +373,16 @@ const featuresExpData_Factory = [
       srceenNavigagor: 'TruckLoading',
     },
   
-    {
-      id: 303,
-      icon: icons.unloading,
-      color: COLORS.yellow,
-      description: 'Truck Unloading',
-      bgColor:['#7cf1fb', '#4ebefd'],
-      backgroundColor: COLORS.lightyellow,
-      screenName: 'TruckUnloadingScreen',
-      srceenNavigagor: 'TruckUnloading',
-    },
+    // {
+    //   id: 303,
+    //   icon: icons.unloading,
+    //   color: COLORS.yellow,
+    //   description: 'Truck Unloading',
+    //   bgColor:['#7cf1fb', '#4ebefd'],
+    //   backgroundColor: COLORS.lightyellow,
+    //   screenName: 'TruckUnloadingScreen',
+    //   srceenNavigagor: 'TruckUnloading',
+    // },
   ]
   const featuresImpData_OffAirport = [
     {

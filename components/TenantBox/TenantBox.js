@@ -13,6 +13,7 @@ import {connectToRedux} from '../../utils/ReduxConnect';
 import {SIZES, COLORS, FONTS} from '../../constants/theme';
 import TextButton from '../TextButton';
 import {getTenant} from '../../api/AccountAPI';
+import {Picker} from '@react-native-picker/picker';
 import {createTenantSelector} from '../../stores/selectors/PersistentStorageSelectors'
 import PersistentStorageActions from '../../stores/actions/PersistentStorageActions';
 const TenantBox = ({
@@ -22,6 +23,8 @@ const TenantBox = ({
   toggleTenantSelection,
 }) => {
   const [tenantName, setTenantName] = useState(tenant.name);
+  console.log('tenantName=========================',tenantName)
+  const [listTenant, setListTenant] = useState([{id: 0, label: 'ALSB', value: 'ALSB'},{id: 1, label: 'ALSW', value: 'ALSW'},{id: 2, label: 'ALSE', value: 'ALSE'},{id: 3, label: 'CLC', value: 'CLC'}]);
   const findTenant = () => {
     if (!tenantName) {
       setTenant({});
@@ -68,15 +71,37 @@ const TenantBox = ({
         </TouchableOpacity>
       </View>
       {showTenantSelection ? (
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1,
+        paddingHorizontal:SIZES.padding}}>
             <Text>Name</Text>
-            <TextInput style={{
+            {/* <TextInput style={{
                  backgroundColor:COLORS.lightGray2,
                  height: 55,
                  marginTop: SIZES.base,
                  paddingHorizontal: SIZES.padding,
                  borderRadius: SIZES.radius,
-            }} value={tenantName} onChangeText={setTenantName}  autoCapitalize='characters' />
+            }} value={tenantName} onChangeText={setTenantName}  autoCapitalize='characters' /> */}
+            <Picker
+                  mode="dropdown"
+                  style={{
+                    borderColor: COLORS.gray,
+                    borderWidth:1,
+                    color: COLORS.gray
+                  }}
+                  selectedValue={tenantName}
+                  onValueChange={(itemValue, itemIndex) =>{
+                    setTenantName(itemValue)
+                  }
+                   
+                  }>
+                  {listTenant.map(it => (
+                    <Picker.Item
+                      key={it.id.toString()}
+                      label={it.label}
+                      value={it.value}
+                    />
+                  ))}
+                </Picker>
           <View style={{ flexDirection: 'row', justifyContent:'space-around',marginTop:SIZES.padding }}>
             <TextButton buttonContainerStyle={{
                 backgroundColor:

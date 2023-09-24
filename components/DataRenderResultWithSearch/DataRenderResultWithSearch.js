@@ -32,6 +32,7 @@ function DataRenderResultWithSearch({
   fetchFn,
   render,
   params,
+  searchText,
   renderFooter,
   renderHeader,
   applyFunc = ()=>{},
@@ -47,7 +48,7 @@ function DataRenderResultWithSearch({
   const [buttonLoading, setButtonLoading] = useState(false);
   const [skipCount, setSkipCount] = useState(0);
   const [filter, setFilter] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false);
   const fetch = (skip = 0, isRefreshingActive = true) => {
     if (isRefreshingActive) setLoading(true);
     return fetchFn({...params, maxResultCount, skipCount: skip})
@@ -77,7 +78,20 @@ function DataRenderResultWithSearch({
       setButtonLoading(false),
     );
   };
-
+  useEffect(() => {
+    if(searchText !==''){
+    function searchFetch() {
+      console.log('searchText Change!')
+      setSearchLoading(true);
+      setIsLoading(true);
+      return fetch(0, false).finally(() =>
+        setTimeout(() => {
+          setSearchLoading(false)}, 150),
+      );
+    }
+    debounceAdv(searchFetch, debounceTime)();
+  }
+  }, [searchText,type,filterByHawb]);
   useFocusEffect(
     useCallback(() => {
       setSkipCount(0);
