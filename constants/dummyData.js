@@ -25,7 +25,7 @@ const featuresHomeData = [
   
     {
       id: 103,
-      icon: icons.awb,
+      icon: icons.awb_inventory,
       color: COLORS.yellow,
       description: 'INVENTORY',
       bgColor:['#7cf1fb', '#4ebefd'],

@@ -67,7 +67,7 @@ const TruckLoadingScreen = ({navigation}) => {
           style={{
             justifyContent:'center',
             alignItems:'center',
-            backgroundColor:COLORS.secondaryALS,
+            backgroundColor:COLORS.gray,
             marginVertical:13,
             flex:1
           }}
@@ -152,7 +152,7 @@ const TruckLoadingScreen = ({navigation}) => {
             <View
               style={{
                 borderBottomWidth: 1,
-                borderBottomColor: COLORS.secondaryALS,
+                borderBottomColor: COLORS.gray,
               }}
             />
           }
@@ -164,7 +164,7 @@ const TruckLoadingScreen = ({navigation}) => {
                 // paddingVertical: SIZES.radius,
                 // paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 flexDirection: 'row',
                 justifyContent: 'center',
                 // alignItems: 'center',
@@ -174,7 +174,7 @@ const TruckLoadingScreen = ({navigation}) => {
                 style={{
                   flex: 1,
                   //borderLeftWidth: 1,
-                  //borderLeftColor: COLORS.secondaryALS,
+                  //borderLeftColor: COLORS.gray,
                   alignItems: 'center',
                   //  paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -207,7 +207,7 @@ const TruckLoadingScreen = ({navigation}) => {
                   flexDirection: 'row',
                   flex: 5,
                  // borderLeftWidth: 1,
-                 // borderLeftColor: COLORS.secondaryALS,
+                 // borderLeftColor: COLORS.gray,
                 }}>
                  {renderStatus(truck?.status)}
                 <View
@@ -251,7 +251,7 @@ const TruckLoadingScreen = ({navigation}) => {
             height: 40,
             width: 140,
             borderWidth: 1,
-            borderColor: COLORS.green,
+            borderColor: COLORS.primaryALS,
             marginLeft: SIZES.base,
             justifyContent: 'center',
             alignItems: 'center',
@@ -270,7 +270,7 @@ const TruckLoadingScreen = ({navigation}) => {
             style={{
               width: 20,
               height: 20,
-              tintColor: COLORS.green,
+              tintColor: COLORS.primaryALS,
             }}
           />
         </TouchableOpacity>
@@ -307,7 +307,7 @@ const TruckLoadingScreen = ({navigation}) => {
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.primaryALS,
           }}
           onPress={() =>
             Platform.OS === 'ios'

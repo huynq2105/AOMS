@@ -18,7 +18,7 @@ const InventoryHomeScreen = ({navigation}) => {
   const renderItem = ({item, index}) => (
     <OutboundItem
       customContainerStyle={{
-        boderColor: COLORS.secondaryALS,
+        boderColor: COLORS.gray,
         marginLeft: SIZES.base,
       }}
       image={item.icon}
@@ -58,8 +58,8 @@ const InventoryHomeScreen = ({navigation}) => {
             <Image
               source={icons.menu}
               style={{
-                width: 20,
-                height: 20,
+                width: 24,
+                height: 24,
                 tintColor: COLORS.white,
               }}
             />

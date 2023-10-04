@@ -65,8 +65,8 @@ const OutboundScreen = ({navigation,appConfig}) => {
             <Image
               source={icons.menu}
               style={{
-                width: 20,
-                height: 20,
+                width: 24,
+                height: 24,
                 tintColor: COLORS.white,
               }}
             />

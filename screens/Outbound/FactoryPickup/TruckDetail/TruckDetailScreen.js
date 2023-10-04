@@ -46,6 +46,7 @@ import LineDivider from '../../../../components/LineDivider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import EditPoModal from './EditPoModal';
 import {useToast} from 'react-native-toast-notifications';
+import TextIconButton from '../../../../components/TextIconButton';
 
 const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   const truck = route?.params?.truck ?? {};
@@ -176,7 +177,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           style: {
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.primaryALS,
           },
           duration: 2000,
           animationType: 'slide-in',
@@ -664,7 +665,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               flexDirection: 'row',
               height: 40,
               flex: 1,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.lightGray2,
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
@@ -690,7 +691,11 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 onChangeTextHandle(text);
               }}
             />
-            <View></View>
+            {searchText !=='' && (<TouchableOpacity
+              onPress={()=>{setSearchText('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
             {/*  {appendComponent} */}
           </View>
         </View>
@@ -861,7 +866,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   name="edit"
                   size={24}
                   style={{
-                    color: COLORS.green,
+                    color: COLORS.primaryALS,
                   }}
                 />
               </TouchableOpacity>
@@ -871,18 +876,29 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         <View
           style={{
             position: 'absolute',
-            left: 10,
-            right: 10,
+            left: 5,
+            right: 5,
             bottom: 0,
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <TextButton
-            label="Scan DO"
-            buttonContainerStyle={{
+          <TextIconButton
+            label="SCAN DO"
+            icon={icons.scan}
+            iconPostion='LEFT'
+            labelStyle={{
+              color: COLORS.white,
+              marginLeft:SIZES.base,
+              width:20,
+              height:20
+            }}
+            iconStyle={{
+              tintColor: COLORS.white
+            }}
+            containerStyle={{
               // flex:1,
-              // width: 120,
-              height: 40,
+               width: 130,
+              height: 50,
               borderRadius: SIZES.base,
               backgroundColor: COLORS.primaryALS,
               paddingHorizontal: SIZES.radius,
@@ -902,12 +918,16 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             onPress={() => navigation.navigate('AddPoDo', {truck})}
           /> */}
 
-          <TextButton
-            label="Remove"
-            buttonContainerStyle={{
+          <TextIconButton
+        
+            label="REMOVE"
+            icon={icons.cross}
+            iconPostion='LEFT'
+            containerStyle={{
               // flex:1,
               //   width: 120,
-              height: 40,
+              height: 50,
+              width: 120,
               borderRadius: SIZES.base,
               backgroundColor: disableButtonRemove
                 ? COLORS.lightGray1
@@ -917,12 +937,23 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             disabled={disableButtonRemove}
             onPress={removeSoFromTruck}
           />
-          <TextButton
-            label="Close"
-            buttonContainerStyle={{
-              backgroundColor: COLORS.red,
-              //    width: 120,
-              height: 40,
+          <TextIconButton
+            label="CLOSE"
+            icon={icons.check_circle}
+            iconPostion='LEFT'
+            labelStyle={{
+              color: COLORS.white,
+              marginLeft:SIZES.base,
+              width:20,
+              height:20
+            }}
+            iconStyle={{
+              tintColor: COLORS.white
+            }}
+            containerStyle={{
+              backgroundColor: COLORS.primaryALS,
+                 width: 120,
+              height: 50,
               borderRadius: SIZES.base,
               paddingHorizontal: SIZES.radius,
             }}
@@ -995,7 +1026,34 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             justifyContent: 'space-around',
             flexDirection: 'row',
           }}>
-          {!serialNo && <TextButton
+            {!serialNo &&
+              <TextIconButton
+              label="ADD SEAL"
+              icon={icons.plus}
+              iconPostion='LEFT'
+              labelStyle={{
+                color: COLORS.white,
+                marginLeft:SIZES.base,
+                width:20,
+                height:20
+              }}
+              iconStyle={{
+                tintColor: COLORS.white
+              }}
+              containerStyle={{
+                // flex:1,
+                 width: 100,
+                height: 50,
+                borderRadius: SIZES.base,
+                backgroundColor: COLORS.primaryALS,
+                paddingHorizontal: SIZES.radius,
+              }}
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            />
+            }
+        {/*   {!serialNo && <TextIconButton
             buttonContainerStyle={{
               height: 45,
               borderRadius: SIZES.base,
@@ -1005,20 +1063,33 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             onPress={() => {
               setModalVisible(true);
             }}
-          />}
+          />} */}
           {screenParent !== 'AddSeal' && (
-            <TextButton
-              buttonContainerStyle={{
-                height: 45,
-                backgroundColor: COLORS.red,
-                borderRadius: SIZES.radius,
-                paddingHorizontal: SIZES.radius,
-              }}
-              label="Unclosed"
-              onPress={() => {
-                handleUncloseTruck(true);
-              }}
-            />
+            <TextIconButton
+            label="UNCLOSE"
+            icon={icons.check_circle}
+            iconPostion='LEFT'
+            labelStyle={{
+              color: COLORS.white,
+              marginLeft:SIZES.base,
+              width:20,
+              height:20
+            }}
+            iconStyle={{
+              tintColor: COLORS.white
+            }}
+            containerStyle={{
+              // flex:1,
+               width: 130,
+              height: 50,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.secondaryALS,
+              paddingHorizontal: SIZES.radius,
+            }}
+            onPress={() => {
+              handleUncloseTruck(true);
+            }}
+          />
           )}
         </View>
       )}

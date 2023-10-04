@@ -16,6 +16,7 @@ import icons from '../../../constants/icons';
 import moment from 'moment';
 import {getTruckFactoryPickup} from '../../../api/OutboundAPI';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
+import DataRenderResultWithSearch from '../../../components/DataRenderResultWithSearch/DataRenderResultWithSearch';
 import IconButton from '../../../components/IconButton';
 import {DMY_FORMAT, DMY_TIME, FORMAT_TIME} from '../../../utils/DateHelpers';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -33,7 +34,6 @@ const FactoryPickupScreen = ({navigation}) => {
     Type: 'EXPORT',
   });
   function renderStatus(status){
-    console.log('da chay vao status',status)
     if(status==='Ready to load'|| status==='Loading' || status ==='Closed'){
       return(
         <View
@@ -84,7 +84,6 @@ const FactoryPickupScreen = ({navigation}) => {
     }
   }
   const changeFilterDate = date => {
-    console.log(date);
     setFilterDate({show: false, val: date ? date : filterDate.val});
     setParams({...params, LoadingArrivalDate: DMY_FORMAT(date)});
   };
@@ -149,7 +148,7 @@ const FactoryPickupScreen = ({navigation}) => {
           marginTop: SIZES.base,
            marginHorizontal:SIZES.base
         }}>
-        <DataRenderResult
+        <DataRenderResultWithSearch
         applyFunc={handleApplyFunc}
           navigation={navigation}
           params={params}
@@ -341,7 +340,7 @@ const FactoryPickupScreen = ({navigation}) => {
             style={{
               width: 20,
               height: 20,
-              tintColor: COLORS.green,
+              tintColor: COLORS.primaryALS,
             }}
           />
         </TouchableOpacity>
@@ -378,7 +377,7 @@ const FactoryPickupScreen = ({navigation}) => {
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.primaryALS,
           }}
           onPress={() =>
             Platform.OS === 'ios'

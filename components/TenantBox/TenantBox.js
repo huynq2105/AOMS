@@ -23,8 +23,7 @@ const TenantBox = ({
   toggleTenantSelection,
 }) => {
   const [tenantName, setTenantName] = useState(tenant.name);
-  console.log('tenantName=========================',tenantName)
-  const [listTenant, setListTenant] = useState([{id: 0, label: 'ALSB', value: 'ALSB'},{id: 1, label: 'ALSW', value: 'ALSW'},{id: 2, label: 'ALSE', value: 'ALSE'},{id: 3, label: 'CLC', value: 'CLC'}]);
+  const [listTenant, setListTenant] = useState([{id: 0, label: '---', value: '---'},{id: 0, label: 'ALSB', value: 'ALSB'},{id: 1, label: 'ALSW', value: 'ALSW'},{id: 2, label: 'ALSE', value: 'ALSE'},{id: 3, label: 'CLC', value: 'CLC'}]);
   const findTenant = () => {
     if (!tenantName) {
       setTenant({});
@@ -90,6 +89,7 @@ const TenantBox = ({
                   }}
                   selectedValue={tenantName}
                   onValueChange={(itemValue, itemIndex) =>{
+                    console.log('Item Value==================',itemValue)
                     setTenantName(itemValue)
                   }
                    
@@ -115,12 +115,12 @@ const TenantBox = ({
               }} label='Cancel' onPress={() => toggleTenantSelection()} />
             <TextButton buttonContainerStyle={{
                 backgroundColor:
-                 COLORS.green ,
+                 COLORS.primaryALS ,
                  width: 130,
                 paddingVertical: 7,
                 marginLeft: SIZES.radius,
                 borderRadius: SIZES.radius,
-                borderColor: COLORS.green,
+                borderColor: COLORS.primaryALS,
                 borderWidth:1
               }} label='Save'  onPress={() => findTenant()} />
           </View>

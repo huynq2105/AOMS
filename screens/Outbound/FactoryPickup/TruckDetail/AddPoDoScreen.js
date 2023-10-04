@@ -28,6 +28,7 @@ import TextButton from '../../../../components/TextButton';
 import {FlatList} from 'react-native-gesture-handler';
 import StepperInput from '../../../../components/StepperInput';
 import LineDevider from '../../../../components/LineDivider'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 const AddPoDoScreen = ({navigation, startLoading, stopLoading, route}) => {
   const truck = route?.params?.truck ?? {};
   const [poDos, setPoDos] = useState([]);
@@ -221,6 +222,11 @@ const AddPoDoScreen = ({navigation, startLoading, stopLoading, route}) => {
                 onChangeTextHandle(text);
               }}
             />
+            {searchText !=='' && (<TouchableOpacity
+              onPress={()=>{setSearchText('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
             {/*  {appendComponent} */}
           </View>
         </View>

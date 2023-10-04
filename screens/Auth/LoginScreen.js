@@ -161,7 +161,7 @@ const LoginScreen = ({
                       email == ''
                         ? COLORS.gray
                         : email != '' && emaiError == ''
-                        ? COLORS.green
+                        ? COLORS.primaryALS
                         : COLORS.red,
                   }}
                 />

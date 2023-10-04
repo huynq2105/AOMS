@@ -202,7 +202,7 @@ const SecurityScreen = ({navigation}) => {
             <View
               style={{
                 borderBottomWidth: 1,
-                borderBottomColor: COLORS.secondaryALS,
+                borderBottomColor: COLORS.gray,
               }}
             />
           }
@@ -210,7 +210,7 @@ const SecurityScreen = ({navigation}) => {
             <View
               style={{
                 flexDirection: 'row',
-                borderTopColor: COLORS.secondaryALS,
+                borderTopColor: COLORS.gray,
                 borderTopWidth: 1,
               }}></View>
           }
@@ -220,7 +220,7 @@ const SecurityScreen = ({navigation}) => {
                 paddingVertical: SIZES.radius,
                 // paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 flexDirection: 'row',
                 justifyContent: 'center',
 
@@ -231,7 +231,7 @@ const SecurityScreen = ({navigation}) => {
                 style={{
                   flex: 1,
                   //borderLeftWidth: 1,
-                  //borderLeftColor: COLORS.secondaryALS,
+                  //borderLeftColor: COLORS.gray,
                   alignItems: 'center',
                   //  paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -242,7 +242,7 @@ const SecurityScreen = ({navigation}) => {
                 style={{
                   flex: 4,
                   //borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                   paddingHorizontal: 5,
                   paddingVertical: SIZES.radius,
                 }}>
@@ -254,7 +254,7 @@ const SecurityScreen = ({navigation}) => {
                 style={{
                   flex: 3,
                   // borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                   alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -265,7 +265,7 @@ const SecurityScreen = ({navigation}) => {
                 style={{
                   flex: 2,
                   //  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                   //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
                 }}>
@@ -277,7 +277,7 @@ const SecurityScreen = ({navigation}) => {
                   flexDirection: 'row',
                   flex: 5,
                   //   borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                 }}>
                 <View
                   style={{

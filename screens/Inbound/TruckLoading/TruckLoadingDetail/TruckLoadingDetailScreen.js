@@ -145,7 +145,7 @@ const TruckLoadingDetailScreen = ({
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: COLORS.secondaryALS,
+            backgroundColor: COLORS.gray,
             marginVertical: 13,
             paddingHorizontal: SIZES.base,
             borderWidth: 1,
@@ -218,7 +218,7 @@ const TruckLoadingDetailScreen = ({
           style: {
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.primaryALS,
           },
           duration: 2000,
           animationType: 'slide-in',
@@ -436,7 +436,7 @@ const TruckLoadingDetailScreen = ({
           fetchFn={getListHawbUnloading}
           renderFooter={
             <LineDivider
-              lineStyle={{backgroundColor: COLORS.secondaryALS, height: 2}}
+              lineStyle={{backgroundColor: COLORS.gray, height: 2}}
             />
           }
           render={truck => (
@@ -444,7 +444,7 @@ const TruckLoadingDetailScreen = ({
               style={{
                 marginVertical: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
               }}>
               <View
                 style={{
@@ -550,7 +550,7 @@ const TruckLoadingDetailScreen = ({
               flexDirection: 'row',
               height: 40,
               flex: 1,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.lightGray2,
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
@@ -577,7 +577,11 @@ const TruckLoadingDetailScreen = ({
                 onChangeTextHandle(text);
               }}
             />
-            <View></View>
+            {searchText !=='' && (<TouchableOpacity
+              onPress={()=>{setSearchText('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
             {/*  {appendComponent} */}
           </View>
         </View>
@@ -588,7 +592,7 @@ const TruckLoadingDetailScreen = ({
               style={{
                 //marginTop:SIZES.padding,
                 borderBottomWidth: 1,
-                borderBottomColor: COLORS.secondaryALS,
+                borderBottomColor: COLORS.gray,
                 marginBottom: 40,
               }}
             />
@@ -599,7 +603,7 @@ const TruckLoadingDetailScreen = ({
               style={{
                 flexDirection: 'row',
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 backgroundColor: item?.checkAwb
                   ? COLORS.transparentprimaryALS
                   : null,

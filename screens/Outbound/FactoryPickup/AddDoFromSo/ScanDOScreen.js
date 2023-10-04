@@ -32,6 +32,7 @@ import {
   getDoByNumber,
   createPo,
 } from '../../../../api/OutboundAPI';
+import TextIconButton from '../../../../components/TextIconButton';
 import {ADD_TRUCK_FORMAT_TIME} from '../../../../utils/DateHelpers';
 import {createLoadingSelector} from '../../../../stores/selectors/LoadingSelectors';
 import {connectToRedux} from '../../../../utils/ReduxConnect';
@@ -540,28 +541,47 @@ const ScanDOScreen = ({navigation, route, startLoading, stopLoading}) => {
             // backgroundColor:COLORS.green,
             justifyContent: 'space-between',
           }}>
-          <TextButton
-            label="Remove"
-            buttonContainerStyle={{
-              // flex:1,
-              width: 120,
-              height: 40,
-              borderRadius: SIZES.base,
-              backgroundColor: disableButton ? COLORS.lightGray1 : COLORS.gray,
-            }}
-            disabled={disableButton}
-            onPress={removeSoFromTruck}
-          />
-          <TextButton
-            label="Close"
-            buttonContainerStyle={{
-              backgroundColor: COLORS.red,
-              width: 120,
-              height: 40,
-              borderRadius: SIZES.base,
-            }}
-            onPress={handleConfirm}
-          />
+           <TextIconButton
+        
+        label="REMOVE"
+        icon={icons.cross}
+        iconPostion='LEFT'
+        containerStyle={{
+          // flex:1,
+          //   width: 120,
+          height: 50,
+          width: 120,
+          borderRadius: SIZES.base,
+          backgroundColor: disableButton
+            ? COLORS.lightGray1
+            : COLORS.gray,
+          paddingHorizontal: SIZES.radius,
+        }}
+        disabled={disableButton}
+        onPress={removeSoFromTruck}
+      />
+      <TextIconButton
+        label="CLOSE"
+        icon={icons.check_circle}
+        iconPostion='LEFT'
+        labelStyle={{
+          color: COLORS.white,
+          marginLeft:SIZES.base,
+          width:20,
+          height:20
+        }}
+        iconStyle={{
+          tintColor: COLORS.white
+        }}
+        containerStyle={{
+          backgroundColor: COLORS.primaryALS,
+             width: 120,
+          height: 50,
+          borderRadius: SIZES.base,
+          paddingHorizontal: SIZES.radius,
+        }}
+        onPress={handleConfirm}
+      />
         </View>
       </View>
     );

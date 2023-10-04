@@ -94,7 +94,7 @@ const NBAUnloadingScreen = ({navigation}) => {
                 paddingVertical: SIZES.radius,
                 paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}
@@ -201,7 +201,7 @@ const NBAUnloadingScreen = ({navigation}) => {
             style={{
               width: 20,
               height: 20,
-              tintColor: COLORS.green,
+              tintColor: COLORS.primaryALS,
             }}
           />
         </TouchableOpacity>

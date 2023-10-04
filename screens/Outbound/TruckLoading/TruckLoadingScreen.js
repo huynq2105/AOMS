@@ -16,6 +16,7 @@ import icons from '../../../constants/icons';
 import moment from 'moment';
 import {getTruckLoading} from '../../../api/OutboundAPI';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
+import DataRenderResultWithSearch from '../../../components/DataRenderResultWithSearch/DataRenderResultWithSearch';
 import IconButton from '../../../components/IconButton';
 import {DMY_FORMAT, DMY_TIME, FORMAT_TIME} from '../../../utils/DateHelpers';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -146,10 +147,11 @@ const TruckLoadingScreen = ({navigation}) => {
           marginTop: SIZES.base,
            marginHorizontal:SIZES.base
         }}>
-        <DataRenderResult
+        <DataRenderResultWithSearch
         applyFunc={handleApplyFunc}
           navigation={navigation}
           params={params}
+          keyword='TruckNumber'
           renderFooter={
             <View
               style={{

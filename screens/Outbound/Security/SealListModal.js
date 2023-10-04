@@ -167,7 +167,7 @@ const SealListModal = ({modalVisible, applyFunc, handleOffModal,truck,listSeal})
                               size={24}
                               color={
                                 item.check === true
-                                  ? COLORS.green
+                                  ? COLORS.primaryALS
                                   : COLORS.black
                               }
                               onPress={e => {
@@ -178,7 +178,7 @@ const SealListModal = ({modalVisible, applyFunc, handleOffModal,truck,listSeal})
                             <Text
                               style={{
                                 color:
-                                  item.check === true ? COLORS.green : null,
+                                  item.check === true ? COLORS.primaryALS : null,
                               }}>
                               {item.vhslSealNumber}
                             </Text>

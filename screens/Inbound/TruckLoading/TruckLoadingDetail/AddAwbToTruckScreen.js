@@ -24,6 +24,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import StepperInput from '../../../../components/StepperInput';
 import LineDevider from '../../../../components/LineDivider';
 import {AddAwbToTruck} from '../../../../api/InboundAPI'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 const AddAwbToTruckScreen = ({
   navigation,
   startLoading,
@@ -229,7 +230,7 @@ const AddAwbToTruckScreen = ({
               flexDirection: 'row',
               height: 40,
               flex: 1,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.lightGray2,
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
@@ -255,6 +256,11 @@ const AddAwbToTruckScreen = ({
                 onChangeTextHandle(text);
               }}
             />
+              {searchText !=='' && (<TouchableOpacity
+              onPress={()=>{setSearchText('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
             {/*  {appendComponent} */}
           </View>
         </View>
@@ -422,7 +428,7 @@ const AddAwbToTruckScreen = ({
           <TextButton
             label="Add"
             buttonContainerStyle={{
-              backgroundColor: COLORS.green,
+              backgroundColor: COLORS.primaryALS,
               width: 120,
               height: 40,
               borderRadius: SIZES.base,

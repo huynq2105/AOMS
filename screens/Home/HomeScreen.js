@@ -57,8 +57,8 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken,appCo
                 <Image
                   source={icons.menu}
                   style={{
-                    width: 20,
-                    height: 20,
+                    width: 24,
+                    height: 24,
                     tintColor: COLORS.white,
                   }}
                 />
@@ -75,7 +75,7 @@ const HomeScreen = ({navigation,logoutAsync,setTokenExpired,setVerifyToken,appCo
           <OutboundItem
           customContainerStyle={{
            // borderWidth:1,
-            boderColor: COLORS.secondaryALS,
+            boderColor: COLORS.gray,
             marginLeft:SIZES.base
           }}
           image={item.icon}

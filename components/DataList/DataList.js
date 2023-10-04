@@ -7,6 +7,7 @@ import {createTokenSelector} from '../../stores/selectors/PersistentStorageSelec
 import { SIZES,COLORS,FONTS } from "../../constants/theme";
 import icons from "../../constants/icons";
 import images from "../../constants/images";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 function DataList({
     style,
     navigation,
@@ -74,8 +75,8 @@ function DataList({
                 flex: 1,
                 //   marginTop:SIZES.padding,
                 marginBottom: SIZES.base,
-                paddingHorizontal: SIZES.radius,
-                borderRadius: SIZES.radius,
+                paddingHorizontal: SIZES.base,
+                borderRadius: SIZES,
                 backgroundColor: COLORS.lightGray2,
                 // paddingTop:5
                 //justifyContent:'center'

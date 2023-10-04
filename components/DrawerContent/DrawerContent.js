@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, StyleSheet,FlatList, View,SafeAreaView,TouchableOpacity} from 'react-native';
 import { getEnvVars } from '../../Environment';
 import PropTypes from 'prop-types';
-import {Text,ListItem} from 'react-native-elements'
+import Text from '../../constants/Text'
 import { getEnvConst } from '../../Environment';
 import images from '../../constants/images';
 import { COLORS, SIZES } from '../../constants/theme';
@@ -68,10 +68,11 @@ const screens = {
                 <View>
                   <View
                     style={{
-                      padding:10
+                      paddingHorizontal:10,
+                      paddingVertical:20
                     }}
                   >
-                    <Icon name={screens[item].iconName} size={24} />
+                  {/*   <Icon name={screens[item].iconName} size={24} /> */}
                    {/*  <Icon
                       dark={item !== routeNames[currentScreenIndex]}
                       light={item === routeNames[currentScreenIndex]}
@@ -82,14 +83,18 @@ const screens = {
                   </View>
                 </View>
                 <View style={{borderBottomWidth: 0}}>
-                  <Text
+                 {/*  <Text
                     style={{
                       color: item === routeNames[currentScreenIndex] ? COLORS.primaryALS : COLORS.secondaryALS,
                       fontSize:16,
                       //marginHorizontal
                     }}>
                 {screens[item].label}
-                  </Text>
+                  </Text> */}
+                  <Text darkGray body3 style={{
+                    fontSize:18,
+                  
+                  }}>  {screens[item].label}</Text>
                 </View>
               </TouchableOpacity>
             )}

@@ -105,7 +105,7 @@ const PickupAwbScreen = ({navigation}) => {
             justifyContent: 'space-around',
             alignItems: 'center',
          //   borderBottomWidth: 1,
-           // borderBottomColor: COLORS.secondaryALS,
+           // borderBottomColor: COLORS.gray,
             //paddingBottom: SIZES.radius,
             //backgroundColor:COLORS.green,
             marginTop: SIZES.radius,
@@ -175,14 +175,14 @@ const PickupAwbScreen = ({navigation}) => {
           navigation={navigation}
           params={params}
           fetchFn={getPickupAwbs}
-          renderFooter={<LineDivider lineStyle={{backgroundColor:COLORS.secondaryALS,height:1}} />}
+          renderFooter={<LineDivider lineStyle={{backgroundColor:COLORS.gray,height:1}} />}
           render={truck => (
             <TouchableOpacity
               style={{
                 paddingVertical: SIZES.radius,
                 paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 flexDirection: 'row',
                 // alignItems: 'center',
               }}

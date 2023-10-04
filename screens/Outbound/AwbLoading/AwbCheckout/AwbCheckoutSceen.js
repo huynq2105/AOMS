@@ -162,22 +162,18 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: COLORS.green,
+              backgroundColor: COLORS.primaryALS,
             }}>
-            <Text h2 white>
-              {awb.mawbNo}
-            </Text>
+           <Text h3 white>{awb.mawbNo}</Text>
           </View>
           <View
             style={{
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: COLORS.secondaryALS,
+              backgroundColor: COLORS.gray,
             }}>
-            <Text h2>
-              {totalPallets} {'>>'} {totalCheckout}
-            </Text>
+            <Text h3 white>{totalPallets} {'>>'} {totalCheckout}</Text>
           </View>
         </View>
         <View
@@ -200,7 +196,7 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
               flexDirection: 'row',
               height: 60,
               flex: 5,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.lightGray2,
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
@@ -258,24 +254,29 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
                 flexDirection: 'row',
                 borderTopColor: COLORS.gray,
                 borderTopWidth: 1,
+                marginTop:SIZES.base
               }}>
               <View
                 style={{
                   flex: 1,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.gray,
+                  paddingHorizontal: 5,
+                  paddingVertical: SIZES.base,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor:COLORS.lightGray1
                 }}></View>
               <View
                 style={{
                   flex: 3,
                   borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
-                  backgroundColor:COLORS.lightGray1,
-                  paddingHorizontal: 5,
-                  paddingVertical: SIZES.base,
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                            borderLeftColor: COLORS.gray,
+                            paddingHorizontal: 5,
+                            paddingVertical: SIZES.base,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>DO No</Text>
               </View>
@@ -284,9 +285,11 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 3,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.gray,
-                  //paddingHorizontal: SIZES.base,
+                  paddingHorizontal: 5,
+                  paddingVertical: SIZES.base,
                   justifyContent: 'center',
                   alignItems: 'center',
+                
                   backgroundColor:COLORS.lightGray1
                 }}>
                 <Text body3>Plt No</Text>
@@ -297,10 +300,12 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 5,
                   borderLeftWidth: 1,
                   borderLeftColor: COLORS.gray,
-                  borderRightWidth: 1,
-                  borderRightColor: COLORS.gray,
+                  paddingHorizontal: 5,
+                  paddingVertical: SIZES.base,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                   backgroundColor:COLORS.lightGray1
                   // marginRight
                 }}>
@@ -320,7 +325,7 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
                 // paddingVertical: SIZES.radius,
                 // paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 flexDirection: 'row',
                 justifyContent: 'center',
                 // alignItems: 'center',
@@ -330,7 +335,7 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
                 style={{
                   flex: 1,
                   //borderLeftWidth: 1,
-                  //borderLeftColor: COLORS.secondaryALS,
+                  //borderLeftColor: COLORS.gray,
                   alignItems: 'center',
                   //  paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -393,7 +398,7 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
       {renderHeader()}
       {renderCheckOut()}
       {renderContent()}
-      <View
+      {/* <View
         style={{
           position: 'absolute',
 
@@ -419,7 +424,7 @@ const AwbCheckoutScreen = ({navigation, route, startLoading, stopLoading}) => {
               : navigation.navigate('AddTruckAnd')
           }
         />
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

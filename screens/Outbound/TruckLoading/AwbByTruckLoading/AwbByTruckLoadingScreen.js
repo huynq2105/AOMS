@@ -21,7 +21,7 @@ import {DMY_FORMAT, DMY_TIME, FORMAT_TIME} from '../../../../utils/DateHelpers';
 import {SafeAreaView} from 'react-native-safe-area-context';
 const AwbByTruckLoadingScreen = ({navigation, route}) => {
   const {truck} = route.params;
-
+  console.log('Truck select ====================',truck)
   const today = moment();
   const [params, setParams] = useState({
     VehicleIsn: truck.id,
@@ -73,7 +73,7 @@ const AwbByTruckLoadingScreen = ({navigation, route}) => {
             }}
           />
         }
-        title="Awbs By Truck"
+        title={truck?.truckNo}
         /*  rightComponent={<CartQuantityButton quantity={cartLagiQuantity} onPress={()=>navigation.navigate("CartLagi")} />} */
       />
     );

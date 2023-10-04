@@ -7,6 +7,7 @@ import DatePicker from 'react-native-date-picker';
 import icons from '../../../constants/icons';
 import moment from 'moment';
 import {getTruckFactoryPickup} from '../../../api/OutboundAPI';
+import DataRenderResultWithSearch from '../../../components/DataRenderResultWithSearch/DataRenderResultWithSearch';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
 import IconButton from '../../../components/IconButton';
 import {DMY_FORMAT,FORMAT_TIME} from '../../../utils/DateHelpers';
@@ -136,7 +137,7 @@ const TruckSealScreen = ({navigation}) => {
           marginTop: SIZES.base,
           marginHorizontal:SIZES.base
         }}>
-        <DataRenderResult
+        <DataRenderResultWithSearch
           navigation={navigation}
           params={params}
           renderFooter={<View
@@ -335,7 +336,7 @@ const TruckSealScreen = ({navigation}) => {
             style={{
               width: 20,
               height: 20,
-              tintColor: COLORS.green,
+              tintColor: COLORS.primaryALS,
             }}
           />
         </TouchableOpacity>
@@ -372,7 +373,7 @@ const TruckSealScreen = ({navigation}) => {
             borderRadius: 25,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.primaryALS,
           }}
           onPress={() => navigation.navigate('AddTruck')}
         />

@@ -110,58 +110,86 @@ const MoveShipmentScreen = ({navigation,startLoading,stopLoading}) => {
         <View
             style={{
                 marginTop:pltText.length===0 ? SIZES.base + 70 : SIZES.base,
-                
+                marginHorizontal:SIZES.base
             }}
         >
             <View
                 style={{
-                    backgroundColor:COLORS.green,
+                    backgroundColor:COLORS.primaryALS,
                     alignItems:'center',
-                    height:40,
-                    justifyContent:'center'
+                    height:35,
+                    justifyContent:'center',
+                  
                 }}
             >
-            <Text h2 white>THÀNH CÔNG</Text>
+            <Text h3 white>THÀNH CÔNG</Text>
             </View>
-          
+           
             <FlatList
                 data={history.sort((a,b)=>b.time-a.time)}
                 keyExtractor={item=>item.plt}
                 ListHeaderComponent={<View
                     style={{
-                        flexDirection:'row'
+                      flexDirection: 'row',
+                      borderTopColor: COLORS.gray,
+                      borderTopWidth: 1,
+                      marginTop:SIZES.base
                     }}
                 >
                     <View style={{
                             flex:1,
-                            justifyContent:'center',
-                            alignItems:'center'
-                        }}><Text >PalletID</Text></View>
+                            borderLeftWidth: 1,
+                            borderLeftColor: COLORS.gray,
+                            paddingHorizontal: 5,
+                            paddingVertical: SIZES.base,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor:COLORS.lightGray1
+                        }}><Text h3 >PalletID</Text></View>
                     
                     <View style={{
                             flex:1,
-                            justifyContent:'center',
-                            alignItems:'center'
-                        }}><Text >Location</Text></View>
+                            borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  paddingHorizontal: 5,
+                  paddingVertical: SIZES.base,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
+                        }}><Text h3>Location</Text></View>
                 </View>}
                 ItemSeparatorComponent={()=><ItemSeparator />}
                 renderItem={({item,index})=>(
                     <View
                         style={{
                             flexDirection:'row',
-                            height:30
+                            height:30,
+                            borderTopWidth: 1,
+                borderColor: COLORS.gray,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                backgroundColor:index%2 == 1? COLORS.lightGray1 : null,
                         }}
                     >
                          <View style={{
-                            flex:1,
-                            justifyContent:'center',
-                            alignItems:'center'
+                            flex: 1,
+                            borderLeftWidth: 1,
+                            borderLeftColor: COLORS.gray,
+                            //borderLeftWidth: 1,
+                            //borderLeftColor: COLORS.secondaryALS,
+                            alignItems: 'center',
+                            //  paddingHorizontal: SIZES.radius,
+                           justifyContent: 'center',
                         }}><Text >{item.plt}</Text></View>
                     
                     <View style={{
                             flex:1,
                             justifyContent:'center',
-                            alignItems:'center'
+                            alignItems:'center',
+                            borderRightWidth: 1,
+                            borderRightColor: COLORS.gray,
                         }}><Text >{item.loc}</Text></View>
                     </View>
                 )}
@@ -197,7 +225,7 @@ const MoveShipmentScreen = ({navigation,startLoading,stopLoading}) => {
               flexDirection: 'row',
               height: 60,
               flex: 5,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.lightGray2,
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
@@ -222,6 +250,7 @@ const MoveShipmentScreen = ({navigation,startLoading,stopLoading}) => {
               onChangeText={text => {
                 setPltText(text);
               }}
+              onSubmitEditing={() => textLocsRef.current.focus()}
             />
             {/*  {appendComponent} */}
           </View>
@@ -247,7 +276,7 @@ const MoveShipmentScreen = ({navigation,startLoading,stopLoading}) => {
                 flexDirection: 'row',
                 height: 60,
                 flex: 5,
-                borderRadius: SIZES.radius,
+                borderRadius: SIZES.base,
                 backgroundColor: COLORS.lightGray2,
                 alignItems: 'center',
                 paddingHorizontal: SIZES.radius,

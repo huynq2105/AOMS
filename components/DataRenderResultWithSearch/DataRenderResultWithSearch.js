@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import i18n from 'i18n-js';
 import {SIZES, COLORS, FONTS} from '../../constants/theme';
+import icons from '../../constants/icons';
 //import { connectStyle, Icon, Input, InputGroup, Item, List, Spinner, Text } from 'native-base';
 import PropTypes from 'prop-types';
 import {
@@ -20,12 +21,13 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Image,
 } from 'react-native';
 import {activeTheme} from '../../theme/variables';
 import {debounce} from '../../utils/Debounce';
 import {connectToRedux} from '../../utils/ReduxConnect';
 import LoadingButton from '../LoadingButton/LoadingButton';
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 function DataRenderResultWithSearch({
   style,
   navigation,
@@ -35,8 +37,9 @@ function DataRenderResultWithSearch({
   searchText,
   renderFooter,
   renderHeader,
-  applyFunc = ()=>{},
+  applyFunc = () => {},
   renderSeparator,
+  keyword = 'keyword',
   maxResultCount = 50,
   debounceTime = 350,
   ...props
@@ -51,14 +54,20 @@ function DataRenderResultWithSearch({
   const [isLoading, setIsLoading] = useState(false);
   const fetch = (skip = 0, isRefreshingActive = true) => {
     if (isRefreshingActive) setLoading(true);
-    return fetchFn({...params, maxResultCount, skipCount: skip})
+    return fetchFn({
+      ...params,
+      keyword: filter,
+      maxResultCount,
+      skipCount: skip,
+      truckNumber:filter,
+    })
       .then(({items, totalCount: total}) => {
         if (!Array.isArray(items)) {
           Alert.alert('Lỗi', 'Không thể lấy dữ liệu!');
           return;
         }
         setTotalCount(total);
-        applyFunc(items,total)
+        applyFunc(items, total);
         setRecords(skip ? [...records, ...items] : items);
         setSkipCount(skip);
       })
@@ -79,19 +88,14 @@ function DataRenderResultWithSearch({
     );
   };
   useEffect(() => {
-    if(searchText !==''){
     function searchFetch() {
-      console.log('searchText Change!')
       setSearchLoading(true);
-      setIsLoading(true);
       return fetch(0, false).finally(() =>
-        setTimeout(() => {
-          setSearchLoading(false)}, 150),
+        setTimeout(() => setSearchLoading(false), 150),
       );
     }
-    debounceAdv(searchFetch, debounceTime)();
-  }
-  }, [searchText,type,filterByHawb]);
+    debounce(searchFetch, debounceTime)();
+  }, [filter]);
   useFocusEffect(
     useCallback(() => {
       setSkipCount(0);
@@ -103,20 +107,22 @@ function DataRenderResultWithSearch({
       <View
         style={{
           flexDirection: 'row',
-          marginHorizontal: SIZES.padding,
-          marginTop: SIZES.padding,
+          //marginHorizontal: SIZES.padding,
+          marginTop: SIZES.base,
         }}>
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            height: 45,
+            height: 42,
             flex: 1,
             //   marginTop:SIZES.padding,
             marginBottom: SIZES.base,
             paddingHorizontal: SIZES.radius,
-            borderRadius: SIZES.radius,
-            backgroundColor: COLORS.lightGray2,
+            // borderRadius: SIZES.radius,
+            // backgroundColor: COLORS.lightGray2,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
             // paddingTop:5
             //justifyContent:'center'
           }}>
@@ -126,9 +132,11 @@ function DataRenderResultWithSearch({
           />
           <View
             style={{
-              alignItems: 'center',
+              marginLeft: SIZES.base,
+              //alignItems: 'center',
               //  backgroundColor:COLORS.yellow,
               marginBottom: -5,
+              flex: 1,
             }}>
             <TextInput
               returnKeyType="done"
@@ -144,11 +152,22 @@ function DataRenderResultWithSearch({
               onChangeText={text => setFilter(text)}
             />
           </View>
+          {filter !=='' && (<TouchableOpacity
+              onPress={()=>{setFilter('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
+          {/* {filter && (
+            <TouchableOpacity
+              onPress={()=>{setFilter('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>
+          )} */}
         </View>
       </View>
     );
   }
-console.log('danh sach ============',records)
   return (
     <>
       {renderSearch()}
