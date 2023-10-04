@@ -120,7 +120,15 @@ const TruckUnloadingScreen = ({navigation}) => {
                 <View
                   style={{
                     marginLeft:SIZES.base,
-                    backgroundColor:truck?.status ==='Ready to load'? COLORS.orange : truck?.status==='Closed'?COLORS.red: truck?.status==='In Transit'?COLORS.gray: COLORS.green,
+                    backgroundColor:truck?.status ==='Ready to load'? COLORS.gray 
+                    : truck?.status==='Closed'?COLORS.gray
+                    : truck?.status==='Transit To Warehouse'?COLORS.gray
+                    : truck?.status==='Loading'?COLORS.gray
+                    : truck?.status==='Arrived WareHouse'?COLORS.yellow
+                    : truck?.status==='Unloading'?COLORS.yellow
+                    : truck?.status==='TRANSIT TO FACTORY'?COLORS.yellow
+                    : truck?.status==='ARRIVED FACTORY'?COLORS.yellow
+                    : COLORS.green,
                     flex:1,
                     padding:5,
                     borderRadius:5,
@@ -162,12 +170,12 @@ const TruckUnloadingScreen = ({navigation}) => {
       {renderHeader()}
       <View
         style={{
-          marginTop: 60,
+          marginTop: 70,
           justifyContent: 'center',
           alignItems: 'center',
           flexDirection: 'row',
         }}>
-        <Text h3 primaryALS>
+        <Text body3 primaryALS>
           Pickup Date
         </Text>
         <View
@@ -175,7 +183,7 @@ const TruckUnloadingScreen = ({navigation}) => {
             height: 40,
             width: 100,
             borderWidth: 1,
-            borderColor: COLORS.gray,
+            borderColor: COLORS.green,
             marginLeft: SIZES.base,
             justifyContent: 'center',
             alignItems: 'center',

@@ -6,7 +6,7 @@ const featuresHomeData = [
       id: 101,
       icon: icons.flightLanded,
       color: COLORS.yellow,
-      description: 'Inbound',
+      description: 'INBOUND',
       bgColor:['#ffc465', '#ff9c5f'],
       backgroundColor: COLORS.lightyellow,
       screenName: 'InboundNavigator',
@@ -16,7 +16,7 @@ const featuresHomeData = [
       id: 102,
       icon: icons.flightDepart,
       color: COLORS.purple,
-      description: 'Outbound',
+      description: 'OUTBOUND',
       bgColor:['#fcaba8', '#fe6bba'],
       backgroundColor: COLORS.lightpurple,
       screenName: 'OutboundNavigator',
@@ -25,18 +25,27 @@ const featuresHomeData = [
   
     {
       id: 103,
-      icon: icons.awb,
+      icon: icons.awb_inventory,
       color: COLORS.yellow,
-      description: 'AWB details',
+      description: 'INVENTORY',
       bgColor:['#7cf1fb', '#4ebefd'],
       backgroundColor: COLORS.lightyellow,
-      screenName: 'InvoiceScreen',
-      srceenNavigagor: 'Invoice',
+      screenName: 'InventoryNavigator',
+      srceenNavigagor: 'InventoryNav',
     },
-  
+    {
+      id: 104,
+      icon: icons.setting,
+      color: COLORS.yellow,
+      description: 'TOOLS',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'ToolScreen',
+      srceenNavigagor: 'Tool',
+    },
   ];
 
-const featuresExpData = [
+const featuresExpData_Factory = [
     {
       id: 201,
       icon: icons.awb_factory_pickup,
@@ -48,7 +57,7 @@ const featuresExpData = [
       srceenNavigagor: 'FactoryPickup',
       requiredPolicy: 'OutboundModule.TruckPickupMobile',
     },
-    {
+   /*  {
       id: 202,  
       icon: icons.security,
       color: COLORS.purple,
@@ -58,7 +67,7 @@ const featuresExpData = [
       screenName: 'SecurityScreen',
       srceenNavigagor: 'Security',
       requiredPolicy: 'OutboundModule.TruckPickupMobile',
-    },
+    }, */
   
     {
       id: 203,
@@ -71,7 +80,7 @@ const featuresExpData = [
       srceenNavigagor: 'TruckSeal',
       requiredPolicy: 'OutboundModule.TruckPickupMobile',
     },
-    {
+  /*   {
         id: 204,
         icon: icons.moveShipment,
         color: COLORS.yellow,
@@ -136,7 +145,211 @@ const featuresExpData = [
         screenName: 'InventoryScreen',
         srceenNavigagor: 'Inventory',
         requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      }, */
+  ];
+  const featuresExpData_OffAirport = [
+  
+    {
+      id: 202,  
+      icon: icons.security,
+      color: COLORS.purple,
+      description: 'Security Check',
+      bgColor:['#fcaba8', '#fe6bba'],
+      backgroundColor: COLORS.lightpurple,
+      screenName: 'SecurityScreen',
+      srceenNavigagor: 'Security',
+      requiredPolicy: 'OutboundModule.TruckPickupMobile',
+    },
+    {
+      id: 208,
+      icon: icons.truckLoading,
+      color: COLORS.yellow,
+      description: 'Truck Loading',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'TruckLoadingScreen',
+      srceenNavigagor: 'TruckLoading',
+      requiredPolicy: 'OutboundModule.TruckPickupMobile',
+    },
+    {
+      id: 207,
+      icon: icons.awb_deliver,
+      color: COLORS.yellow,
+      description: 'AWB Loading',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'AwbLoadingScreen',
+      srceenNavigagor: 'AwbLoading',
+      requiredPolicy: 'OutboundModule.TruckPickupMobile',
+    },
+ /*    {
+      id: 203,
+      icon: icons.TruckSeal,
+      color: COLORS.yellow,
+      description: 'Truck Seal',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'TruckSealScreen',
+      srceenNavigagor: 'TruckSeal',
+      requiredPolicy: 'OutboundModule.TruckPickupMobile',
+    }, */
+  /*   {
+        id: 204,
+        icon: icons.moveShipment,
+        color: COLORS.yellow,
+        description: 'Move Shipment',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'MoveShipmentScreen',
+        srceenNavigagor: 'MoveShipment',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
       },
+      {
+        id: 205,
+        icon: icons.truckTransit,
+        color: COLORS.yellow,
+        description: 'Truck Transit',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'TruckTransitScreen',
+        srceenNavigagor: 'TruckTransit',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 206,
+        icon: icons.awb_truck_location,
+        color: COLORS.yellow,
+        description: 'NBA Unloading',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'NBAUnloadingScreen',
+        srceenNavigagor: 'NBAUnloading',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 207,
+        icon: icons.awb_deliver,
+        color: COLORS.yellow,
+        description: 'AWB Loading',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'AwbLoadingScreen',
+        srceenNavigagor: 'AwbLoading',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 208,
+        icon: icons.truckLoading,
+        color: COLORS.yellow,
+        description: 'Truck Loading',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'TruckLoadingScreen',
+        srceenNavigagor: 'TruckLoading',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 209,
+        icon: icons.awb_inventory,
+        color: COLORS.yellow,
+        description: 'Inventory',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'InventoryScreen',
+        srceenNavigagor: 'Inventory',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      }, */
+  ];
+  const featuresExpData_Airport = [
+    {
+      id: 206,
+      icon: icons.awb_truck_location,
+      color: COLORS.yellow,
+      description: 'NBA Unloading',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'NBAUnloadingScreen',
+      srceenNavigagor: 'NBAUnloading',
+      requiredPolicy: 'OutboundModule.TruckPickupMobile',
+    },
+    
+ /*    {
+      id: 203,
+      icon: icons.TruckSeal,
+      color: COLORS.yellow,
+      description: 'Truck Seal',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'TruckSealScreen',
+      srceenNavigagor: 'TruckSeal',
+      requiredPolicy: 'OutboundModule.TruckPickupMobile',
+    }, */
+  /*   {
+        id: 204,
+        icon: icons.moveShipment,
+        color: COLORS.yellow,
+        description: 'Move Shipment',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'MoveShipmentScreen',
+        srceenNavigagor: 'MoveShipment',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 205,
+        icon: icons.truckTransit,
+        color: COLORS.yellow,
+        description: 'Truck Transit',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'TruckTransitScreen',
+        srceenNavigagor: 'TruckTransit',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 206,
+        icon: icons.awb_truck_location,
+        color: COLORS.yellow,
+        description: 'NBA Unloading',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'NBAUnloadingScreen',
+        srceenNavigagor: 'NBAUnloading',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 207,
+        icon: icons.awb_deliver,
+        color: COLORS.yellow,
+        description: 'AWB Loading',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'AwbLoadingScreen',
+        srceenNavigagor: 'AwbLoading',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 208,
+        icon: icons.truckLoading,
+        color: COLORS.yellow,
+        description: 'Truck Loading',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'TruckLoadingScreen',
+        srceenNavigagor: 'TruckLoading',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      },
+      {
+        id: 209,
+        icon: icons.awb_inventory,
+        color: COLORS.yellow,
+        description: 'Inventory',
+        bgColor:['#7cf1fb', '#4ebefd'],
+        backgroundColor: COLORS.lightyellow,
+        screenName: 'InventoryScreen',
+        srceenNavigagor: 'Inventory',
+        requiredPolicy: 'OutboundModule.TruckPickupMobile',
+      }, */
   ];
   const featuresImpData = [
     {
@@ -160,16 +373,73 @@ const featuresExpData = [
       srceenNavigagor: 'TruckLoading',
     },
   
+    // {
+    //   id: 303,
+    //   icon: icons.unloading,
+    //   color: COLORS.yellow,
+    //   description: 'Truck Unloading',
+    //   bgColor:['#7cf1fb', '#4ebefd'],
+    //   backgroundColor: COLORS.lightyellow,
+    //   screenName: 'TruckUnloadingScreen',
+    //   srceenNavigagor: 'TruckUnloading',
+    // },
+  ]
+  const featuresImpData_OffAirport = [
     {
-      id: 303,
+      id: 501,
       icon: icons.unloading,
       color: COLORS.yellow,
-      description: 'Truck Unloading',
-      bgColor:['#7cf1fb', '#4ebefd'],
+      description: 'TRUCK UNLOADING',
+      bgColor:['#ffc465', '#ff9c5f'],
       backgroundColor: COLORS.lightyellow,
       screenName: 'TruckUnloadingScreen',
       srceenNavigagor: 'TruckUnloading',
     },
+   /*  {
+      id: 502,
+      icon: icons.truckLoading,
+      color: COLORS.purple,
+      description: 'AWB DETAIL',
+      bgColor:['#fcaba8', '#fe6bba'],
+      backgroundColor: COLORS.lightpurple,
+      screenName: 'TruckLoadingScreen',
+      srceenNavigagor: 'TruckLoading',
+    },
+  
+    {
+      id: 303,
+      icon: icons.unloading,
+      color: COLORS.yellow,
+      description: 'DELIVERY PLAN',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'TruckUnloadingScreen',
+      srceenNavigagor: 'TruckUnloading',
+    }, */
+  ]
+  const inventoryData = [
+    {
+      id: 704,
+      icon: icons.moveShipment,
+      color: COLORS.yellow,
+      description: 'Move Shipment',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'MoveShipmentScreen',
+      srceenNavigagor: 'MoveShipment',
+      requiredPolicy: 'OutboundModule.TruckPickupMobile',
+    },
+    {
+      id: 709,
+      icon: icons.awb_inventory,
+      color: COLORS.yellow,
+      description: 'Inventory',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'InventoryScreen',
+      srceenNavigagor: 'Inventory',
+      requiredPolicy: 'OutboundModule.TruckPickupMobile',
+    }
   ]
   const irrData = [
     {
@@ -247,8 +517,12 @@ const featuresExpData = [
   ]
   export default {
     featuresHomeData,
-    featuresExpData,
     featuresImpData,
-    irrData
+    irrData,
+    featuresImpData_OffAirport,
+    featuresExpData_Factory,
+    featuresExpData_OffAirport,
+    featuresExpData_Airport,
+    inventoryData
   };
   

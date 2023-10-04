@@ -128,6 +128,7 @@ const AddTruckScreenAnd = ({startLoading, stopLoading, navigation}) => {
               
                 getFactory({maxResultCount: 1000, skipCount: 0,KundCustomerTypeCode:'FACTORY'}).then(
                   ({items, totalCount: total}) => {
+                    console.log('danh sach Factory',items)
                     const loadFactory = [];
                     items.forEach((item, index) => {
                       return loadFactory.push({
@@ -258,7 +259,7 @@ const AddTruckScreenAnd = ({startLoading, stopLoading, navigation}) => {
 
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Add Truck And"
+        title="Add Truck"
         rightComponent={
           <View
             style={{
@@ -380,7 +381,7 @@ const AddTruckScreenAnd = ({startLoading, stopLoading, navigation}) => {
                   }}
                 />
               </View>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   position: 'absolute',
                   right: 70,
@@ -395,7 +396,7 @@ const AddTruckScreenAnd = ({startLoading, stopLoading, navigation}) => {
                     tintColor: COLORS.primaryALS,
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <Text

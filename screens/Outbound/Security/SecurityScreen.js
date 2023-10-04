@@ -57,10 +57,13 @@ const SecurityScreen = ({navigation}) => {
     setParams({...params, LoadingArrivalDate: DMY_FORMAT(date)});
   };
   const loadData = () => {
-    getVehicleSecurity(params).then(data => {
-      setTrucks(data);
-    }).catch((e)=>console.log('Da xay ra loi',e));
+    getVehicleSecurity(params)
+      .then(data => {
+        setTrucks(data);
+      })
+      .catch(e => console.log('Da xay ra loi', e));
   };
+  console.log('Danh sach Truck==================', trucks);
   useEffect(() => {
     loadData();
   }, []);
@@ -199,7 +202,7 @@ const SecurityScreen = ({navigation}) => {
             <View
               style={{
                 borderBottomWidth: 1,
-                borderBottomColor: COLORS.secondaryALS,
+                borderBottomColor: COLORS.gray,
               }}
             />
           }
@@ -207,7 +210,7 @@ const SecurityScreen = ({navigation}) => {
             <View
               style={{
                 flexDirection: 'row',
-                borderTopColor: COLORS.secondaryALS,
+                borderTopColor: COLORS.gray,
                 borderTopWidth: 1,
               }}></View>
           }
@@ -217,7 +220,7 @@ const SecurityScreen = ({navigation}) => {
                 paddingVertical: SIZES.radius,
                 // paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 flexDirection: 'row',
                 justifyContent: 'center',
 
@@ -228,7 +231,7 @@ const SecurityScreen = ({navigation}) => {
                 style={{
                   flex: 1,
                   //borderLeftWidth: 1,
-                  //borderLeftColor: COLORS.secondaryALS,
+                  //borderLeftColor: COLORS.gray,
                   alignItems: 'center',
                   //  paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -237,19 +240,21 @@ const SecurityScreen = ({navigation}) => {
               </View>
               <View
                 style={{
-                  flex: 3,
+                  flex: 4,
                   //borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                   paddingHorizontal: 5,
                   paddingVertical: SIZES.radius,
                 }}>
-                <Text primaryALS>{item.vehicleRegNo}</Text>
+                <Text body3 style={{
+                  fontSize:17
+                }} primaryALS>{item.vehicleRegNo}</Text>
               </View>
               <View
                 style={{
                   flex: 3,
                   // borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                   alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
@@ -260,7 +265,7 @@ const SecurityScreen = ({navigation}) => {
                 style={{
                   flex: 2,
                   //  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                   //paddingHorizontal: SIZES.radius,
                   justifyContent: 'center',
                 }}>
@@ -272,7 +277,7 @@ const SecurityScreen = ({navigation}) => {
                   flexDirection: 'row',
                   flex: 5,
                   //   borderLeftWidth: 1,
-                  borderLeftColor: COLORS.secondaryALS,
+                  borderLeftColor: COLORS.gray,
                 }}>
                 <View
                   style={{
@@ -284,13 +289,7 @@ const SecurityScreen = ({navigation}) => {
                     //borderWidth:1,
                     borderRadius: 10,
                   }}>
-                  <Text
-                    style={{
-                      //flex: 1,
-                      color: COLORS.green,
-                    }}>
-                    {item.checkedSeal ? 'Kiểm tra lại' : ''}
-                  </Text>
+                  <Text body4 red>{item.checkedSeal ? 'Kiểm tra lại' : ''}</Text>
                 </View>
                 <View
                   style={{
@@ -316,12 +315,13 @@ const SecurityScreen = ({navigation}) => {
   function renderModal() {
     return (
       <Modal
-        backdropOpacity={0.3}
+        backdropOpacity={0.4}
+        hasBackdrop={true}
         onBackdropPress={() => {
-          handleOffModal();
+          closeModalConfirmSeal();
         }}
         onBackButtonPress={() => {
-          handleOffModal();
+          closeModalConfirmSeal();
         }}
         animationType="slide"
         transparent={true}
@@ -369,7 +369,7 @@ const SecurityScreen = ({navigation}) => {
                         <Text h2 primaryALS>
                           Xe {truckSelect?.vehicleRegNo}
                         </Text>
-                        <Text h2 primaryALS>
+                        <Text body4 primaryALS>
                           Danh sách Seal cần xác nhận
                         </Text>
                       </View>

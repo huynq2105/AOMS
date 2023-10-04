@@ -24,6 +24,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import StepperInput from '../../../../components/StepperInput';
 import LineDevider from '../../../../components/LineDivider';
 import {AddAwbToTruck} from '../../../../api/InboundAPI'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 const AddAwbToTruckScreen = ({
   navigation,
   startLoading,
@@ -39,10 +40,12 @@ const AddAwbToTruckScreen = ({
   const [check, setCheck] = useState(false);
 
   function updateQuantityHandler(newQuantity, id) {
+    console.log('da chay vao updateQuantityHandler======',newQuantity,id)
     const newMycartList = awbs.map(cl =>
-      cl.id === id ? {...cl, pieces: newQuantity} : cl,
+      cl.id === id ? {...cl, piecesToLoaded: newQuantity} : cl,
     );
     setawbs(newMycartList);
+    setFilterAwbs(newMycartList)
   }
   const loadAwb = useCallback(() => {
     getAwbList({Awb: searchText})
@@ -63,6 +66,8 @@ const AddAwbToTruckScreen = ({
             pieces: item.pieces,
             piecesLoaded: item.piecesLoaded,
             piecesUnloaded: item.piecesUnloaded,
+            piecesRemain: item.pieces - item.piecesLoaded,
+            piecesToLoaded : item.pieces - item.piecesLoaded,
           };
           result.push(awb);
         });
@@ -93,7 +98,7 @@ const AddAwbToTruckScreen = ({
       // 👇️ otherwise return the object as is
       return obj;
     });
-    setFilterListPo(newState);
+    setFilterAwbs(newState);
     //setawbs(newState);
     if (newState.every(item => item.checkAwb === true)) {
       setCheck(true);
@@ -116,9 +121,9 @@ const AddAwbToTruckScreen = ({
   };
   const handleAddAwbs = () => {
     const listAwbToAdd = [];
-    awbs.forEach((item, index) => {
+    filterAwbs.forEach((item, index) => {
       if (item.checkAwb === true) {
-        const data = {lagiId: item.id, pieces: item.pieces};
+        const data = {lagiId: item.id, pieces: item.piecesToLoaded};
         listAwbToAdd.push(data);
       }
     });
@@ -126,6 +131,7 @@ const AddAwbToTruckScreen = ({
       vehicleIsn: truck ? truck.id : 0,
       listItem: listAwbToAdd,
     };
+    console.log('Data To Add=======================',dataToAdd)
     AddAwbToTruck(dataToAdd)
       .then(data => {
         navigation.navigate('TruckLoadingDetail',{truck: {...truck,status:'Loading'}})
@@ -152,24 +158,24 @@ const AddAwbToTruckScreen = ({
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
         title="Add Awb To Truck"
-        rightComponent={
-          <TouchableOpacity
-            style={{
-              width: 35,
-              height: 35,
-              justifyContent: 'center',
-            }}
-            onPress={() => setModalVisible(true)}>
-            <Image
-              source={icons.plus}
-              style={{
-                width: 35,
-                height: 35,
-                tintColor: COLORS.white,
-              }}
-            />
-          </TouchableOpacity>
-        }
+        // rightComponent={
+        //   <TouchableOpacity
+        //     style={{
+        //       width: 35,
+        //       height: 35,
+        //       justifyContent: 'center',
+        //     }}
+        //     onPress={() => setModalVisible(true)}>
+        //     <Image
+        //       source={icons.filter}
+        //       style={{
+        //         width: 35,
+        //         height: 35,
+        //         tintColor: COLORS.white,
+        //       }}
+        //     />
+        //   </TouchableOpacity>
+        // }
         leftComponent={
           <TouchableOpacity
             style={{
@@ -214,7 +220,7 @@ const AddAwbToTruckScreen = ({
           <CheckComponent
             check={check}
             size={24}
-            color={COLORS.lightGray1}
+            color={COLORS.gray}
             onPress={e => {
               ToggleCheckSearch(e)
             }}
@@ -224,7 +230,7 @@ const AddAwbToTruckScreen = ({
               flexDirection: 'row',
               height: 40,
               flex: 1,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.lightGray2,
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
@@ -250,6 +256,11 @@ const AddAwbToTruckScreen = ({
                 onChangeTextHandle(text);
               }}
             />
+              {searchText !=='' && (<TouchableOpacity
+              onPress={()=>{setSearchText('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
             {/*  {appendComponent} */}
           </View>
         </View>
@@ -270,7 +281,7 @@ const AddAwbToTruckScreen = ({
               style={{
                 marginTop: SIZES.padding,
               }}>
-              <Text h2 primaryALS>
+              <Text body3 primaryALS>
                 Danh sách Vận đơn:
               </Text>
             </View>
@@ -287,7 +298,7 @@ const AddAwbToTruckScreen = ({
               <CheckComponent
                 check={item?.checkAwb}
                 size={24}
-                color={COLORS.lightGray1}
+                color={COLORS.gray}
                 onPress={e => {
                   handleCheckItem(e, item);
                 }}
@@ -306,13 +317,13 @@ const AddAwbToTruckScreen = ({
                     // flex:1
                   }}>
                   <Text
-                    body2
+                    body3
                     style={
                       {
                         //flex:1
                       }
                     }>
-                    {item?.mawb}/{item?.hawb}
+                    {item?.mawb} / {item?.hawb}
                   </Text>
                   <View
                     style={{
@@ -338,7 +349,7 @@ const AddAwbToTruckScreen = ({
                     }}
                   >
                     <Image
-                      source={icons.flightDepart}
+                      source={icons.flightLanded}
                       style={{
                         width: 25,
                         height: 25,
@@ -366,7 +377,7 @@ const AddAwbToTruckScreen = ({
                     <Text body3 style={{
                       marginLeft:SIZES.base
                     }}>
-                      {item?.piecesLoaded}/{item?.pieces}
+                      {item?.piecesRemain}/{item?.pieces}
                     </Text>
                   </View>
                   <StepperInput
@@ -378,13 +389,13 @@ const AddAwbToTruckScreen = ({
                       marginLeft:SIZES.base,
                       flex: 2,
                     }}
-                    value={item?.pieces}
+                    value={item?.piecesToLoaded}
                     onAdd={() =>
-                      updateQuantityHandler(item?.pieces + 1, item.id)
+                      updateQuantityHandler(item?.piecesToLoaded + 1, item.id)
                     }
                     onMinus={() => {
-                      if (item?.pieces > 1) {
-                        updateQuantityHandler(item?.pieces - 1, item.id);
+                      if (item?.piecesToLoaded > 1) {
+                        updateQuantityHandler(item?.piecesToLoaded - 1, item.id);
                       }
                     }}
                   />
@@ -409,15 +420,15 @@ const AddAwbToTruckScreen = ({
               width: 120,
               height: 40,
               borderRadius: SIZES.base,
-              backgroundColor: COLORS.primaryALS,
+              backgroundColor: COLORS.gray,
             }}
             onPress={() => navigation.goBack()}
           />
 
           <TextButton
-            label="Save"
+            label="Add"
             buttonContainerStyle={{
-              backgroundColor: COLORS.red,
+              backgroundColor: COLORS.primaryALS,
               width: 120,
               height: 40,
               borderRadius: SIZES.base,

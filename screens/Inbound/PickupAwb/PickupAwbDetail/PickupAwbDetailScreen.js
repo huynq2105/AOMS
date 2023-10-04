@@ -74,6 +74,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
         setModalVisible(false);
       };
     const loadHawb = () => {
+      startLoading('LoadHawb')
         getPickupAwbDetail({KundId: awb.kundId,FlightDate:fligtDate})
           .then(({items, totalCount}) => {
             if (!items) {
@@ -93,7 +94,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
               setListHawb(result);
             });
           })
-          .catch(e => console.log(e));
+          .catch(e => console.log(e)).finally(()=>stopLoading('LoadHawb'));
       };
       useFocusEffect(
         useCallback(() => {
@@ -190,7 +191,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
           <CheckComponent
             check={check}
             size={24}
-            color={COLORS.black}
+            color={COLORS.gray}
             onPress={e => {
               ToggleCheckSearch(e);
             }}
@@ -205,7 +206,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
               borderWidth: 1,
-              borderColor: COLORS.black,
+              borderColor: COLORS.gray,
             }}>
             <Image
               source={icons.search}
@@ -226,7 +227,11 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
                 onChangeTextHandle(text);
               }}
             />
-            <View></View>
+             {searchText !=='' && (<TouchableOpacity
+              onPress={()=>{setSearchText('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
             {/*  {appendComponent} */}
           </View>
         </View>
@@ -252,7 +257,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
               <CheckComponent
                 check={item?.checkHawb}
                 size={24}
-                color={COLORS.black}
+                color={COLORS.gray}
                 onPress={e => {
                   handleCheckItem(e, item);
                   //handleSeachByHawb(e)
@@ -287,22 +292,22 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
                         flexDirection:'row'
                     }}
                >
-                <Text body3 gray>Pcs {item?.lagiQuantityExpected} - </Text>
-                <Text body3 gray>GW {item?.lagiWeightExpected} - </Text>
-                <Text body3 gray>{item?.flight} {item?.eta} </Text>
+                <Text body3 gray>Pcs <Text h3 darkGray>{item?.lagiQuantityExpected}</Text>  - </Text>
+                <Text body3 gray>GW <Text h3 darkGray>{item?.lagiWeightExpected}</Text>  - </Text>
+                <Text body3 darkGray>{item?.flight} {item?.eta} </Text>
                </View>
                {/* Status */}
                <View>
-               <Text body3 gray>Status {item?.status}</Text>
+               <Text body3 darkGray2>Status {item?.status}</Text>
                </View>
               </View>
-              <TouchableOpacity
+             {/*  <TouchableOpacity
                 //onPress={()=>handleEditPO(item)}
               >
                 <Icon name='edit' size={24} style={{
-                  color:COLORS.green
+                  color:COLORS.primaryALS
                 }} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           )}
         />

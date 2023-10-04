@@ -5,6 +5,7 @@ import DrawerContent from '../components/DrawerContent/DrawerContent';
 import HomeNavigator from './HomeNavigation/HomeNavigator';
 import OutboundNavigator from './OutboundNavigation/OutboundNavigator';
 import InboundNavigator from './InboundNavigation/InboundNavigator';
+import InventoryNavigator from './InventoryNavigator/InventoryNavigator';
 import OutboundScreen from '../screens/Outbound/OutboundScreen';
 import { connectToRedux } from '../utils/ReduxConnect';
 import AppActions from '../stores/actions/AppActions';
@@ -34,6 +35,11 @@ function DrawerNavigator({logoutAsync,setTokenExpired}) {
         <Drawer.Screen
         name="InboundNav"
         component={InboundNavigator}
+        options={{headerShown: false}}
+      />
+       <Drawer.Screen
+        name="InventoryNav"
+        component={InventoryNavigator}
         options={{headerShown: false}}
       />
     </Drawer.Navigator>

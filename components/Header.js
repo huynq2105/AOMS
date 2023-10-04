@@ -32,10 +32,11 @@ const Header = ({containerStyle, title, leftComponent, rightComponent}) => {
         <Text
           // eslint-disable-next-line react-native/no-inline-styles
           style={{
-            ...FONTS.h3,
-            fontSize: 18,
-            fontFamily: 'Roboto-Bold',
+            ...FONTS.body3,
+            fontSize: 16,
+            //fontFamily: 'Roboto-Bold',
             color: COLORS.white,
+            textTransform:'uppercase'
           }}>
           {title}
         </Text>

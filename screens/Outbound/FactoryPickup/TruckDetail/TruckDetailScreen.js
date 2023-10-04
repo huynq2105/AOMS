@@ -46,6 +46,7 @@ import LineDivider from '../../../../components/LineDivider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import EditPoModal from './EditPoModal';
 import {useToast} from 'react-native-toast-notifications';
+import TextIconButton from '../../../../components/TextIconButton';
 
 const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
   const truck = route?.params?.truck ?? {};
@@ -176,7 +177,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           style: {
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.primaryALS,
           },
           duration: 2000,
           animationType: 'slide-in',
@@ -399,6 +400,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
       <View
         style={{
           flex: 1,
+          marginHorizontal:SIZES.base
          // marginTop: 10,
           // backgroundColor:COLORS.green,
           // width:400
@@ -406,6 +408,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           <View
               style={{
                 //marginTop: 5,
+                borderTopColor:COLORS.gray,
+                borderTopWidth:1,
+               
                 borderBottomWidth: 1,
                 borderBottomColor: COLORS.gray,
                 flexDirection: 'row',
@@ -414,6 +419,10 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 style={{
                   flex: 1,
                   alignItems:'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1,
+                  paddingVertical:SIZES.base,
                 //  borderRightWidth:1
 
                 }}><Text>STT</Text></View>
@@ -422,6 +431,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>DO No</Text>
               </View>
@@ -430,6 +442,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>Time PDA</Text>
               </View>
@@ -438,6 +453,11 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 2,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1,
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                 }}>
                 <Text> Loaded</Text>
               </View>
@@ -460,13 +480,14 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           
           renderFooter={
             <LineDivider
-              lineStyle={{backgroundColor: COLORS.secondaryALS, height: 2}}
+              lineStyle={{backgroundColor: COLORS.gray, height: 2}}
             />
           }
           render={(truck,index) => (
             <View
               style={{
                 flexDirection: 'row',
+                backgroundColor: index%2===1? COLORS.lightGray1: null
               }}>
               <View
                 style={{
@@ -474,10 +495,12 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   paddingVertical: SIZES.radius,
                   justifyContent:'center',
                   alignItems:'center',
-                  borderRightWidth: 1,
-                  borderRightColor: COLORS.gray,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  
+                 
                 }}>
-               <Text>{index + 1}</Text>
+               <Text body3>{index + 1}</Text>
               </View>
 
               <View
@@ -488,33 +511,32 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   alignItems: 'center',
                   //backgroundColor:COLORS.green,
                 }}>
-                <Text h3 primaryALS>
+                <Text body3 primaryALS>
                   {truck.poNumber}
                 </Text>
               </View>
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                 
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
-                <Text h3 primaryALS>
+                <Text body3 primaryALS>
                   {FORMAT_TIME(truck.date)}
                 </Text>
               </View>
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
                 }}>
-                <Text h2 primaryALS>
+                <Text body3 primaryALS>
                   {truck.piecesLoaded}
                 </Text>
               </View>
@@ -523,6 +545,78 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         />
       </View>
     );
+  }
+  function renderStatus(status) {
+    console.log('da chay vao status', status);
+    if (
+      status === 'Ready to load' ||
+      status === 'Loading' ||
+      status === 'Closed'
+    ) {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.gray,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.black,
+            // flex:1
+          }}>
+          <Text body3 white>
+            {status}
+          </Text>
+        </View>
+      );
+    }
+    if (
+      status === 'Transit To Warehose' ||
+      status === 'Arrived To WareHouse' ||
+      status === 'Arrived Warehouse' ||
+      status === 'Unloading' ||
+      status === 'Arrived Terminal' ||
+      status === 'TRANSIT TO FACTORY' ||
+      status === 'ARRIVED FACTORY' ||
+      status === 'In Transit'
+    ) {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.secondaryALS,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            // flex:1
+          }}>
+          <Text body3 white>
+            {status}
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.green,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            //  flex:1
+          }}>
+          <Text body3 white>
+            Completed
+          </Text>
+        </View>
+      );
+    }
   }
   function renderDetail() {
     return (
@@ -534,9 +628,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           justifyContent:'space-around'
         }}>
        
-          <Text h3>W.H: <Text red h3>    {truck?.warehousePickup}</Text></Text>
+          <Text h3>W.H: <Text body3>    {truck?.warehousePickup}</Text></Text>
           {/* <Text h3>Pieces: <Text red h3>{truckDetail?.countPcsLoaded}</Text></Text> */}
-          <Text h3>Serial No: <Text red h3>{serialNo}</Text></Text>
+          <Text h3>Seal Number: <Text body3>{serialNo}</Text></Text>
         
       </View>
     );
@@ -561,7 +655,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           <CheckComponent
             check={check}
             size={24}
-            color={COLORS.lightGray1}
+            color={COLORS.gray}
             onPress={e => {
               ToggleCheckSearch(e);
             }}
@@ -571,7 +665,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               flexDirection: 'row',
               height: 40,
               flex: 1,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.lightGray2,
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
@@ -597,7 +691,11 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 onChangeTextHandle(text);
               }}
             />
-            <View></View>
+            {searchText !=='' && (<TouchableOpacity
+              onPress={()=>{setSearchText('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
             {/*  {appendComponent} */}
           </View>
         </View>
@@ -606,20 +704,29 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
           ListHeaderComponent={
             <View
               style={{
-                marginTop: SIZES.padding,
-                borderBottomWidth: 1,
-                borderBottomColor: COLORS.gray,
-                flexDirection: 'row',
+                marginTop: SIZES.radius,
+            borderBottomWidth: 1,
+            borderBottomColor: COLORS.gray,
+            flexDirection: 'row',
+            borderTopColor: COLORS.gray,
+            borderTopWidth: 1,
               }}>
               <View
                 style={{
                   flex: 1,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1,
+                  paddingVertical:SIZES.base * 2
                 }}></View>
               <View
                 style={{
                   flex: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderLeftWidth: 1,
+              borderLeftColor: COLORS.gray,
+              backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>DO No</Text>
               </View>
@@ -628,6 +735,9 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 3,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text>Time PDA</Text>
               </View>
@@ -636,12 +746,22 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   flex: 2,
                   justifyContent: 'center',
                   alignItems: 'center',
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1
                 }}>
                 <Text> Loaded</Text>
               </View>
               <View
                 style={{
                   flex: 1,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
+                  backgroundColor:COLORS.lightGray1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                 }}>
                 <Text>Edit</Text>
               </View>
@@ -674,17 +794,19 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                 flexDirection: 'row',
                 backgroundColor: item?.checkPo
                   ? COLORS.transparentprimaryALS
-                  : null,
+                  :index%2 == 1? COLORS.lightGray1 : null,
               }}>
               <View
                 style={{
                   flex: 1,
                   paddingVertical: SIZES.radius,
+                  borderLeftWidth: 1,
+                  borderLeftColor: COLORS.gray,
                 }}>
                 <CheckComponent
                   check={item?.checkPo}
                   size={24}
-                  color={COLORS.lightGray1}
+                  color={COLORS.gray}
                   onPress={e => {
                     handleCheckItem(e, item);
                     //handleSeachByHawb(e)
@@ -695,8 +817,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                 
                   justifyContent: 'center',
                   alignItems: 'center',
                   //backgroundColor:COLORS.green,
@@ -708,8 +829,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                 
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
@@ -721,8 +841,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               <View
                 style={{
                   flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+               
                   justifyContent: 'center',
                   alignItems: 'center',
                   // backgroundColor:COLORS.lightGreen
@@ -733,8 +852,8 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
               </View>
               <TouchableOpacity
                 style={{
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
+                  borderRightWidth: 1,
+                  borderRightColor: COLORS.gray,
                   justifyContent: 'center',
                   alignItems: 'center',
                   //paddingHorizontal: SIZES.radius,
@@ -747,7 +866,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
                   name="edit"
                   size={24}
                   style={{
-                    color: COLORS.green,
+                    color: COLORS.primaryALS,
                   }}
                 />
               </TouchableOpacity>
@@ -757,18 +876,29 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
         <View
           style={{
             position: 'absolute',
-            left: 10,
-            right: 10,
+            left: 5,
+            right: 5,
             bottom: 0,
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <TextButton
-            label="Scan DO"
-            buttonContainerStyle={{
+          <TextIconButton
+            label="SCAN DO"
+            icon={icons.scan}
+            iconPostion='LEFT'
+            labelStyle={{
+              color: COLORS.white,
+              marginLeft:SIZES.base,
+              width:20,
+              height:20
+            }}
+            iconStyle={{
+              tintColor: COLORS.white
+            }}
+            containerStyle={{
               // flex:1,
-              // width: 120,
-              height: 40,
+               width: 130,
+              height: 50,
               borderRadius: SIZES.base,
               backgroundColor: COLORS.primaryALS,
               paddingHorizontal: SIZES.radius,
@@ -788,12 +918,16 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             onPress={() => navigation.navigate('AddPoDo', {truck})}
           /> */}
 
-          <TextButton
-            label="Remove"
-            buttonContainerStyle={{
+          <TextIconButton
+        
+            label="REMOVE"
+            icon={icons.cross}
+            iconPostion='LEFT'
+            containerStyle={{
               // flex:1,
               //   width: 120,
-              height: 40,
+              height: 50,
+              width: 120,
               borderRadius: SIZES.base,
               backgroundColor: disableButtonRemove
                 ? COLORS.lightGray1
@@ -803,12 +937,23 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             disabled={disableButtonRemove}
             onPress={removeSoFromTruck}
           />
-          <TextButton
-            label="Close"
-            buttonContainerStyle={{
-              backgroundColor: COLORS.red,
-              //    width: 120,
-              height: 40,
+          <TextIconButton
+            label="CLOSE"
+            icon={icons.check_circle}
+            iconPostion='LEFT'
+            labelStyle={{
+              color: COLORS.white,
+              marginLeft:SIZES.base,
+              width:20,
+              height:20
+            }}
+            iconStyle={{
+              tintColor: COLORS.white
+            }}
+            containerStyle={{
+              backgroundColor: COLORS.primaryALS,
+                 width: 120,
+              height: 50,
               borderRadius: SIZES.base,
               paddingHorizontal: SIZES.radius,
             }}
@@ -824,7 +969,7 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          marginTop: Platform.OS === 'android' ? 80 : 40,
+          marginTop: Platform.OS === 'android' ? 60 : 40,
           //backgroundColor: COLORS.green,
         }}>
         <View
@@ -835,35 +980,21 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             alignItems: 'center',
           }}>
           <Image
-            source={icons.truck}
+            source={icons.truckLeft}
             style={{
               width: 40,
               height: 40,
-              tintColor: COLORS.primaryALS,
+              //tintColor: COLORS.primaryALS,
             }}
           />
           <Text h3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
             {truck?.vehicRegNo}
           </Text>
           <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
-            Total:{totalPieces}pcs
+            Total: {totalPieces} Pcs
           </Text>
         
-          <View
-            style={{
-              marginLeft: SIZES.base,
-              backgroundColor:
-                truck?.status === 'Ready to load'
-                  ? COLORS.orange
-                  : truck?.status === 'Closed'
-                  ? COLORS.red
-                  : COLORS.green,
-              padding: SIZES.base,
-              //padding: 3,pa
-              borderRadius: 5,
-            }}>
-            <Text white>{truck.status}</Text>
-          </View>
+          {renderStatus(truck.status)}
         </View>
         <View>
       {/*   <Text h3 primaryALS style={{marginLeft: SIZES.base}}>
@@ -895,7 +1026,34 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             justifyContent: 'space-around',
             flexDirection: 'row',
           }}>
-          {!serialNo && <TextButton
+            {!serialNo &&
+              <TextIconButton
+              label="ADD SEAL"
+              icon={icons.plus}
+              iconPostion='LEFT'
+              labelStyle={{
+                color: COLORS.white,
+                marginLeft:SIZES.base,
+                width:20,
+                height:20
+              }}
+              iconStyle={{
+                tintColor: COLORS.white
+              }}
+              containerStyle={{
+                // flex:1,
+                 width: 100,
+                height: 50,
+                borderRadius: SIZES.base,
+                backgroundColor: COLORS.primaryALS,
+                paddingHorizontal: SIZES.radius,
+              }}
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            />
+            }
+        {/*   {!serialNo && <TextIconButton
             buttonContainerStyle={{
               height: 45,
               borderRadius: SIZES.base,
@@ -905,20 +1063,33 @@ const TruckDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
             onPress={() => {
               setModalVisible(true);
             }}
-          />}
+          />} */}
           {screenParent !== 'AddSeal' && (
-            <TextButton
-              buttonContainerStyle={{
-                height: 45,
-                backgroundColor: COLORS.red,
-                borderRadius: SIZES.radius,
-                paddingHorizontal: SIZES.radius,
-              }}
-              label="Unclosed"
-              onPress={() => {
-                handleUncloseTruck(true);
-              }}
-            />
+            <TextIconButton
+            label="UNCLOSE"
+            icon={icons.check_circle}
+            iconPostion='LEFT'
+            labelStyle={{
+              color: COLORS.white,
+              marginLeft:SIZES.base,
+              width:20,
+              height:20
+            }}
+            iconStyle={{
+              tintColor: COLORS.white
+            }}
+            containerStyle={{
+              // flex:1,
+               width: 130,
+              height: 50,
+              borderRadius: SIZES.base,
+              backgroundColor: COLORS.secondaryALS,
+              paddingHorizontal: SIZES.radius,
+            }}
+            onPress={() => {
+              handleUncloseTruck(true);
+            }}
+          />
           )}
         </View>
       )}

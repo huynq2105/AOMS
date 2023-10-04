@@ -119,7 +119,7 @@ const LoginScreen = ({
     setSaveMe(value);
   };
   return (
-    <AuthLayout title="AOMS-UAT" subTitle="ALS Off-airport Management System">
+    <AuthLayout /* title="AOMS" subTitle="ALS Off-airport Management System" */>
       <TenantBox
         showTenantSelection={showTenantSelection}
         toggleTenantSelection={toggleTenantSelection}
@@ -127,18 +127,20 @@ const LoginScreen = ({
       {!showTenantSelection ? (
         <View
           style={{
-            flex: 1,
+            flex: 3,
             marginHorizontal: SIZES.padding,
+           // backgroundColor:COLORS.red
             //marginVertical: SIZES.base
           }}>
           {/* Email */}
           <FormInput
-            label="User"
+            //label="User"
             keyboardType="email-address"
             autoCompleteType="email"
+            placeHolder='User Name'
             inputValue={email}
             inputStyle={{
-              color: COLORS.white,
+              color: COLORS.blue,
             }}
             onChange={text => {
               //  utils.validateEmail(text, setEmailError);
@@ -159,7 +161,7 @@ const LoginScreen = ({
                       email == ''
                         ? COLORS.gray
                         : email != '' && emaiError == ''
-                        ? COLORS.green
+                        ? COLORS.primaryALS
                         : COLORS.red,
                   }}
                 />
@@ -167,14 +169,15 @@ const LoginScreen = ({
             }
           />
           <FormInput
-            label="Password"
+            //label="Password"
             autoCompleteType="password"
             inputValue={password}
+            placeHolder='Password'
             inputStyle={{
               color: COLORS.primaryALS,
             }}
             containerStyle={{
-              marginTop: SIZES.radius,
+              //marginTop: SIZES.radius,
             }}
             secureTextEntry={!showPassword}
             errMsg={passwordError}
@@ -238,6 +241,21 @@ const LoginScreen = ({
           )}
         </View>
       ) : null}
+      <View
+        style={{
+          flex:5
+        }}
+      ></View>
+       <View
+        style={{
+          flex:1,
+          //backgroundColor:COLORS.gray,
+          alignItems:'center',
+          justifyContent:'flex-end'
+        }}
+      >
+        <Text body3 primaryALS>Powered by ALS 1.0.1 - 22092023</Text>
+      </View>
     </AuthLayout>
   );
 };

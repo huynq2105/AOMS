@@ -59,7 +59,7 @@ const Calendar =   ({isVisible,
               allowRangeSelection
               minDate={back30days}
             //  maxDate={new Date()}
-              selectedDayColor={COLORS.green}
+              selectedDayColor={COLORS.primaryALS}
               selectedDayTextColor={COLORS.white}
               onDateChange={onSelectDate}
               textStyle={s.textStyle}

@@ -507,7 +507,7 @@ const NBAUnloadingDetailScreen = ({
             paddingHorizontal: SIZES.radius,
             paddingVertical: SIZES.radius,
             borderRadius: SIZES.radius,
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.primaryALS,
           }}
           onPress={handleConfirm}
           disabled={loading}>

@@ -8,23 +8,24 @@ const OutboundItem = ({customContainerStyle, onPress, title, image}) => {
   return (
     <TouchableOpacity
       style={{
-        width: '30%',
+        width: '45%',
         padding: SIZES.base,
-        height: 100,
+        height: 160,
         alignItems: 'center',
-        marginBottom: SIZES.padding,
-        borderRadius: SIZES.base,
-        backgroundColor: COLORS.white,
-        ...styles.shadow,
-        //borderColor:COLORS.secondaryALS,
+        marginBottom: SIZES.base,
+        borderRadius: SIZES.radius,
+       // backgroundColor: COLORS.white,
+        borderWidth:1,
+        //...styles.shadow,
+        borderColor:COLORS.gray,
         ...customContainerStyle,
       }}
       onPress={onPress}>
       <Image
         source={image}
         style={{
-          width: 40,
-          height: 40,
+          width: 80,
+          height: 80,
           tintColor: COLORS.primaryALS,
         }}
       />
@@ -32,11 +33,12 @@ const OutboundItem = ({customContainerStyle, onPress, title, image}) => {
         style={{
           justifyContent:'center',
           alignItems:'center',
-          marginTop:SIZES.radius + 2
+          marginTop:SIZES.padding
         }}>
         <Text body4 black style={{
             fontWeight:'600',
-            fontSize:12
+            fontSize:15,
+            textTransform: 'uppercase'
         }}>
           {title}
         </Text>
@@ -47,7 +49,7 @@ const OutboundItem = ({customContainerStyle, onPress, title, image}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    //flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

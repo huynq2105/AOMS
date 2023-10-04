@@ -24,13 +24,13 @@ import moment from 'moment';
 import CheckComponent from '../../../../components/Checkbox';
 import DataRenderResult from '../../../../components/DataRenderResult/DataRenderResult';
 import {
-getTruckDetail,
-getSumVehicleDetail,
-getTruckById,
-removeManyHawb,
-closeTruck,
-getAwbList,
-getListHawbUnloading
+  getTruckDetail,
+  getSumVehicleDetail,
+  getTruckById,
+  removeManyHawb,
+  closeTruck,
+  getAwbList,
+  getListHawbUnloading,
 } from '../../../../api/InboundAPI';
 import {
   ADD_TRUCK_FORMAT_TIME,
@@ -44,11 +44,16 @@ import LineDivider from '../../../../components/LineDivider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useToast} from 'react-native-toast-notifications';
 import AddSealModal from './AddSealModal';
-const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}) => {
+const TruckLoadingDetailScreen = ({
+  navigation,
+  route,
+  startLoading,
+  stopLoading,
+}) => {
   const truck = route?.params?.truck ?? {};
   const screenParent = route?.params?.screenParent;
   const toast = useToast();
-  const [statusTruck,setStatusTruck] = useState(truck?.status)
+  const [statusTruck, setStatusTruck] = useState(truck?.status);
   const today = moment();
   const [truckDetail, setTruckDetail] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,7 +69,7 @@ const TruckLoadingDetailScreen = ({navigation, route, startLoading, stopLoading}
   const params = {VehicleIsn: truck.id};
   const [listMawb, setListMawb] = useState([]);
   const [filterListMawb, setFilterListMawb] = useState([]);
-const [totalPieces,setTotalPieces] = useState(0)
+  const [totalPieces, setTotalPieces] = useState(0);
   const loadTruckDetail = () => {
     startLoading('Load data');
     getTruckDetail({VehicleIsn: truck.id})
@@ -100,19 +105,91 @@ const [totalPieces,setTotalPieces] = useState(0)
         stopLoading('Load data');
       });
   };
+  function renderStatus(status) {
+    console.log('da chay vao status', status);
+    if (
+      status === 'Ready to load' ||
+      status === 'Loading' ||
+      status === 'Closed'
+    ) {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.gray,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.black,
+            // flex:1
+          }}>
+          <Text body3 white>
+            {status}
+          </Text>
+        </View>
+      );
+    }
+    if (
+      status === 'Transit To Warehose' ||
+      status === 'Arrived To WareHouse' ||
+      status === 'Arrived Warehouse' ||
+      status === 'Unloading' ||
+      status === 'Arrived Terminal' ||
+      status === 'TRANSIT TO FACTORY' ||
+      status === 'ARRIVED FACTORY' ||
+      status === 'In Transit'
+    ) {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.gray,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            // flex:1
+          }}>
+          <Text body3 white>
+            {status}
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: COLORS.green,
+            marginVertical: 13,
+            paddingHorizontal: SIZES.base,
+            borderWidth: 1,
+            borderColor: COLORS.gray,
+            //  flex:1
+          }}>
+          <Text body3 white>
+            Completed
+          </Text>
+        </View>
+      );
+    }
+  }
   useFocusEffect(
     useCallback(() => {
       getSumVehicleDetail({vehicleIsn: truck.id})
-      .then(data => {
-        setTruckDetail(data);
-        getTruckById(truck.id).then(data => {
-          setSerialNo(data.vhclSealNumber);
+        .then(data => {
+          setTruckDetail(data);
+          getTruckById(truck.id).then(data => {
+            setSerialNo(data.vhclSealNumber);
+          });
+          loadTruckDetail();
+        })
+        .catch(e => {
+          console.log('DLV73', e);
         });
-        loadTruckDetail();
-      })
-      .catch(e => {
-        console.log('DLV73', e);
-      });
     }, []),
   );
   function GetDateNowUCT() {
@@ -134,14 +211,14 @@ const [totalPieces,setTotalPieces] = useState(0)
     listObjectIsn = listObjectIsn.substring(0, listObjectIsn.length - 1);
     removeManyHawb(listObjectIsn, truck.id)
       .then(data => {
-        toast.show('Remove DO thành công! ', {
+        toast.show('Remove Vận đơn thành công! ', {
           type: 'success',
           placement: 'top',
           swipeEnabled: true,
           style: {
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.primaryALS,
           },
           duration: 2000,
           animationType: 'slide-in',
@@ -156,7 +233,7 @@ const [totalPieces,setTotalPieces] = useState(0)
   const closeModalEditPO = () => {
     setModalVisibleEditPO(false);
   };
-  const applyFunc = (vhclSealNumber,qlaNumber) => {
+  const applyFunc = (vhclSealNumber, qlaNumber) => {
     getTruckById(truck.id)
       .then(data => {
         if (!data || !data?.id) {
@@ -166,8 +243,8 @@ const [totalPieces,setTotalPieces] = useState(0)
         const truckPut = {
           ...data,
           vhclSealNumber: vhclSealNumber,
-          vhclRacNumber:qlaNumber,
-          vhclLoadingVehicleClosed:true,
+          vhclRacNumber: qlaNumber,
+          vhclLoadingVehicleClosed: true,
           vhclLoadingVehicleClosedDate: GetDateNowUCT(),
           vhclLoadingVehicleClosedTime: ADD_TRUCK_FORMAT_TIME(today),
         };
@@ -177,16 +254,16 @@ const [totalPieces,setTotalPieces] = useState(0)
             Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
             return;
           } */
-         setStatusTruck('Closed')
+            setStatusTruck('Closed');
             closeModal();
           })
           .catch(e => {
             closeModal();
-           console.log(e)
+            console.log(e);
           });
       })
       .catch(e => {
-        console.log(e)
+        console.log(e);
       });
   };
   const applyFuncEditPO = value => {
@@ -210,7 +287,7 @@ const [totalPieces,setTotalPieces] = useState(0)
     }
   };
   const handleConfirm = () => {
-    Alert.alert('Đóng xe', 'Bạn có chắc chắn? ' + truck.vehicRegNo, [
+    Alert.alert('Transit ' + truck.vehicRegNo, 'Bạn có chắc chắn ? ' , [
       {
         text: 'Cancel',
         onPress: () => console.log('Cancel Pressed'),
@@ -277,7 +354,7 @@ const [totalPieces,setTotalPieces] = useState(0)
         });
       })
       .catch(e => {
-        console.log(e)
+        console.log(e);
       });
   };
   const handleUncloseTruck = () => {
@@ -296,7 +373,7 @@ const [totalPieces,setTotalPieces] = useState(0)
         });
       })
       .catch(e => {
-        console.log(e)
+        console.log(e);
       });
   };
   function renderHeader() {
@@ -350,7 +427,6 @@ const [totalPieces,setTotalPieces] = useState(0)
       <View
         style={{
           flex: 1,
-          marginTop: 30,
           // backgroundColor:COLORS.green,
           // width:400
         }}>
@@ -358,136 +434,72 @@ const [totalPieces,setTotalPieces] = useState(0)
           navigation={navigation}
           params={params}
           fetchFn={getListHawbUnloading}
-          renderSeparator={() => (
-            <LineDivider
-              lineStyle={{
-                height: 1,
-                backgroundColor: COLORS.gray,
-                // marginTop:SIZES.base,
-                // marginBottom:SIZES.base
-              }}
-            />
-          )}
-          renderHeader={
-            <View
-              style={{
-                marginTop: SIZES.padding,
-                borderBottomWidth: 1,
-                borderBottomColor: COLORS.gray,
-                flexDirection: 'row',
-              }}>
-              <View
-                style={{
-                  flex: 1,
-                }}></View>
-              <View
-                style={{
-                  flex: 5,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>Awb</Text>
-              </View>
-           {/*    <View
-                style={{
-                  flex: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>Time PDA</Text>
-              </View> */}
-              <View
-                style={{
-                  flex: 2,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text> Loaded</Text>
-              </View>
-            </View>
-          }
           renderFooter={
             <LineDivider
-              lineStyle={{backgroundColor: COLORS.secondaryALS, height: 2}}
+              lineStyle={{backgroundColor: COLORS.gray, height: 2}}
             />
           }
           render={truck => (
             <View
               style={{
-                flexDirection: 'row',
-                marginVertical:SIZES.base
+                marginVertical: SIZES.base,
+                borderTopWidth: 1,
+                borderColor: COLORS.gray,
               }}>
               <View
                 style={{
-                  flex: 1,
-                  paddingVertical: SIZES.radius,
+                  marginLeft: 30,
+                  marginTop: SIZES.base,
                 }}>
-                <Image
-                  source={icons.awb}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    marginRight: SIZES.base,
-                    tintColor: COLORS.primaryALS,
-                  }}
-                />
+                <Text body3 green>
+                  {truck.mawb} / {truck.hawb}
+                </Text>
               </View>
-
               <View
                 style={{
-                  flex: 5,
-
+                  flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  //backgroundColor:COLORS.green,
+                  marginLeft: 30,
+                  marginTop: SIZES.base,
                 }}>
-                <Text body3 primaryALS>
-                  {truck.mawb}/{truck.hawb}
-                </Text>
                 <View
-                style={{
-                  flexDirection:'row',
-                  justifyContent:'center',
-                  alignItems:'center'
-                }}
-                  >
-                    <Image
-                      source={icons.flightDepart}
-                      style={{
-                        width:20,
-                        height:20,
-                        marginRight:SIZES.base
-                      }}
-                      
-                    />
-                    <Text body3>{truck.flightNo}</Text>
-                  </View>
-              </View>
-             {/*  <View
-                style={{
-                  flex: 3,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  // backgroundColor:COLORS.lightGreen
-                }}>
-                <Text h3 primaryALS>
-                  {FORMAT_TIME(truck.date)}
-                </Text>
-              </View> */}
-              <View
-                style={{
-                  flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  // backgroundColor:COLORS.lightGreen
-                }}>
-                <Text h2 primaryALS>
-                  {truck.piecesLoaded}/{truck.pieces}
-                </Text>
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                  }}>
+                  <Image
+                    source={icons.flightLanded}
+                    style={{
+                      width: 20,
+                      height: 20,
+                      marginRight: SIZES.base,
+                    }}
+                  />
+                  <Text body3 green>
+                    {truck.flightNo}
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    flex: 1,
+                    //justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    // backgroundColor:COLORS.lightGreen
+                  }}>
+                  <Image
+                    source={icons.awb_load}
+                    style={{
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
+                  <Text body3 green>
+                    {truck.piecesLoaded}/{truck.pieces}
+                  </Text>
+                </View>
               </View>
             </View>
           )}
@@ -499,14 +511,13 @@ const [totalPieces,setTotalPieces] = useState(0)
     return (
       <View
         style={{
-          marginTop: 40,
           paddingHorizontal: SIZES.radius,
         }}>
         <View>
-          <Text h3>Total Awb: {truckDetail?.awb}</Text>
-          <Text h3>Total Pieces: {truckDetail?.piciesLoaded}</Text>
-          <Text h3>Total GW Loaded: {truckDetail?.weightLoaded}</Text>
-          <Text h3>Serial No: {serialNo}</Text>
+          <Text body3>Total Awb: {truckDetail?.awb}</Text>
+          <Text body3>Total Pieces: {truckDetail?.piciesLoaded}</Text>
+          <Text body3>Total GW Loaded: {truckDetail?.weightLoaded}</Text>
+          <Text body3>Seal Number: {serialNo}</Text>
         </View>
       </View>
     );
@@ -518,20 +529,18 @@ const [totalPieces,setTotalPieces] = useState(0)
           flex: 1,
           padding: SIZES.base,
           marginBottom: SIZES.base,
-          //marginVertical:SIZES.radius
         }}>
         <View
           style={{
             marginTop: SIZES.base,
             marginHorizontal: SIZES.padding,
             flexDirection: 'row',
-
-            // backgroundColor: COLORS.red,
+            marginBottom:SIZES.base
           }}>
           <CheckComponent
             check={check}
             size={24}
-            color={COLORS.lightGray1}
+            color={COLORS.gray}
             onPress={e => {
               ToggleCheckSearch(e);
             }}
@@ -541,12 +550,13 @@ const [totalPieces,setTotalPieces] = useState(0)
               flexDirection: 'row',
               height: 40,
               flex: 1,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.base,
               backgroundColor: COLORS.lightGray2,
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,
               borderWidth: 1,
               borderColor: COLORS.black,
+             
             }}>
             <Image
               source={icons.search}
@@ -567,56 +577,16 @@ const [totalPieces,setTotalPieces] = useState(0)
                 onChangeTextHandle(text);
               }}
             />
-            <View></View>
+            {searchText !=='' && (<TouchableOpacity
+              onPress={()=>{setSearchText('')}}
+            >
+              <Icon name="close" size={20} />
+            </TouchableOpacity>)}
             {/*  {appendComponent} */}
           </View>
         </View>
         <FlatList
           data={filterListMawb}
-          ListHeaderComponent={
-            <View
-              style={{
-                marginTop: SIZES.padding,
-                borderBottomWidth: 1,
-                borderBottomColor: COLORS.gray,
-                flexDirection: 'row',
-              }}>
-              <View
-                style={{
-                  flex: 1,
-                }}></View>
-              <View
-                style={{
-                  flex: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>AWB</Text>
-              </View>
-             {/*  <View
-                style={{
-                  flex: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>Time PDA</Text>
-              </View> */}
-              <View
-                style={{
-                  flex: 2,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text> Loaded</Text>
-              </View>
-             {/*  <View
-                style={{
-                  flex: 1,
-                }}>
-                <Text>Edit</Text>
-              </View> */}
-            </View>
-          }
           ListFooterComponent={
             <View
               style={{
@@ -627,115 +597,90 @@ const [totalPieces,setTotalPieces] = useState(0)
               }}
             />
           }
-          ItemSeparatorComponent={() => (
-            <LineDivider
-              lineStyle={{
-                height: 1,
-                backgroundColor: COLORS.gray,
-                // marginTop:SIZES.base,
-                // marginBottom:SIZES.base
-              }}
-            />
-          )}
           keyExtractor={item => `lagi-${item?.lagiId}`}
           renderItem={({item, index}) => (
             <View
               style={{
                 flexDirection: 'row',
+                borderTopWidth: 1,
+                borderColor: COLORS.gray,
                 backgroundColor: item?.checkAwb
                   ? COLORS.transparentprimaryALS
                   : null,
+                 
               }}>
               <View
                 style={{
-                  flex: 1,
                   paddingVertical: SIZES.radius,
                 }}>
                 <CheckComponent
                   check={item?.checkAwb}
                   size={24}
-                  color={COLORS.lightGray1}
+                  color={COLORS.gray}
                   onPress={e => {
                     handleCheckItem(e, item);
                     //handleSeachByHawb(e)
                   }}
                 />
               </View>
-
               <View
                 style={{
-                  flex: 7,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  //backgroundColor:COLORS.green,
-                }}>
-                <Text body2 primaryALS>
-                  {item?.mawb}/{item?.hawb}
-                </Text>
+                  flex:1,
+                  marginVertical:SIZES.base
+                }}
+              >
                 <View
                   style={{
-                    flexDirection:'row'
-                  }}
-                >
-                  <Image
-                    source={icons.flightDepart}
+                    justifyContent: 'center',
+                    marginLeft:SIZES.padding,
+                  }}>
+                  <Text body3 darkGray>
+                    {item?.mawb} / {item?.hawb}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                   marginLeft:SIZES.padding,
+                    alignItems: 'center',
+                    flexDirection:'row',
+                  }}>
+                  <View
                     style={{
-                      width:30,
-                      height:30,
-                      tintColor:COLORS.primaryALS,
-                      marginRight:SIZES.base
-                    }}
-                  />
-                <Text body2 primaryALS>
-                  {item?.flightNo}
-                </Text>
+                      flexDirection: 'row',
+                      flex:1
+                    }}>
+                    <Image
+                      source={icons.flightLanded}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        marginRight: SIZES.base,
+                      }}
+                    />
+                    <Text body3 gray>
+                      {item?.flightNo}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flex:1
+                    }}>
+                    <Image
+                      source={icons.awb_load}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        marginRight: SIZES.base,
+                      }}
+                    />
+                   <Text body3 gray>
+                    {item?.piecesLoaded}/{item.pieces}
+                  </Text>
+                  </View>
+                  
                 </View>
               </View>
-          {/*     <View
-                style={{
-                  flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  // backgroundColor:COLORS.lightGreen
-                }}>
-                <Text h3 primaryALS>
-                  {FORMAT_TIME(item?.date)}
-                </Text>
-              </View> */}
-              <View
-                style={{
-                  flex: 2,
-                  borderLeftWidth: 1,
-                  borderLeftColor: COLORS.gray,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  // backgroundColor:COLORS.lightGreen
-                }}>
-                {/*   <Text></Text> */}
-                <Text h2 primaryALS>
-                  {item?.piecesLoaded}/{item.pieces}
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={{
-                  flexDirection:'row',
-                  justifyContent:'center',
-                  alignItems:'center'
-                }}
-                onPress={()=>navigation.navigate('Irregularity',{awb:item})}
-              >
-                <Image source={icons.right_arrow}
-                  style={{
-                    width:25,
-                    height:25
-                  }}
-                />
-              </TouchableOpacity>
-              
             </View>
           )}
         />
@@ -760,7 +705,6 @@ const [totalPieces,setTotalPieces] = useState(0)
             }}
             onPress={() => navigation.navigate('AddAwbToTruck', {truck})}
           />
-          
 
           <TextButton
             label="Remove"
@@ -777,7 +721,7 @@ const [totalPieces,setTotalPieces] = useState(0)
             disabled={disableButtonRemove}
             onPress={removeAwbFromTruck}
           />
-          <TextButton
+          {/* <TextButton
             label="Irregularity"
             buttonContainerStyle={{
               // flex:1,
@@ -789,7 +733,7 @@ const [totalPieces,setTotalPieces] = useState(0)
             }}
             disabled={true}
             onPress={() => navigation.navigate('Irregularity', {})}
-          />
+          /> */}
           <TextButton
             label="Close"
             buttonContainerStyle={{
@@ -799,7 +743,9 @@ const [totalPieces,setTotalPieces] = useState(0)
               borderRadius: SIZES.base,
               paddingHorizontal: SIZES.radius,
             }}
-            onPress={()=>{setModalVisible(true)}}
+            onPress={() => {
+              setModalVisible(true);
+            }}
           />
         </View>
       </View>
@@ -811,7 +757,7 @@ const [totalPieces,setTotalPieces] = useState(0)
       <View
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
-          marginTop: 80,
+          marginTop: 60,
           //backgroundColor: COLORS.green,
         }}>
         <View
@@ -822,37 +768,26 @@ const [totalPieces,setTotalPieces] = useState(0)
             alignItems: 'center',
           }}>
           <Image
-            source={icons.truck}
+            source={icons.truckLeft}
             style={{
-              width: 40,
-              height: 40,
-              tintColor: COLORS.primaryALS,
+              width: 30,
+              height: 30,
+              //tintColor: COLORS.primaryALS,
             }}
           />
-          <Text h3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
+          <Text
+            body3
+            primaryALS
+            style={{flex: 2, marginLeft: SIZES.base, fontSize: 17}}>
             {truck?.vehicRegNo}
           </Text>
           <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>
-         {/*    Total:{totalPieces}pcs */}
+            {/*    Total:{totalPieces}pcs */}
           </Text>
           <Text h3 primaryALS style={{flex: 1, marginLeft: SIZES.base}}>
             {truck?.warehousePickup}
           </Text>
-          <View
-            style={{
-              marginLeft: SIZES.base,
-              backgroundColor:
-              statusTruck === 'Ready to load'
-                  ? COLORS.orange
-                  : statusTruck === 'Closed'
-                  ? COLORS.red
-                  : COLORS.green,
-              padding: SIZES.base,
-              //padding: 3,pa
-              borderRadius: 5,
-            }}>
-            <Text white>{statusTruck}</Text>
-          </View>
+          {renderStatus(statusTruck)}
         </View>
       </View>
 
@@ -860,7 +795,7 @@ const [totalPieces,setTotalPieces] = useState(0)
         statusTruck === 'Closed' ||
         statusTruck === 'In Transit' ||
         statusTruck === 'Unloading') &&
-        renderDetail()} 
+        renderDetail()}
       {(statusTruck === 'Completed' ||
         statusTruck === 'Closed' ||
         statusTruck === 'In Transit' ||
@@ -886,10 +821,9 @@ const [totalPieces,setTotalPieces] = useState(0)
             }}
             label="Transit To Warehouse"
             onPress={() => {
-              handleConfirm()
+              handleConfirm();
             }}
           />
-       
         </View>
       )}
       <AddSealModal
@@ -899,7 +833,7 @@ const [totalPieces,setTotalPieces] = useState(0)
         truck={truck}
         totalAwb={filterListMawb.length}
       />
-     {/*  <EditPoModal
+      {/*  <EditPoModal
         modalVisible={modalVisibleEditPO}
         applyFunc={applyFuncEditPO}
         handleOffModal={closeModalEditPO}

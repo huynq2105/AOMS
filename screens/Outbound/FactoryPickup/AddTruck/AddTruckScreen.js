@@ -570,7 +570,7 @@ const AddTruckScreen = ({startLoading, stopLoading, navigation}) => {
                   zIndex: -2,
                   //padding: 10,
                   //  flex: 1,
-                  backgroundColor:COLORS.green
+                  backgroundColor:COLORS.primaryALS
                 }}>
                 {/* <Picker
                   mode="dropdown"

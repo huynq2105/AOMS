@@ -136,7 +136,7 @@ const AlsxUnloadingScreen = ({navigation}) => {
                   paddingVertical:SIZES.radius,
                   paddingHorizontal:SIZES.base,
                   borderTopWidth:1,
-                  borderColor:COLORS.secondaryALS,
+                  borderColor:COLORS.gray,
                   flexDirection:'row'
                 }}
                 onPress={()=>handleNavigate(truck)}

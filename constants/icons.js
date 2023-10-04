@@ -69,7 +69,9 @@ const TruckSeal = require('../assets/icons/TruckSeal.png');
 const security = require('../assets/icons/security.png');
 const truckTransit = require('../assets/icons/truckTransit.png');
 const unloading = require('../assets/icons/unloading.png');
+const unlock = require('../assets/icons/unlock.png');
 const truckLoading = require('../assets/icons/truckLoading.png');
+const truckLeft = require('../assets/icons/truck_left.png');
 const awb_inventory =  require('../assets/icons/Inventory.png');
 const moveShipment = require('../assets/icons/moveShipment.png');
 //const TruckSeal = require('../assets/icons/TruckSeal.png');
@@ -149,12 +151,14 @@ export default {
   help,
   back,
   bell,
+  unlock,
   bill,
   close,
   disable_eye,
   down,
   quantity,
   weight,
+  truckLeft,
   //eye,
   game,
   barcode,

@@ -33,7 +33,7 @@ const FormInput = ({
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
-           // backgroundColor:COLORS.red
+            //backgroundColor:COLORS.yellow
           }}
         >
           <Text white body4>
@@ -47,13 +47,11 @@ const FormInput = ({
         <View
           style={{
             flexDirection: "row",
-            height: 40,
+            height: 60,
            // marginTop: SIZES.base,
-            //paddingHorizontal: SIZES.padding,
+            paddingHorizontal: SIZES.padding,
             borderRadius: SIZES.radius,
-            borderBottomColor: COLORS.white,
-            borderBottomWidth:2,
-            //backgroundColor:COLORS.green,
+            backgroundColor:COLORS.lightGray2,
             ...inputContainerStyle
           }}
         >
@@ -61,6 +59,7 @@ const FormInput = ({
           <TextInput
             style={{
               flex: 1,
+              fontSize:20,
               ...inputStyle,
             }}
             editable={ediable}

@@ -87,7 +87,7 @@ const PickupAwbScreen = ({navigation}) => {
           margin: SIZES.padding,
           //justifyContent:'center',
           marginTop: 70,
-          //backgroundColor:COLORS.green,
+          //backgroundColor:COLORS.yellow,
           // alignItems:"center"
         }}>
         <View
@@ -105,8 +105,8 @@ const PickupAwbScreen = ({navigation}) => {
             justifyContent: 'space-around',
             alignItems: 'center',
          //   borderBottomWidth: 1,
-           // borderBottomColor: COLORS.secondaryALS,
-            paddingBottom: SIZES.radius,
+           // borderBottomColor: COLORS.gray,
+            //paddingBottom: SIZES.radius,
             //backgroundColor:COLORS.green,
             marginTop: SIZES.radius,
           }}>
@@ -168,20 +168,21 @@ const PickupAwbScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
-         // marginTop: SIZES.padding,
+          //backgroundColor:COLORS.green,
+          marginTop: -SIZES.base,
         }}>
         <DataRenderResult
           navigation={navigation}
           params={params}
           fetchFn={getPickupAwbs}
-          renderFooter={<LineDivider lineStyle={{backgroundColor:COLORS.secondaryALS,height:1}} />}
+          renderFooter={<LineDivider lineStyle={{backgroundColor:COLORS.gray,height:1}} />}
           render={truck => (
             <TouchableOpacity
               style={{
                 paddingVertical: SIZES.radius,
                 paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
-                borderColor: COLORS.secondaryALS,
+                borderColor: COLORS.gray,
                 flexDirection: 'row',
                 // alignItems: 'center',
               }}
@@ -213,9 +214,9 @@ const PickupAwbScreen = ({navigation}) => {
                   // justifyContent:'center',
                   // alignItems:'center'
                 }}>
-                <Text style={{}}>{truck.agentName}</Text>
-                <Text style={{}}>
-                  HAWB Pickup/Plan:{truck.hawbPickup}/{truck.hawbPlan}
+                <Text body3 primaryALS>{truck.agentName}</Text>
+                <Text body3 primaryALS>
+                  HAWB Pickup/Plan:{truck.hawbPickup} / {truck.hawbPlan}
                 </Text>
               </View>
               <View

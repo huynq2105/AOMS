@@ -34,6 +34,7 @@ function getTruckStatus(status){
     }
 }
 function validatePassword(value, setPasswordError) {
+    console.log('Passsowrddddddddddddddddd',value)
     if (validator.isStrongPassword(value, {
         minLength: 6, minLowercase: 1,
         minUppercase: 1, minNumbers: 1, minSymbols: 1
