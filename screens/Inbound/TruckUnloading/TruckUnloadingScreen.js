@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, TouchableOpacity, View, Image,Alert} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Image, Alert} from 'react-native';
 import Text from '../../../constants/Text';
 import {SIZES, COLORS, FONTS} from '../../../constants/theme';
 import Header from '../../../components/Header';
 import DatePicker from 'react-native-date-picker';
 import icons from '../../../constants/icons';
 import moment from 'moment';
-import { getTruckUnloading } from '../../../api/InboundAPI';
+import {getTruckUnloading} from '../../../api/InboundAPI';
 import DataRenderResult from '../../../components/DataRenderResult/DataRenderResult';
 import IconButton from '../../../components/IconButton';
 import {DMY_FORMAT} from '../../../utils/DateHelpers';
@@ -54,11 +54,11 @@ const TruckUnloadingScreen = ({navigation}) => {
             style={{
               width: 35,
               height: 35,
-              justifyContent:'center'
+              justifyContent: 'center',
             }}
-            onPress={() => navigation.openDrawer()}>
+            onPress={() => navigation.goBack()}>
             <Image
-              source={icons.menu}
+              source={icons.back}
               style={{
                 width: 20,
                 height: 20,
@@ -77,7 +77,7 @@ const TruckUnloadingScreen = ({navigation}) => {
       <View
         style={{
           flex: 1,
-          marginTop:SIZES.padding
+          marginTop: SIZES.padding,
         }}>
         <DataRenderResult
           navigation={navigation}
@@ -90,72 +90,117 @@ const TruckUnloadingScreen = ({navigation}) => {
                 paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
                 borderColor: COLORS.secondaryALS,
-                flexDirection: 'row',
-                alignItems: 'center',
+
+              //  alignItems: 'center',
               }}
               onPress={() => handleNavigate(truck)}>
               <View
                 style={{
                   flexDirection: 'row',
-                  flex: 3,
                   alignItems: 'center',
                 }}>
-                <Image
-                  source={icons.truck}
+                <View
                   style={{
-                    width: 30,
-                    height: 30,
-                    marginRight: SIZES.base,
-                    tintColor: COLORS.primaryALS,
-                  }}
-                />
-                <Text primaryALS>{truck.vehicRegNo}</Text>
+                    flexDirection: 'row',
+                    flex: 3,
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    source={icons.truck}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      marginRight: SIZES.base,
+                      tintColor: COLORS.primaryALS,
+                    }}
+                  />
+                  <Text body3 primaryALS>{truck.vehicRegNo}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flex: 5,
+                  }}>
+                  <View
+                    style={{
+                      marginLeft: SIZES.base,
+                      backgroundColor:
+                        truck?.status === 'Ready to load'
+                          ? COLORS.gray
+                          : truck?.status === 'Closed'
+                          ? COLORS.gray
+                          : truck?.status === 'Transit To Warehouse'
+                          ? COLORS.gray
+                          : truck?.status === 'Loading'
+                          ? COLORS.gray
+                          : truck?.status == 'Arrived Warehouse'
+                          ? COLORS.yellow
+                          : truck?.status === 'Unloading'
+                          ? COLORS.yellow
+                          : truck?.status === 'TRANSIT TO FACTORY'
+                          ? COLORS.yellow
+                          : truck?.status === 'ARRIVED FACTORY'
+                          ? COLORS.yellow
+                          : COLORS.green,
+                      flex: 1,
+                      padding: 5,
+                      borderRadius: 5,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        flex: 1,
+                      }}>
+                      {truck.status}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                    }}>
+                    <Image
+                      source={icons.right_arrow}
+                      style={{
+                        width: 20,
+                        height: 20,
+                        tintColor: COLORS.primaryALS,
+                        marginLeft: SIZES.radius,
+                      }}
+                    />
+                  </View>
+                </View>
               </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  flex: 5
-
+                  justifyContent: 'space-around',
+                  marginTop:SIZES.base
                 }}>
+                <Text body3 gray>
+                  Terminal:{' '}
+                  <Text body3 black>
+                    {truck?.shedWarehouse}
+                  </Text>
+                </Text>
                 <View
                   style={{
-                    marginLeft:SIZES.base,
-                    backgroundColor:truck?.status ==='Ready to load'? COLORS.gray 
-                    : truck?.status==='Closed'?COLORS.gray
-                    : truck?.status==='Transit To Warehouse'?COLORS.gray
-                    : truck?.status==='Loading'?COLORS.gray
-                    : truck?.status==='Arrived WareHouse'?COLORS.yellow
-                    : truck?.status==='Unloading'?COLORS.yellow
-                    : truck?.status==='TRANSIT TO FACTORY'?COLORS.yellow
-                    : truck?.status==='ARRIVED FACTORY'?COLORS.yellow
-                    : COLORS.green,
-                    flex:1,
-                    padding:5,
-                    borderRadius:5,
-                    justifyContent:'center',
-                    alignItems:'center'
+                    flexDirection:'row'
                   }}
                 >
-                  <Text
-                    style={{
-                      flex: 1,
-                    }}>
-                    {truck.status}
+                  <Image source={icons.location} style={{
+                    width:20,
+                    height:20,
+                    tintColor:COLORS.secondaryALS,
+                    marginRight:SIZES.base
+                  }} />
+
+                
+                  <Text body3 black>
+                    {truck?.warehouse}
                   </Text>
-                </View>
-                <View
-                style={{
-                  justifyContent:'center'
-                }}>
-                <Image
-                  source={icons.right_arrow}
-                  style={{
-                    width: 20,
-                    height: 20,
-                    tintColor: COLORS.primaryALS,
-                    marginLeft:SIZES.radius
-                  }}
-                />
+           
+
                 </View>
               
               </View>
@@ -224,10 +269,9 @@ const TruckUnloadingScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-       
-    }
-})
+  container: {
+    flex: 1,
+  },
+});
 
 export default TruckUnloadingScreen;

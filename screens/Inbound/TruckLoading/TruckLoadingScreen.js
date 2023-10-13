@@ -165,12 +165,18 @@ const TruckLoadingScreen = ({navigation}) => {
                 // paddingHorizontal: SIZES.base,
                 borderTopWidth: 1,
                 borderColor: COLORS.gray,
-                flexDirection: 'row',
-                justifyContent: 'center',
+              
                 // alignItems: 'center',
               }}
               onPress={() => handleNavigate(truck)}>
-              <View
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    //backgroundColor:COLORS.green
+                  }}
+                >
+                  <View
                 style={{
                   flex: 1,
                   //borderLeftWidth: 1,
@@ -199,9 +205,6 @@ const TruckLoadingScreen = ({navigation}) => {
                 }} />
                 <Text primaryALS body3>{truck.vehicRegNo}</Text>
               </View>
-             
-             
-
               <View
                 style={{
                   flexDirection: 'row',
@@ -224,6 +227,16 @@ const TruckLoadingScreen = ({navigation}) => {
                     }}
                   />
                 </View>
+              </View>
+                </View>
+              <View
+                style={{
+                  flexDirection:'row',
+                  justifyContent:'space-around'
+                }}
+              >
+                <Text body3 gray>Terminal: <Text body3 black>{truck?.shedWarehouse}</Text></Text>
+                <Text body3 gray>WH: <Text body3 black>{truck?.warehouse}</Text></Text>
               </View>
             </TouchableOpacity>
           )}

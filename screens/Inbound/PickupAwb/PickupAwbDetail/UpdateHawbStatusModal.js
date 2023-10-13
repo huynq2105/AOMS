@@ -122,17 +122,17 @@ const UpdateHawbStatusModal = ({modalVisible, applyFunc, handleOffModal}) => {
                         iconStyle={{
                           tintColor: COLORS.primaryALS,
                         }}
-                        label="HOÀN THÀNH THỦ TỤC XUẤT KHO TẠI NHÀ GA"
+                        label="HOÀN THÀNH THỦ TỤC XUẤT KHO NHÀ GA"
                         labelStyle={{
                             fontSize:17
                         }}
                         isSelected={
-                          values.hawbStatusValue === 'HOÀN THÀNH THỦ TỤC XUẤT KHO TẠI NHÀ GA'
+                          values.hawbStatusValue === 'HOÀN THÀNH THỦ TỤC XUẤT KHO NHÀ GA'
                             ? true
                             : false
                         }
                         onPress={() => {
-                          setFieldValue('hawbStatusValue', 'HOÀN THÀNH THỦ TỤC XUẤT KHO TẠI NHÀ GA');
+                          setFieldValue('hawbStatusValue', 'HOÀN THÀNH THỦ TỤC XUẤT KHO NHÀ GA');
                         }}
                       />
                       <TextRadioButton

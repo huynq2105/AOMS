@@ -64,9 +64,9 @@ const PickupAwbScreen = ({navigation}) => {
               height: 35,
               justifyContent: 'center',
             }}
-            onPress={() => navigation.openDrawer()}>
+            onPress={() => navigation.goBack()}>
             <Image
-              source={icons.menu}
+              source={icons.back}
               style={{
                 width: 20,
                 height: 20,

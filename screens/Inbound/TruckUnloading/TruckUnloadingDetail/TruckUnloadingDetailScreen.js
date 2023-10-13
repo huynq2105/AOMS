@@ -27,7 +27,8 @@ import {
   getPickupAwbDetail,
   updateStatusHawb,
   getListHawbUnloading,
-  getTruckById
+  getTruckById,
+  uploadCompleted,
 } from '../../../../api/InboundAPI';
 import {
   DELIVER_FORMAT_TIME,
@@ -72,7 +73,7 @@ const TruckUnloadingDetailScreen = ({
   const textInputRef = useRef();
   const [modalVisible, setModalVisible] = useState(false);
   const [serialNo, setSerialNo] = useState('');
-  const[truckData,setTruckData] = useState();
+  const [truckData, setTruckData] = useState();
   const [listMawb, setListMawb] = useState([]);
   const [filterListMawb, setFilterListMawb] = useState([]);
   const [totalPieces, setTotalPieces] = useState(0);
@@ -126,14 +127,12 @@ const TruckUnloadingDetailScreen = ({
       loadData();
     }, []),
   );
-  // console.log('Truck Detail=================================',truckData)
   const [truckDetail, setTruckDetail] = useState({
     vhclLoadingArrivalDate: truck.vhclLoadingArrivalDate,
     vhclRemarks: '',
   });
   const [status, setStatus] = useState(0);
   const loadTruckDetail = () => {
-    console.log('loadTruckDetail==========================',truck.id)
     startLoading('Load data');
     getListHawbUnloading({VehicleIsn: truck.id})
       .then(({items, totalCount}) => {
@@ -141,7 +140,7 @@ const TruckUnloadingDetailScreen = ({
           Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
           return;
         }
-        console.log('loadTruckDetail items==========================',items)
+        console.log('loadTruckDetail items==========================', items);
         const result = [];
         let piece = 0;
         let weight = 0;
@@ -155,8 +154,10 @@ const TruckUnloadingDetailScreen = ({
             flightDate: item.flightDate,
             hawb: item.hawb,
             mawb: item.mawb,
+            unload: item.unload,
             flightNo: item.flightNo,
             piecesLoaded: item.piecesLoaded,
+            piecesUnload: item.piecesUnload,
             pieces: item.pieces,
           };
           result.push(awb);
@@ -164,7 +165,7 @@ const TruckUnloadingDetailScreen = ({
         setListMawb(result);
         setFilterListMawb(result);
         setTotalPieces(piece);
-        setTotalWeight(weight)
+        setTotalWeight(weight);
         stopLoading('Load data');
       })
       .catch(e => {
@@ -183,7 +184,7 @@ const TruckUnloadingDetailScreen = ({
           navigation.goBack();
           return;
         }
-        setTruckData(data)
+        setTruckData(data);
         let status = selectKey.intransit;
         if (data.vhclVehicleComplete) status = selectKey.complete;
         else if (data.vhclUnloadingActivationDate) status = selectKey.unload;
@@ -235,7 +236,11 @@ const TruckUnloadingDetailScreen = ({
       //making a case insensitive regular expression to get similar value from the film json
       const regex = new RegExp(`${text.trim()}`, 'i');
       //setting the filtered film array according the query from the input
-      setFilterListMawb(listMawb.filter(po => po.poNumber.search(regex) >= 0));
+      setFilterListMawb(
+        listMawb.filter(
+          awb => awb.mawb.search(regex) >= 0 || awb.hawb.search(regex) >= 0,
+        ),
+      );
     } else {
       //if the query is null then return blank
       setFilterListMawb(listMawb);
@@ -284,6 +289,30 @@ const TruckUnloadingDetailScreen = ({
       .finally(function () {
         stopLoading({key: 'deliverDetail'});
       });
+  };
+  const handleUnloadCompleted = item => {
+    console.log('Truck complete', truck.id, item.lagiId);
+    uploadCompleted(truck.id, item.lagiId)
+      .then(() => {
+        console.log('Unload success!!!');
+        loadTruckDetail();
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+  const handleConfirmItem = item => {
+    Alert.alert('Confirm', 'Confirmation of shipment completed? ', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => handleUnloadCompleted(item)},
+    ]);
+  };
+  const handleNavigate = () => {
+    navigation.navigate('UnloadAwb', {truck: truck});
   };
   function renderHeader() {
     return (
@@ -336,7 +365,7 @@ const TruckUnloadingDetailScreen = ({
       <View
         style={{
           flex: 1,
-         // marginTop: 30,
+          // marginTop: 30,
           // backgroundColor:COLORS.green,
           // width:400
         }}>
@@ -348,7 +377,7 @@ const TruckUnloadingDetailScreen = ({
             />
           }
           data={filterListMawb}
-          renderItem={({item,index}) => (
+          renderItem={({item, index}) => (
             <TouchableOpacity
               style={{
                 paddingVertical: SIZES.radius,
@@ -395,12 +424,16 @@ const TruckUnloadingDetailScreen = ({
                     style={{
                       flex: 1,
                     }}>
-                    {item.piecesLoaded}/{item.pieces}
+                    {item.piecesUnload}/{item.piecesLoaded}
                   </Text>
                 </View>
               </View>
-              <View>
-                {item.piecesLoaded === item.pieces && (
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                {item.unload && (
                   <Image
                     source={icons.correct}
                     style={{
@@ -409,6 +442,18 @@ const TruckUnloadingDetailScreen = ({
                       tintColor: COLORS.blue,
                     }}
                   />
+                )}
+                {item.unload === false && (
+                  <TouchableOpacity onPress={() => handleConfirmItem(item)}>
+                    <Image
+                      source={icons.correct}
+                      style={{
+                        width: 20,
+                        height: 20,
+                        tintColor: COLORS.darkGray,
+                      }}
+                    />
+                  </TouchableOpacity>
                 )}
               </View>
             </TouchableOpacity>
@@ -450,15 +495,23 @@ const TruckUnloadingDetailScreen = ({
             style={{
               marginLeft: SIZES.base,
               backgroundColor:
-              truck?.status ==='Ready to load'? COLORS.gray 
-              : truck?.status==='Closed'?COLORS.gray
-              : truck?.status==='Transit To Warehouse'?COLORS.gray
-              : truck?.status==='Loading'?COLORS.gray
-              : truck?.status==='Arrived WareHouse'?COLORS.yellow
-              : truck?.status==='Unloading'?COLORS.yellow
-              : truck?.status==='TRANSIT TO FACTORY'?COLORS.yellow
-              : truck?.status==='ARRIVED FACTORY'?COLORS.yellow
-              : COLORS.green,
+                truck?.status === 'Ready to load'
+                  ? COLORS.gray
+                  : truck?.status === 'Closed'
+                  ? COLORS.gray
+                  : truck?.status === 'Transit To Warehouse'
+                  ? COLORS.gray
+                  : truck?.status === 'Loading'
+                  ? COLORS.gray
+                  : truck?.status === 'Arrived Warehouse'
+                  ? COLORS.yellow
+                  : truck?.status === 'Unloading'
+                  ? COLORS.yellow
+                  : truck?.status === 'TRANSIT TO FACTORY'
+                  ? COLORS.yellow
+                  : truck?.status === 'ARRIVED FACTORY'
+                  ? COLORS.yellow
+                  : COLORS.green,
               padding: SIZES.base,
               //padding: 3,pa
               borderRadius: 5,
@@ -468,7 +521,8 @@ const TruckUnloadingDetailScreen = ({
         </View>
         {/* render Search */}
       </View>
-      {/* <View
+      {renderDetail()}
+      <View
         style={{
           margin: SIZES.base,
         }}>
@@ -504,11 +558,10 @@ const TruckUnloadingDetailScreen = ({
           />
           <View></View>
         </View>
-      </View> */}
-         
-      {renderDetail()}
+      </View>
+
       {renderPoDo()}
-      {truck?.status !== 'Completed' && (
+      {truck?.status !== 'Completed' && truck?.status !== 'Unloading' && (
         <View
           style={{
             position: 'absolute',
@@ -524,6 +577,54 @@ const TruckUnloadingDetailScreen = ({
             warning
             style={{
               flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingHorizontal: SIZES.radius,
+              paddingVertical: SIZES.radius,
+              borderRadius: SIZES.radius,
+              backgroundColor: COLORS.green,
+            }}
+            onPress={handleConfirm}
+            disabled={loading}>
+            <Text white h3>
+              {getStatusButtonSave(status)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {truck?.status === 'Unloading' && (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 10,
+            left: 20,
+            right: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity
+            warning
+            style={{
+              // flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingHorizontal: SIZES.radius,
+              paddingVertical: SIZES.radius,
+              borderRadius: SIZES.radius,
+              backgroundColor: COLORS.primaryALS,
+            }}
+            onPress={handleNavigate}
+            disabled={loading}>
+            <Text white h3>
+              Unload
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            warning
+            style={{
+              //  flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
               paddingHorizontal: SIZES.radius,

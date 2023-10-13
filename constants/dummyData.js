@@ -43,6 +43,16 @@ const featuresHomeData = [
       screenName: 'ToolScreen',
       srceenNavigagor: 'Tool',
     },
+    {
+      id: 104,
+      icon: icons.awb,
+      color: COLORS.yellow,
+      description: 'AWB',
+      bgColor:['#7cf1fb', '#4ebefd'],
+      backgroundColor: COLORS.lightyellow,
+      screenName: 'AwbSearchScreen',
+      srceenNavigagor: 'AwbSearch',
+    },
   ];
 
 const featuresExpData_Factory = [

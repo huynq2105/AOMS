@@ -56,14 +56,22 @@ const AddSealModal = ({modalVisible, applyFunc, handleOffModal,truck,totalAwb}) 
               marginBottom: SIZES.base,
               height: 500,
             }}>
-                <View
+              <View
+                style={{
+                  marginBottom:50
+                }}
+              >
+              <View
                     style={{
-                        flexDirection:'row'
+                        flexDirection:'row',
+                        justifyContent:'center'
                     }}
                 >
-                    <Text>Truck Number: {truck.vehicRegNo}</Text>
+                    <Text h3> {truck.vehicRegNo}</Text>
                 </View>
-                <Text>Total Awb: {totalAwb}</Text>
+                <Text body3>Total Awb: {totalAwb}</Text>
+              </View>
+                
             <Formik
             validateOnMount={true}
             enableReinitialize

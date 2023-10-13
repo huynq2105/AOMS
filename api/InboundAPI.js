@@ -175,10 +175,20 @@ export const getDelivers = (params = {maxResultCount: 20, skipCount: 0}) =>
         .get('/api/inbound-module/truck-loadings/get-list-group-hawb-v1', {params})
         .then(({data}) => data);
     };
+
+    export const getListMawbDetail = (params = {maxResultCount: 1000, skipCount: 0}) => {
+      return api
+        .get('/api/inbound-module/truck-loadings/get-list-group-by-lagi-id', {params})
+        .then(({data}) => data);
+    };
     export const AddAwbToTruck = body =>
   api
     .post('/api/inbound-module/truck-loadings/add-hawb-to-truck', body)
     .then(({data}) => data);
+    export const unloadAwb = body =>
+    api
+      .post('/api/inbound-module/truck-loadings/unload-hawb-to-truck', body)
+      .then(({data}) => data);
     export const removeManyHawb = (listObjectIsn, vehicleRegId) => {
       return api
         .post(
@@ -205,5 +215,38 @@ export const getDelivers = (params = {maxResultCount: 20, skipCount: 0}) =>
 
       export const createIrr = body =>
       api.post('/api/master-data-module/hawb-irrs', body).then(({data}) => data);
-     
+      export const uploadCompleted = (vehicleRegID, objectIsn) => {
+        return api
+          .put(
+            `/api/inbound-module/truck-loadings/unload-vehicle-by-objectisn?vehicleRegID=${vehicleRegID}&objectIsn=${objectIsn}`,
+          )
+          .then(({data}) => data);
+      };
+      export const checkAwbInboundExist = (params = {MawbPrefix:'',MawbSerial:'',Hawb:''}) => {
+        return api
+          .get('/api/inbound-module/awbSearchs/CheckAwbExist', {params})
+          .then(({data}) => data);
+      };
+      export const getTrackTraceInboundSearch = (params = {MawbPrefix:'',MawbSerial:'',Hawb:''}) => {
+        return api
+          .get('/api/inbound-module/awbSearchs/GetListAwbSearchAsync', {params})
+          .then(({data}) => data);
+      };
+
+      export const updateDelivery = (body, id) =>
+      api
+        .put(`/api/inbound-module/delivery-dockets/update-confirm-delivery?deliveryDocketId=${id}`, body)
+        .then(({data}) => data);
+        export const getDeliveries = (params = {hawbId: 0}) => {
+          return api
+            .get('/api/inbound-module/delivery-dockets/get-list-unupdated-received-time-delivery-docket-by/hawb-id', {params})
+            .then(({data}) => data);
+        };
+        export const getListSearchAwb = (params = {MawbHawbs:''}) => {
+          return api
+            .get('/api/inbound-module/track-trace/get-paged-list-hawb-for-datatable', {params})
+            .then(({data}) => data);
+        };
+  
+      
     

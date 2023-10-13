@@ -218,7 +218,7 @@ const TruckLoadingDetailScreen = ({
           style: {
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: COLORS.primaryALS,
+            backgroundColor: COLORS.green,
           },
           duration: 2000,
           animationType: 'slide-in',
@@ -697,7 +697,7 @@ const TruckLoadingDetailScreen = ({
             label="Add"
             buttonContainerStyle={{
               // flex:1,
-              // width: 120,
+               width: 100,
               height: 40,
               borderRadius: SIZES.base,
               backgroundColor: COLORS.primaryALS,
@@ -711,6 +711,7 @@ const TruckLoadingDetailScreen = ({
             buttonContainerStyle={{
               // flex:1,
               //   width: 120,
+              width: 100,
               height: 40,
               borderRadius: SIZES.base,
               backgroundColor: disableButtonRemove
@@ -738,6 +739,7 @@ const TruckLoadingDetailScreen = ({
             label="Close"
             buttonContainerStyle={{
               backgroundColor: COLORS.red,
+              width: 100,
               //    width: 120,
               height: 40,
               borderRadius: SIZES.base,
@@ -778,7 +780,7 @@ const TruckLoadingDetailScreen = ({
           <Text
             body3
             primaryALS
-            style={{flex: 2, marginLeft: SIZES.base, fontSize: 17}}>
+            style={{flex: 3, marginLeft: SIZES.base, fontSize: 17}}>
             {truck?.vehicRegNo}
           </Text>
           <Text body3 primaryALS style={{flex: 2, marginLeft: SIZES.base}}>

@@ -15,7 +15,7 @@ import {SIZES, COLORS} from '../../../../constants/theme';
 import icons from '../../../../constants/icons';
 import Header from '../../../../components/Header';
 import CheckComponent from '../../../../components/Checkbox';
-import {getAwbList} from '../../../../api/InboundAPI';
+import {getListMawbDetail} from '../../../../api/InboundAPI';
 import {createLoadingSelector} from '../../../../stores/selectors/LoadingSelectors';
 import {connectToRedux} from '../../../../utils/ReduxConnect';
 import LoadingActions from '../../../../stores/actions/LoadingActions';
@@ -23,18 +23,18 @@ import TextButton from '../../../../components/TextButton';
 import {FlatList} from 'react-native-gesture-handler';
 import StepperInput from '../../../../components/StepperInput';
 import LineDevider from '../../../../components/LineDivider';
-import {AddAwbToTruck} from '../../../../api/InboundAPI'
+import {unloadAwb} from '../../../../api/InboundAPI'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { debounceAdv } from '../../../../utils/Debounce';
 import {useToast} from 'react-native-toast-notifications';
-const AddAwbToTruckScreen = ({
+const UnloadAwbScreen = ({
   navigation,
   startLoading,
   stopLoading,
   route,
 }) => {
-  const truck = route?.params?.truck ?? {};
   const toast = useToast();
+  const truck = route?.params?.truck ?? {};
   const [awbs, setawbs] = useState([]);
   const [filterAwbs,setFilterAwbs] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,34 +45,38 @@ const AddAwbToTruckScreen = ({
   function updateQuantityHandler(newQuantity, id) {
     console.log('da chay vao updateQuantityHandler======',newQuantity,id)
     const newMycartList = awbs.map(cl =>
-      cl.id === id ? {...cl, piecesToLoaded: newQuantity} : cl,
+      cl.id === id ? {...cl, piecesToUnLoaded: newQuantity} : cl,
     );
     setawbs(newMycartList);
     setFilterAwbs(newMycartList)
   }
+  function getPiecesUnload(piecesUnload){
+    if(piecesUnload){
+        return piecesUnload
+    }else return 0;
+  }
   const loadAwb = () => {
     setSearchLoading(true);
     console.log('Load Hawb================================',searchText)
-   return getAwbList({Awb: searchText})
+   return getListMawbDetail({VehicleRegId: truck?.id,Unload:false})
       .then(({items, totalCount: total}) => {
         if (!items) {
           Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
           return;
         }
+        console.log('Items================',items)
         const result = [];
         items.forEach((item, index) => {
+           
           const awb = {
             id: item.lagiId,
             checkAwb: false,
             flight: item.flight,
-            flightDate: item.flightDate,
-            mawb: item.mawbPrefix + item.mawbSerial,
+            mawb: item.mawbPrefix + item.mawb,
             hawb: item.hawb,
             pieces: item.pieces,
-            piecesLoaded: item.piecesLoaded,
-            piecesUnloaded: item.piecesUnloaded,
-            piecesRemain: item.pieces - item.piecesLoaded,
-            piecesToLoaded : item.pieces - item.piecesLoaded,
+            piecesRemain: item.pieces - getPiecesUnload(item.piecesUnload),
+            piecesToUnLoaded : item.pieces - getPiecesUnload(item.piecesUnload),
           };
           result.push(awb);
         });
@@ -83,6 +87,18 @@ const AddAwbToTruckScreen = ({
       setTimeout(() => setSearchLoading(false), 150),
     );
   }
+  const checkEmptySelect = ()=>{
+    if(filterAwbs.every(c=>c.checkAwb===false)){
+      console.log('Empty Select t')
+      return true;
+    }
+   return false;
+  }
+/*     useFocusEffect(
+      useCallback(() => {
+        loadAwb()
+      }, []),
+    ); */
   const ToggleCheckSearch = e => {
     setCheck(e);
    /*  if (e) {
@@ -114,42 +130,45 @@ const AddAwbToTruckScreen = ({
       setCheck(false);
     }
   };
-  useEffect(() => {
-    console.log('triggle Load Hawb==========',searchText)
-    function searchFetch() {
-      setSearchLoading(true);
-      return loadAwb()
-    }
-    debounceAdv(searchFetch, 350)();
-  }, [searchText]);
-/*   const onChangeTextHandle = text => {
+
+  const onChangeTextHandle = text => {
     setSearchText(text);
     if (text) {
       //making a case insensitive regular expression to get similar value from the film json
       const regex = new RegExp(`${text.trim()}`, 'i');
       //setting the filtered film array according the query from the input
-      setFilterAwbs(awbs.filter(awb => awb.hawb.search(regex) >= 0));
+      setFilterAwbs(awbs.filter(awb => awb.mawb.search(regex) >= 0));
     } else {
       //if the query is null then return blank
       setFilterAwbs(awbs);
     }
-  }; */
-  const handleAddAwbs = () => {
-    const listAwbToAdd = [];
+  };
+  const handleConfirm = () => {
+    Alert.alert('Unload AWB', 'Bạn có chắc chắn? ', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => handleUnload()},
+    ]);
+  };
+  const handleUnload = () => {
+    const listAwbToUnload = [];
     filterAwbs.forEach((item, index) => {
       if (item.checkAwb === true) {
-        const data = {lagiId: item.id, pieces: item.piecesToLoaded};
-        listAwbToAdd.push(data);
+        const data = {lagiId: item.id, pieces: item.piecesToUnLoaded};
+        listAwbToUnload.push(data);
       }
     });
-    const dataToAdd = {
+    const dataToUnload = {
       vehicleIsn: truck ? truck.id : 0,
-      listItem: listAwbToAdd,
+      listItem: listAwbToUnload,
     };
-    console.log('Data To Add=======================',dataToAdd)
-    AddAwbToTruck(dataToAdd)
+    console.log('Data To Add=======================',dataToUnload)
+    unloadAwb(dataToUnload)
       .then(data => {
-        toast.show('Add vận đơn thành công! ', {
+        toast.show('Unload thành công! ', {
           type: 'success',
           placement: 'top',
           swipeEnabled: true,
@@ -161,20 +180,13 @@ const AddAwbToTruckScreen = ({
           duration: 2000,
           animationType: 'slide-in',
         });
-        loadAwb();
-        /* navigation.navigate('TruckLoadingDetail',{truck: {...truck,status:'Loading'}}) */
+        loadAwb()
       })
       .catch(e => console.log(e));
   };
   const closeModal = () => {
     setModalVisible(false);
   };
-  const checkEmptySelect = ()=>{
-    if(filterAwbs.every(c=>c.checkAwb===false)){
-      return true;
-    }
-   return false;
-  }
   useEffect(() => {
     loadAwb();
   }, []);
@@ -191,7 +203,7 @@ const AddAwbToTruckScreen = ({
 
           //marginTop: Platform.OS == 'ios' ? 30 : 10,
         }}
-        title="Add Awb To Truck"
+        title="UNLOAD AWB"
         // rightComponent={
         //   <TouchableOpacity
         //     style={{
@@ -287,11 +299,11 @@ const AddAwbToTruckScreen = ({
               placeholder={'Tim theo mawb'}
               placeholderTextColor={COLORS.primaryALS}
               onChangeText={text => {
-                setSearchText(text);
+                onChangeTextHandle(text);
               }}
             />
               {searchText !=='' && (<TouchableOpacity
-              onPress={()=>{setSearchText('')}}
+              onPress={()=>{onChangeTextHandle('')}}
             >
               <Icon name="close" size={20} />
             </TouchableOpacity>)}
@@ -352,6 +364,7 @@ const AddAwbToTruckScreen = ({
                   }}>
                   <Text
                     body3
+                    black
                     style={
                       {
                         //flex:1
@@ -375,40 +388,23 @@ const AddAwbToTruckScreen = ({
                     marginLeft:SIZES.radius,
                     //backgroundColor:COLORS.lightOrange
                   }}>
-                  <View
-                    style={{
-                      flexDirection:'row',
-                      alignItems:'center',
-                      flex:2
-                    }}
-                  >
-                    <Image
-                      source={icons.flightLanded}
-                      style={{
-                        width: 25,
-                        height: 25,
-                      }}
-                    />
-                    <Text body3 style={{
-                      marginLeft:SIZES.base
-                    }}>{item?.flight}</Text>
-                  </View>
+                  
                   <View
                      style={{
                       flexDirection:'row',
                       alignItems:'center',
-                      flex:1
+                      flex:3
                     }}
                   >
                     <Image
-                      source={icons.awb_number}
+                      source={icons.awb_load}
                       style={{
                         width: 25,
                         height: 25,
                         tintColor:COLORS.primaryALS
                       }}
                     />
-                    <Text body3 style={{
+                    <Text h3 style={{
                       marginLeft:SIZES.base
                     }}>
                       {item?.piecesRemain}/{item?.pieces}
@@ -423,13 +419,13 @@ const AddAwbToTruckScreen = ({
                       marginLeft:SIZES.base,
                       flex: 2,
                     }}
-                    value={item?.piecesToLoaded}
+                    value={item?.piecesToUnLoaded}
                     onAdd={() =>
-                      updateQuantityHandler(item?.piecesToLoaded + 1, item.id)
+                      updateQuantityHandler(item?.piecesToUnLoaded + 1, item.id)
                     }
                     onMinus={() => {
-                      if (item?.piecesToLoaded > 1) {
-                        updateQuantityHandler(item?.piecesToLoaded - 1, item.id);
+                      if (item?.piecesToUnLoaded > 0) {
+                        updateQuantityHandler(item?.piecesToUnLoaded - 1, item.id);
                       }
                     }}
                   />
@@ -460,15 +456,15 @@ const AddAwbToTruckScreen = ({
           />
 
           <TextButton
-            label="Add"
+            label="Unload"
             buttonContainerStyle={{
-             backgroundColor: checkEmptySelect()? COLORS.gray:COLORS.primaryALS,
+              backgroundColor: checkEmptySelect()? COLORS.gray:COLORS.primaryALS,
               width: 120,
               height: 40,
               borderRadius: SIZES.base,
             }}
+            onPress={handleConfirm}
             disabled={checkEmptySelect()}
-            onPress={handleAddAwbs}
           />
         </View>
       </View>
@@ -522,7 +518,7 @@ const styles = StyleSheet.create({
   },
 });
 export default connectToRedux({
-  component: AddAwbToTruckScreen,
+  component: UnloadAwbScreen,
   stateProps: state => ({loading: createLoadingSelector()(state)}),
   dispatchProps: {
     startLoading: LoadingActions.start,

@@ -38,7 +38,7 @@ import LineDivider from '../../../../components/LineDivider';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { DMY_FORMAT,DMY_TIME } from '../../../../utils/DateHelpers';
 import UpdateHawbStatusModal from './UpdateHawbStatusModal';
-
+import {useToast} from 'react-native-toast-notifications';
 const PickupAwbDetailScreen = ({
   navigation,
   route,
@@ -48,7 +48,9 @@ const PickupAwbDetailScreen = ({
 const {awb,filterDateFrom,filterDateTo} = route?.params;
     const today = moment(); 
     const fligtDate = filterDateFrom + "-" + filterDateTo;
+    const toast = useToast();
     const [listHawb,setListHawb] = useState([]);
+    const [filterlistHawb,setFilterlistHawb] = useState([])
     const [searchText, setSearchText] = useState('');
     const [check, setCheck] = useState(false);
     const textInputRef = useRef();
@@ -56,7 +58,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
     const applyFuc = (value)=>{
         closeModal();
         let listLagisId = '';
-        listHawb.forEach((item, index) => {
+        filterlistHawb.forEach((item, index) => {
           if (item.checkHawb) {
             listLagisId += item.lagiId + ',';
           }
@@ -64,45 +66,89 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
         });
         if(listLagisId.length > 2){
           updateStatusHawb(listLagisId.substring(0, listLagisId.length - 1),value,DMY_TIME(today)).then(()=>{
-            loadHawb()
-          })
+            toast.show('Update status thành công! ', {
+              type: 'success',
+              placement: 'top',
+              swipeEnabled: true,
+              style: {
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: COLORS.green,
+              },
+              duration: 2000,
+              animationType: 'slide-in',
+            });
+            const newState = filterlistHawb.map(obj => {
+              // 👇️ if id equals 2, update country property
+              if (obj.checkHawb) {
+                return {...obj, status: value};
+              }
+              // 👇️ otherwise return the object as is
+              return obj;
+            });
+            setFilterlistHawb(newState);
+          }).catch((e)=>console.log(e))
         }
         
        
     }
+    const checkEmptySelect = ()=>{
+      if(filterlistHawb.every(c=>c.checkHawb===false)){
+        return true;
+      }
+     return false;
+    }
+    const onChangeTextHandle = text => {
+      setSearchText(text);
+      if (text) {
+        //making a case insensitive regular expression to get similar value from the film json
+        const regex = new RegExp(`${text.trim()}`, 'i');
+        //setting the filtered film array according the query from the input
+        setFilterlistHawb(listHawb.filter(awb => awb.mawb.search(regex) >=0 || awb.lagiHawb.search(regex) >= 0));
+      } else {
+        //if the query is null then return blank
+        setCheck(false);
+        setFilterlistHawb(listHawb);
+      }
+    };
     const closeModal = () => {
         setModalVisible(false);
       };
     const loadHawb = () => {
+      console.log('Start Loading!',awb.kundId)
       startLoading('LoadHawb')
-        getPickupAwbDetail({KundId: awb.kundId,FlightDate:fligtDate})
+        getPickupAwbDetail({KundId: awb.kundId,FlightDate:fligtDate,maxResultCount: 1000, skipCount: 0})
           .then(({items, totalCount}) => {
             if (!items) {
               Alert.alert('Lỗi', 'Liên hệ với quản trị viên');
               return;
             }
+            const result = [];
+         
             items.forEach((item, index) => {
-              const result = [];
-           
-              items.forEach((item, index) => {
-                const hawb = {
-                   ...item,
-                   checkHawb:false
-                };
-                result.push(hawb);
-              });
-              setListHawb(result);
+              const hawb = {
+                 ...item,
+                 checkHawb:false
+              };
+              result.push(hawb);
             });
+            setListHawb(result);
+            setFilterlistHawb(result);
+            console.log('Stop Loading!')
           })
           .catch(e => console.log(e)).finally(()=>stopLoading('LoadHawb'));
       };
-      useFocusEffect(
+      useEffect(()=>{
+        loadHawb()
+      },[])
+     /*  useFocusEffect(
         useCallback(() => {
           loadHawb()
         }, []),
-      );
+      ); */
+
       const handleCheckItem = (e, item) => {
-        const newState = listHawb.map(obj => {
+        const newState = filterlistHawb.map(obj => {
           // 👇️ if id equals 2, update country property
           if (obj.lagiId === item.lagiId) {
             return {...obj, checkHawb: e};
@@ -110,7 +156,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
           // 👇️ otherwise return the object as is
           return obj;
         });
-        setListHawb(newState);
+        setFilterlistHawb(newState);
         if (newState.every(item => item.checkHawb === true)) {
           setCheck(true);
         }
@@ -120,11 +166,11 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
       };
       const ToggleCheckSearch = e => {
         setCheck(e);
-        const newState = listHawb.map(obj => {
+        const newState = filterlistHawb.map(obj => {
           // 👇️ if id equals 2, update country property
           return {...obj, checkHawb: e};
         });
-        setListHawb(newState);
+        setFilterlistHawb(newState);
       };
   function renderHeader() {
     return (
@@ -228,7 +274,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
               }}
             />
              {searchText !=='' && (<TouchableOpacity
-              onPress={()=>{setSearchText('')}}
+              onPress={()=>{onChangeTextHandle('');}}
             >
               <Icon name="close" size={20} />
             </TouchableOpacity>)}
@@ -236,7 +282,7 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
           </View>
         </View>
         <FlatList
-          data={listHawb}
+          data={filterlistHawb}
           ListHeaderComponent={<View
             style={{
               marginTop:SIZES.padding
@@ -330,9 +376,10 @@ const {awb,filterDateFrom,filterDateTo} = route?.params;
              // width: 120,
               height: 40,
               borderRadius: SIZES.base,
-              backgroundColor: COLORS.primaryALS,
+              backgroundColor: checkEmptySelect()? COLORS.gray:COLORS.primaryALS,
               paddingHorizontal:SIZES.radius
             }}
+            disabled={checkEmptySelect()}
             onPress={() => setModalVisible(true)}
           />
           

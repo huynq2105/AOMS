@@ -11,7 +11,6 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
-import {getEnvVars} from '../../Environment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import images from '../../constants/images';
 import {SIZES, COLORS, FONTS} from '../../constants/theme';
@@ -30,11 +29,12 @@ import TenantBox from '../../components/TenantBox/TenantBox';
 import LoadingActions from '../../stores/actions/LoadingActions';
 import utils from '../../utils/Utils';
 import moment from 'moment';
+import { getEnvConst } from '../../Environment';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {createAppConfigSelector} from '../../stores/selectors/AppSelectors';
 import {createVerifyTokenSelector} from '../../stores/selectors/PersistentStorageSelectors';
-
+const {version} = getEnvConst();
 const LoginScreen = ({
   setToken,
   setTenant,
@@ -254,7 +254,7 @@ const LoginScreen = ({
           justifyContent:'flex-end'
         }}
       >
-        <Text body3 primaryALS>Powered by ALS 1.0.1 - 22092023</Text>
+        <Text body3 primaryALS>Powered by ALS {version}</Text>
       </View>
     </AuthLayout>
   );
